@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>helios. — AI Operating Layer</title>
+  <meta name="description" content="Terminal-native AI orchestration with seven specialized agents, self-enforcing governance, and cross-session memory." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────── */
+    :root {
+      /* Base */
+      --bg:           #020914;
+      --surface:      #060f1f;
+      --surface2:     #0a1628;
+      --surface3:     #0d1f38;
+      --border:       rgba(34, 211, 238, 0.10);
+      --border-bright:rgba(34, 211, 238, 0.28);
+
+      /* Text — slightly warmer */
+      --text:         #f0f4f8;
+      --text-dim:     #8a9bb5;
+      --text-muted:   #6b7e96;
+
+      /* Primary accent — cyan phosphor */
+      --accent:       #22D3EE;
+      --accent-dim:   rgba(34, 211, 238, 0.10);
+      --accent-glow:  rgba(34, 211, 238, 0.06);
+
+      /* Warm secondary accent — amber/gold for human-facing elements */
+      --warm:         #f0a030;
+      --warm-dim:     rgba(240, 160, 48, 0.10);
+      --warm-glow:    rgba(240, 160, 48, 0.04);
+      --warm-border:  rgba(240, 160, 48, 0.20);
+
+      /* Status colors */
+      --green:        #3fb950;
+      --green-dim:    rgba(63, 185, 80, 0.12);
+      --purple:       #bc8cff;
+
+      /* Typography */
+      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:    'Space Mono', 'IBM Plex Mono', monospace;
+      --nav-h:        48px;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1rem;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      /* dual-temperature glow */
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34,211,238,0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(240,160,48,0.03) 0%, transparent 50%),
+        radial-gradient(circle, rgba(34,211,238,0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
+      background-attachment: fixed, fixed, fixed;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    strong { font-weight: 400; color: var(--accent); }
+    ul { list-style: none; }
+
+    /* ─────────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────────── */
+    .mono    { font-family: var(--font-mono); }
+    .accent  { color: var(--accent); }
+    .warm    { color: var(--warm); }
+    .dim     { color: var(--text-dim); }
+    .muted   { color: var(--text-muted); }
+
+    /* Section label */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .section-label::before,
+    .section-label::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 24px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+
+    /* Warm section label variant */
+    .section-label-warm {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--warm);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .section-label-warm::before,
+    .section-label-warm::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 24px;
+      background: var(--warm);
+      opacity: 0.4;
+    }
+
+    /* LED dot */
+    .led {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 4px var(--green);
+      flex-shrink: 0;
+    }
+    .led-amber { background: var(--warm); box-shadow: 0 0 4px var(--warm); }
+    .led-cyan  { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+
+    /* Inset panel */
+    .inset-panel {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 0;
+    }
+
+    /* Fade-up animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1; transform: none; transition: none; }
+      .warm-pulse-ring { animation: none !important; }
+    }
+
+    /* ─────────────────────────────────────────────
+       NAV
+    ───────────────────────────────────────────── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--nav-h);
+      background: rgba(2, 9, 20, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .wordmark {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1.125rem;
+      letter-spacing: 0.25em;
+      color: var(--accent);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.15s ease-out;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links .nav-cta {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 0;
+      transition: background 0.15s ease-out;
+    }
+    .nav-links .nav-cta:hover { background: rgba(34,211,238,0.2); }
+
+    /* ─────────────────────────────────────────────
+       LAYOUT
+    ───────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    section { padding: 120px 0; }
+
+    section + section {
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─────────────────────────────────────────────
+       HERO — Centered, Apple-style
+    ───────────────────────────────────────────── */
+    #hero {
+      padding-top: 140px;
+      padding-bottom: 120px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .hero-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .hero-title-line2 {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .hero-title-line3 {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 48px;
+    }
+    .hero-title-line3 .accent-word { color: var(--accent); }
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1.125rem;
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 56px;
+      line-height: 1.75;
+    }
+
+    /* CTA buttons */
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 96px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: var(--bg);
+      border: 1px solid var(--accent);
+      padding: 12px 28px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: opacity 0.15s ease-out;
+      font-weight: 700;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--border-bright);
+      padding: 12px 28px;
+      border-radius: 0;
+      cursor: pointer;
+      transition: color 0.15s ease-out, border-color 0.15s ease-out;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--text-dim); }
+
+    /* Telemetry readout row */
+    .telemetry-row {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 1px;
+      justify-content: center;
+    }
+    .telemetry-cell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 104px;
+      position: relative;
+    }
+    .telemetry-value {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .telemetry-cell.warm-cell .telemetry-value { color: var(--warm); }
+    .telemetry-cell.green-cell .telemetry-value { color: var(--green); }
+    .telemetry-cell.dim-val .telemetry-value {
+      color: var(--text-dim);
+      font-size: 1rem;
+    }
+    .telemetry-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ─────────────────────────────────────────────
+       USE CASES
+    ───────────────────────────────────────────── */
+    #use-cases {
+      padding: 120px 0;
+    }
+    .use-cases-header {
+      text-align: center;
+      margin-bottom: 96px;
+    }
+    .section-title {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1rem;
+      color: var(--text-dim);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Use case cards — alternating layout */
+    .use-case-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .use-case-block:first-of-type { border-top: none; }
+    .use-case-block.reverse .use-case-content { order: 2; }
+    .use-case-block.reverse .use-case-detail  { order: 1; }
+
+    /* warm card style for use cases */
+    .use-case-card {
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(240,160,48,0.02) 100%);
+      border: 1px solid var(--border);
+      padding: 36px;
+      border-radius: 0;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .use-case-card:hover {
+      border-color: var(--warm-border);
+      box-shadow: 0 0 32px rgba(240,160,48,0.04);
+    }
+
+    .use-case-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: rgba(240,160,48,0.12);
+      color: var(--warm);
+      border: 1px solid rgba(240,160,48,0.22);
+      padding: 3px 8px;
+      border-radius: 0;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .use-case-title {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1.375rem;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 14px;
+      letter-spacing: -0.01em;
+    }
+    .use-case-desc {
+      font-size: 0.9375rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    /* How panel */
+    .how-panel {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .how-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .how-flow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    .how-flow .arrow { color: var(--accent); opacity: 0.6; margin: 0 4px; }
+    .vs-note {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .vs-note::before {
+      content: 'vs. ';
+      font-style: normal;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Use case detail column — supporting visual */
+    .use-case-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 24px;
+    }
+    .use-case-number {
+      font-family: var(--font-mono);
+      font-size: 4rem;
+      font-weight: 700;
+      color: rgba(240,160,48,0.08);
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+    .use-case-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .meta-key {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      min-width: 64px;
+    }
+    .meta-val {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+    .meta-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--warm);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       THREE PILLARS
+    ───────────────────────────────────────────── */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 56px;
+    }
+    .pillar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 36px;
+      position: relative;
+      transition: border-color 0.2s ease-out;
+    }
+    .pillar-card:hover { border-color: var(--border-bright); }
+    .pillar-icon {
+      font-family: var(--font-mono);
+      font-size: 1.375rem;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+    .pillar-icon.warm-icon  { color: var(--warm); }
+    .pillar-icon.cyan-icon  { color: var(--accent); }
+    .pillar-icon.green-icon { color: var(--green); }
+    .pillar-title {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .pillar-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────────
+       SEVEN AGENTS
+    ───────────────────────────────────────────── */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 48px;
+    }
+    .agent-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      transition: border-color 0.2s ease-out;
+      overflow: hidden;
+    }
+    .agent-card:hover { border-color: var(--border-bright); }
+    .agent-card.worker-card { background: var(--surface2); }
+    .agent-callsign {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .agent-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+    .agent-role {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 16px;
+    }
+    .agent-desc {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+    .agent-card.featured {
+      grid-column: span 2;
+    }
+
+    /* ─────────────────────────────────────────────
+       CAPABILITIES
+    ───────────────────────────────────────────── */
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 48px;
+    }
+    .cap-cell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      transition: border-color 0.2s ease-out;
+    }
+    .cap-cell:hover { border-color: var(--border-bright); }
+    .cap-glyph {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    .cap-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 0.875rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .cap-desc {
+      font-size: 0.8125rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ─────────────────────────────────────────────
+       COMPARISON TABLE
+    ───────────────────────────────────────────── */
+    #comparison {
+      padding: 120px 0;
+    }
+    .comparison-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .comparison-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .comparison-table th {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+    .comparison-table th.helios-col {
+      color: var(--accent);
+      background: var(--accent-dim);
+      border-left: 1px solid rgba(34,211,238,0.2);
+      border-right: 1px solid rgba(34,211,238,0.2);
+    }
+    .comparison-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(34,211,238,0.06);
+      color: var(--text-dim);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .comparison-table td:first-child {
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .comparison-table td.helios-col {
+      color: var(--accent);
+      background: rgba(34,211,238,0.03);
+      border-left: 1px solid rgba(34,211,238,0.1);
+      border-right: 1px solid rgba(34,211,238,0.1);
+    }
+    .comparison-table tbody tr:hover td { background: rgba(34,211,238,0.02); }
+    .comparison-table tbody tr:hover td.helios-col { background: rgba(34,211,238,0.06); }
+    .comparison-table .row-label {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────────
+       INSTALL
+    ───────────────────────────────────────────── */
+    .install-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 48px;
+    }
+    .install-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+    }
+    .install-panel-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .install-panel-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .code-block {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text-dim);
+    }
+    .code-line { display: block; }
+    .code-prompt { color: var(--accent); margin-right: 8px; }
+    .code-comment { color: var(--text-muted); }
+    .code-cmd    { color: var(--text); }
+    .code-arg    { color: var(--warm); }
+
+    /* ─────────────────────────────────────────────
+       WARM CTA
+    ───────────────────────────────────────────── */
+    #cta {
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(240,160,48,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .cta-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      margin-bottom: 12px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cta-sub {
+      font-size: 0.9375rem;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      line-height: 1.65;
+    }
+    .btn-warm {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--warm);
+      color: var(--bg);
+      border: 1px solid var(--warm);
+      padding: 14px 36px;
+      border-radius: 0;
+      cursor: pointer;
+      font-weight: 700;
+      transition: opacity 0.15s ease-out;
+      display: inline-block;
+    }
+    .btn-warm:hover { opacity: 0.88; }
+
+    /* Warm pulse animation on CTA section */
+    @keyframes warm-pulse {
+      0%, 100% { opacity: 0.7; }
+      50%       { opacity: 1; }
+    }
+    .warm-pulse-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(240,160,48,0.08);
+      animation: warm-pulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .footer-wordmark {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 0.9375rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+    .footer-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.15s ease-out;
+    }
+    .footer-links a:hover { color: var(--text-dim); }
+
+    /* ─────────────────────────────────────────────
+       MODEL-AGNOSTIC SECTION
+    ───────────────────────────────────────────── */
+    #model-agnostic {
+      text-align: center;
+    }
+    .model-agnostic-text {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 1.125rem;
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto 32px;
+      line-height: 1.75;
+    }
+    .model-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+    .model-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 999px;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .model-badge:hover {
+      border-color: var(--border-bright);
+      color: var(--text);
+    }
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-bottom: 32px;
+    }
+    .evidence-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+    }
+    .evidence-number {
+      font-family: var(--font-mono);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .evidence-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .evidence-detail {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+    .evidence-source {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .evidence-quote {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .container { padding: 0 24px; }
+      .nav { padding: 0 24px; }
+      section { padding: 64px 0; }
+      #hero { padding-top: 72px; padding-bottom: 64px; }
+
+      .pillars-grid { grid-template-columns: 1fr; }
+      .agents-grid  { grid-template-columns: 1fr 1fr; }
+      .capabilities-grid { grid-template-columns: 1fr 1fr; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .install-panels { grid-template-columns: 1fr; }
+
+      .use-case-block {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 48px 0;
+      }
+      .use-case-block.reverse .use-case-content { order: 1; }
+      .use-case-block.reverse .use-case-detail  { order: 2; }
+      .use-case-detail { display: none; }
+
+      .agent-card.featured { grid-column: span 1; }
+
+      .nav-links .nav-hide-mobile { display: none; }
+    }
+
+    .terminal-demo {
+      background: #0a0e14;
+      border: 1px solid rgba(34, 211, 238, 0.12);
+      padding: 24px 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.9;
+      color: var(--text-dim);
+      overflow-x: auto;
+      white-space: pre;
+      margin: 20px 0 12px;
+    }
+    .terminal-demo .p { color: #22D3EE; }
+    .terminal-demo .a { color: #f0a030; }
+    .terminal-demo .s { color: #3fb950; }
+    .terminal-demo .d { color: #6b7e96; }
+
+    @media (max-width: 600px) {
+      section { padding: 80px 0; }
+      .container { padding: 0 20px; }
+      .agents-grid        { grid-template-columns: 1fr; }
+      .capabilities-grid  { grid-template-columns: 1fr; }
+      .telemetry-row { gap: 1px; }
+      .telemetry-cell { min-width: 80px; padding: 10px 14px; }
+      .hero-ctas { flex-direction: column; align-items: center; }
+    }
+
+    /* ─────────────────────────────────────────────
+       ACCESSIBILITY
+    ───────────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 16px;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 8px 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      z-index: 200;
+      text-decoration: none;
+    }
+    .skip-link:focus-visible {
+      top: 8px;
+    }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .comparison-table th[scope="row"] { font-weight: 400; text-align: left; }
+    .hero-title,
+    .hero-title-line2,
+    .hero-title-line3 { display: block; }
+    .footer-links ul[role="list"] {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ─── NAV ──────────────────────────────────────────── -->
+  <nav class="nav" aria-label="Main">
+    <div class="nav-inner">
+      <a href="#hero" aria-label="helios — back to top" class="wordmark">helios.</a>
+      <ul class="nav-links">
+        <li class="nav-hide-mobile"><a href="#use-cases">Use Cases</a></li>
+        <li class="nav-hide-mobile"><a href="#agents">Agents</a></li>
+        <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
+        <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
+        <li class="nav-hide-mobile"><a href="#install">Install</a></li>
+        <li><a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" class="nav-cta" aria-label="GitHub (opens in new tab)">GitHub →</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content">
+
+  <!-- ─── HERO ─────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="container">
+
+      <div class="hero-eyebrow fade-up">AI OPERATING LAYER</div>
+
+      <h1>
+        <span class="hero-title fade-up">The AI that does things.</span>
+        <span class="hero-title-line2 fade-up">Then reviews its own work.</span>
+        <span class="hero-title-line3 fade-up">Then remembers what it <span class="accent-word">learned</span>.</span>
+      </h1>
+
+      <p class="hero-subtitle fade-up">
+        Ships your features overnight. Reviews its own PRs. Researches markets with real sources. Debugs with memory from last month's bugs. Manages your email triage. Writes and distributes your content. Keeps itself in line with 10 self-enforcing rules.
+      </p>
+
+      <div class="hero-ctas fade-up">
+        <a href="#install" class="btn-primary">Get Started</a>
+        <a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" class="btn-secondary" aria-label="View on GitHub (opens in new tab)">View on GitHub →</a>
+      </div>
+
+      <div class="telemetry-row fade-up">
+        <div class="telemetry-cell">
+          <span class="telemetry-value">7</span>
+          <span class="telemetry-label">Agents</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="telemetry-value">50+</span>
+          <span class="telemetry-label">Skills</span>
+        </div>
+        <div class="telemetry-cell warm-cell">
+          <span class="telemetry-value">10+</span>
+          <span class="telemetry-label">Rules</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="telemetry-value">95k</span>
+          <span class="telemetry-label">Memory Nodes</span>
+        </div>
+        <div class="telemetry-cell green-cell">
+          <span class="telemetry-value">0</span>
+          <span class="telemetry-label">Daemons</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── USE CASES ─────────────────────────────────────── -->
+  <section id="use-cases">
+    <div class="container">
+
+      <div class="use-cases-header fade-up">
+        <div class="section-label-warm">WHAT PEOPLE BUILD</div>
+        <h2 class="section-title">Eight ways Helios works<br>across every domain.</h2>
+        <p class="section-subtitle">
+          One command. Here's what happens next.
+        </p>
+      </div>
+
+      <!-- 1 -->
+      <div class="use-case-block fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">DEVELOPMENT</span>
+            <h3 class="use-case-title">Ship a feature from a single sentence</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: shipping a Stripe billing feature"><span class="p">❯</span> helios "Add Stripe billing to the SaaS app"
+
+<span class="a">[scout]</span>    Mapping codebase... 847 files, Next.js + Prisma
+<span class="a">[planner]</span>  6 tasks decomposed, 3 parallelizable
+<span class="a">[worker]</span>   Wave 1: schema + API routes       ██████████ 3/3
+<span class="a">[worker]</span>   Wave 2: webhooks + checkout UI     ██████████ 3/3
+<span class="a">[reviewer]</span> Adversarial review: 1 finding → patching
+<span class="a">[verifier]</span> 23 tests passing. Stripe test mode verified.
+<span class="s">✅ PR #47 opened</span> <span class="d">"Add Stripe billing"</span></div>
+            <p class="use-case-desc">Six tasks. Two parallel waves. Adversarial review before the PR. You slept through it.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Scout → Planner → Workers → Reviewer → Verifier</div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="use-case-block reverse fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">RESEARCH</span>
+            <h3 class="use-case-title">Research a market in 5 minutes, not 5 hours</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: researching AI agent market"><span class="p">❯</span> helios "Research the AI agent landscape for our investor deck"
+
+<span class="a">[researcher]</span> Running 4 parallel searches...
+<span class="a">[researcher]</span> Cross-referencing 23 sources across 4 angles
+<span class="a">[researcher]</span> Synthesizing with citations
+<span class="s">✅ Report saved</span> <span class="d">ai-agent-landscape-2026.html (42 sources)</span></div>
+            <p class="use-case-desc">Four search angles. Twenty-three sources. Forty-two citations. Not a summary — a proper analysis.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Researcher → Cross-reference → Synthesis</div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="use-case-block fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">OPERATIONS</span>
+            <h3 class="use-case-title">Automate the daily grind</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: automating email and CRM tasks"><span class="p">❯</span> helios "Summarize unread emails, draft replies, update CRM with new leads"
+
+<span class="a">[scout]</span>    Scanning inbox... 47 unread, 8 flagged urgent
+<span class="a">[worker]</span>   Drafting replies for 8 threads
+<span class="a">[worker]</span>   3 new leads → Salesforce
+<span class="a">[reviewer]</span> Checking tone + accuracy
+<span class="s">✅ Done</span> <span class="d">8 drafts ready · 3 leads added · summary sent</span></div>
+            <p class="use-case-desc">Email triage, CRM updates, and draft replies — reviewed before anything sends.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Scout → Worker → Reviewer → Report</div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="use-case-block reverse fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">REVIEW</span>
+            <h3 class="use-case-title">Three agents review your code, not one</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: three-agent code review"><span class="p">❯</span> helios "Review PR #89 before we merge"
+
+<span class="a">[reviewer]</span> Adversarial review: security, architecture, style
+<span class="a">[verifier]</span> Tracing data flow across 12 files
+<span class="a">[auditor]</span>  Checking PR description vs actual diff
+<span class="s">⚠️ 2 findings</span> <span class="d">SQL injection in /api/users · missing edge case test</span></div>
+            <p class="use-case-desc">Reviewer finds bugs. Verifier traces data flow. Auditor checks the PR description isn't lying.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Reviewer → Verifier → Auditor</div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="use-case-block fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">CONTENT</span>
+            <h3 class="use-case-title">Research, write, publish — one command</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: writing and publishing content"><span class="p">❯</span> helios "Blog post about our new API, publish and create social threads"
+
+<span class="a">[researcher]</span> Reading API docs + changelog + competitors
+<span class="a">[worker]</span>    Draft: 1,200 words, technical audience
+<span class="a">[reviewer]</span>  Tone + accuracy review passed
+<span class="a">[worker]</span>    Published: blog · Twitter (6) · LinkedIn
+<span class="s">✅ Live</span> <span class="d">blog + 2 social platforms</span></div>
+            <p class="use-case-desc">Research. Draft. Review. Publish. Four agents, one command.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Researcher → Worker → Reviewer → Publish</div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="use-case-block reverse fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">DEBUGGING</span>
+            <h3 class="use-case-title">Debug with memory from last month</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: debugging with cross-session memory"><span class="p">❯</span> helios "Auth middleware returning 403s on valid tokens"
+
+<span class="a">[memory]</span>   Similar bug: Session #412 — JWT clock skew (Feb 14)
+<span class="a">[scout]</span>    Confirmed: expiry check ignores clock drift
+<span class="a">[worker]</span>   Added 30s leeway to jwt.verify()
+<span class="a">[verifier]</span> 14 auth tests passing. No regression.
+<span class="s">✅ Fixed</span> <span class="d">Same root cause as last month — 4 min vs 2 hours</span></div>
+            <p class="use-case-desc">Last month this took 2 hours. Helios remembered the fix. Four minutes.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Memory → Scout → Worker → Verifier</div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="use-case-block fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">GOVERNANCE</span>
+            <h3 class="use-case-title">The agent that asks before it breaks things</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: governance confirmation before refactoring"><span class="p">❯</span> helios "Refactor the entire payments module"
+
+<span class="a">[governance]</span> Scope: 34 files, 6 services affected
+<span class="a">[governance]</span> Confirmation required
+<span class="d">  "This touches payments, auth, and billing.</span>
+<span class="d">   Should I preserve the legacy Stripe v2 fallback?"</span>
+<span class="p">❯</span> Yes, keep the fallback
+<span class="a">[planner]</span>   8 tasks, review after every 2 workers
+<span class="s">✅ Done</span> <span class="d">8 tasks · 4 review cycles · 0 violations</span></div>
+            <p class="use-case-desc">It asked before touching payments. Reviewed after every two tasks. Zero drift.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Governance → Planner → Workers → Review Cycles</div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="use-case-block reverse fade-up">
+        <div class="use-case-content">
+          <div class="use-case-card">
+            <span class="use-case-tag">ORCHESTRATION</span>
+            <h3 class="use-case-title">Coordinate a real migration</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: coordinating a monolith migration"><span class="p">❯</span> helios "Migrate user service out of the monolith"
+
+<span class="a">[planner]</span>  12 tasks across 4 waves
+<span class="a">[wave 1]</span>  Schema + API contracts        ██████████
+<span class="a">[wave 2]</span>  Service extraction + routing   ██████████
+<span class="a">[wave 3]</span>  Integration tests + sync       ██████████
+<span class="a">[reviewer]</span> Architecture review each wave
+<span class="a">[wave 4]</span>  Cutover + monitoring           ██████████
+<span class="s">✅ Migrated</span> <span class="d">12 tasks · 4 waves · 47 tests</span></div>
+            <p class="use-case-desc">Twelve tasks. Four waves. Parallel workers. Real coordination.</p>
+          </div>
+        </div>
+        <div class="use-case-detail">
+          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Planner → Wave 1 → Wave 2 → Wave 3 → Wave 4</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── THREE PILLARS ─────────────────────────────────── -->
+  <section id="pillars">
+    <div class="container">
+
+      <div class="fade-up">
+        <div class="section-label">DESIGN PRINCIPLES</div>
+        <h2 class="section-title">Built on three hard commitments.</h2>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon warm-icon" aria-hidden="true">⚖</div>
+          <h3 class="pillar-title">Governance-first</h3>
+          <p class="pillar-desc">
+            Every action logged with a reason. Asks before touching important code. Reviews its own work after every two tasks. Compliance score: 0 to 100. You don't have to watch it — it watches itself.
+          </p>
+        </div>
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon cyan-icon" aria-hidden="true">◈</div>
+          <h3 class="pillar-title">Self-solving architecture</h3>
+          <p class="pillar-desc">
+            Searches the web when it doesn't know. Reviews failed sessions and adjusts. Extracts working patterns into reusable rules. Gets better the more you use it.
+          </p>
+        </div>
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon green-icon" aria-hidden="true">◉</div>
+          <h3 class="pillar-title">Human-in-control</h3>
+          <p class="pillar-desc">
+            You set the autonomy level — fully autonomous, approval-required, or advisory-only. Pause mid-task without losing state. Stalled agents get killed and restarted automatically.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── SEVEN AGENTS ──────────────────────────────────── -->
+  <section id="agents">
+    <div class="container">
+
+      <div class="fade-up">
+        <div class="section-label">THE CREW</div>
+        <h2 class="section-title">Seven specialized agents.<br>Each owns a lane.</h2>
+        <p class="section-subtitle">
+          Named after physicists. Each is a specialist, not a generalist.
+          Role boundaries are enforced by governance — a reviewer can't write code,
+          a scout can't make edits.
+        </p>
+      </div>
+
+      <div class="agents-grid">
+        <div class="agent-card featured fade-up">
+          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> ARLINE</div>
+          <h3 class="agent-name">Scout</h3>
+          <div class="agent-role">Reconnaissance</div>
+          <div class="agent-desc">
+            Maps the codebase before any work begins. Identifies patterns, entities, dependencies,
+            and data flow. Produces the intelligence that all other agents rely on. Cannot edit
+            source files — read-only by governance rule.
+          </div>
+        </div>
+        <div class="agent-card featured fade-up">
+          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> WHEELER</div>
+          <h3 class="agent-name">Planner</h3>
+          <div class="agent-role">Decomposition</div>
+          <div class="agent-desc">
+            Converts scout findings and requirements into executable task graphs with dependencies,
+            verification criteria, and file boundaries. Uses goal-backward planning — starts from
+            the desired outcome, works back to the first step.
+          </div>
+        </div>
+        <div class="agent-card worker-card fade-up">
+          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> DYSON</div>
+          <h3 class="agent-name">Worker</h3>
+          <div class="agent-role">Implementation</div>
+          <div class="agent-desc">
+            The only agent allowed to write source code. Operates under strict TDD —
+            RED → GREEN → refactor. Deep Execution Standard: no partial reports, no stubs.
+            100% completion or escalate.
+          </div>
+        </div>
+        <div class="agent-card fade-up">
+          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> MURRAY</div>
+          <h3 class="agent-name">Reviewer</h3>
+          <div class="agent-role">Adversarial Review</div>
+          <div class="agent-desc">
+            Assumes all worker output is subtly wrong until proven otherwise. Multi-technique
+            rotation across type tracing, state mutation, spec contradiction, and security
+            scans. Cannot fix — only flags.
+          </div>
+        </div>
+        <div class="agent-card fade-up">
+          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> HANS</div>
+          <h3 class="agent-name">Verifier</h3>
+          <div class="agent-role">Invariant Analysis</div>
+          <div class="agent-desc">
+            Traces data flow and checks invariant preservation. Verifies that worker
+            implementation matches the approved data model. Vacuous test detection —
+            deletes the implementation and checks if tests still pass.
+          </div>
+        </div>
+        <div class="agent-card fade-up">
+          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> DIRAC</div>
+          <h3 class="agent-name">Auditor</h3>
+          <div class="agent-role">Claim Verification</div>
+          <div class="agent-desc">
+            Checks that what agents claim matches ground truth. Every assertion needs evidence —
+            file:line citations, test output, direct observation. Trust-but-verify at the
+            orchestration layer.
+          </div>
+        </div>
+        <div class="agent-card fade-up">
+          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> TUKEY</div>
+          <h3 class="agent-name">Researcher</h3>
+          <div class="agent-role">Web Research</div>
+          <div class="agent-desc">
+            Live web search via Perplexity — no stale training data. Multi-angle research
+            across 2–4 queries per topic. Synthesizes findings into actionable intelligence
+            before planning starts.
+          </div>
+        </div>
+        <div class="agent-card fade-up">
+          <div class="agent-callsign"><span class="led" aria-hidden="true"></span> EXTENDED CREW</div>
+          <h3 class="agent-name">+5 Specialists</h3>
+          <div class="agent-role">Conditional Dispatch</div>
+          <div class="agent-desc">
+            Oracle (architecture decisions), Metis (plan consulting), Momus (adversarial plan
+            review), Pauli (governance critic), Noether (library research). Dispatched
+            conditionally based on task complexity.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── CAPABILITIES ──────────────────────────────────── -->
+  <section id="capabilities">
+    <div class="container">
+
+      <div class="fade-up">
+        <div class="section-label">SYSTEM CAPABILITIES</div>
+        <h2 class="section-title">Twelve systems, one orchestrator.</h2>
+      </div>
+
+      <div class="capabilities-grid">
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">◈</div>
+          <h3 class="cap-name">GSD Lane Routing</h3>
+          <div class="cap-desc">Scores 8 complexity signals every task. Routes to lite, collaboration, or full-lane execution automatically.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">◉</div>
+          <h3 class="cap-name">Cross-Session Memory</h3>
+          <div class="cap-desc">95k+ nodes in a local Memgraph database. Vector-embedded semantic search. HEMA auto-injects prior experience into every dispatch.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⊞</div>
+          <h3 class="cap-name">Parallel Execution</h3>
+          <div class="cap-desc">Independent subtasks run simultaneously. File reservations prevent conflicts. Wave-based coordination via pi_messenger mesh.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⌘</div>
+          <h3 class="cap-name">Governance Engine</h3>
+          <div class="cap-desc">10+ hard rules enforced by extension every turn. Compliance score 0–100. Events logged to audit trail. Cannot be bypassed.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⊙</div>
+          <h3 class="cap-name">Coding Matrix</h3>
+          <div class="cap-desc">Live Sigma.js dependency graph from Memgraph. Visualize architecture, identify hotspots, explore coupling before touching code.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">≡</div>
+          <h3 class="cap-name">TDD Enforcement</h3>
+          <div class="cap-desc">Dirty-bit protocol — no completion accepted without RED→GREEN evidence. Stub scanner. Pipe verification. Vacuous test detection.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">↻</div>
+          <h3 class="cap-name">Self-Repair Loop</h3>
+          <div class="cap-desc">Workers attempt 5 different repair strategies before escalating. Scratchpad prevents repeating failed approaches. Loop detection cuts thrashing.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⊿</div>
+          <h3 class="cap-name">Warm Proactive System</h3>
+          <div class="cap-desc">Ambient watch loop queries the knowledge graph between dispatches. Speculative pre-warming caches likely next agents. Sub-5s activation latency.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">◳</div>
+          <h3 class="cap-name">Data-Model-First</h3>
+          <div class="cap-desc">Entities and relationships designed before code. Data model approval gate on full-lane tasks — workers blocked until user approves the schema.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⟳</div>
+          <h3 class="cap-name">Provider Failover</h3>
+          <div class="cap-desc">Automatic failover across Anthropic → OpenAI → Google on rate limits. Failover path logged in session recap. No interruption to workflows.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">◫</div>
+          <h3 class="cap-name">Design System</h3>
+          <div class="cap-desc">IBM Plex Sans + Space Mono. Deep navy + cyan phosphor + amber warmth. Every HTML artifact follows the visual system automatically.</div>
+        </div>
+        <div class="cap-cell fade-up">
+          <div class="cap-glyph" aria-hidden="true">⊛</div>
+          <h3 class="cap-name">Multi-Provider</h3>
+          <div class="cap-desc">Anthropic, OpenAI, Google, OpenRouter. Per-agent model overrides. Cost-optimized routing with the GSD execution standard.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── MODEL-AGNOSTIC ───────────────────────────────── -->
+  <section id="model-agnostic">
+    <div class="container">
+
+      <div class="fade-up">
+        <div class="section-label">ANY MODEL. YOUR RULES.</div>
+        <h2 class="section-title">Any model. Your rules.</h2>
+      </div>
+
+      <p class="model-agnostic-text fade-up">
+        Helios is the harness, not the model. Use Claude, GPT, Gemini, Llama, Mistral, or any local model through Ollama. The orchestration layer — the governance, the memory, the multi-agent coordination — that's what makes the difference. Models are commodities. The harness is the competitive moat.
+      </p>
+
+      <div class="model-badges-row fade-up">
+        <span class="model-badge">Claude</span>
+        <span class="model-badge">GPT</span>
+        <span class="model-badge">Gemini</span>
+        <span class="model-badge">Llama</span>
+        <span class="model-badge">Mistral</span>
+        <span class="model-badge">Ollama</span>
+        <span class="model-badge">Any OpenAI-compatible API</span>
+      </div>
+
+      <div class="evidence-grid fade-up">
+        <div class="evidence-card">
+          <div class="evidence-number">17%</div>
+          <div class="evidence-label">Performance Variance</div>
+          <div class="evidence-detail">from scaffolding alone, same underlying model</div>
+          <div class="evidence-source">arXiv:2603.02176</div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-number">100×</div>
+          <div class="evidence-label">Cost Reduction</div>
+          <div class="evidence-detail">small models + proper harness match frontier models</div>
+          <div class="evidence-source">arXiv:2510.21443</div>
+        </div>
+        <div class="evidence-card">
+          <div class="evidence-number">100%</div>
+          <div class="evidence-label">Compliance Rate</div>
+          <div class="evidence-detail">AutoHarness eliminated all illegal actions vs 78% failure without</div>
+          <div class="evidence-source">DeepMind, 2026</div>
+        </div>
+      </div>
+
+      <p class="evidence-quote fade-up">
+        "A 3B specialist with the right harness beats a 400B generalist without one." — synthesized from NVIDIA ToolOrchestra, AutoHarness, and ThinkSLM research.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ─── COMPARISON ────────────────────────────────────── -->
+  <section id="comparison">
+    <div class="container">
+
+      <div class="comparison-header fade-up">
+        <div class="section-label">HOW HELIOS IS DIFFERENT</div>
+        <h2 class="section-title">Built different by design.</h2>
+        <p class="section-subtitle">
+          The choices that matter aren't features — they're architectural commitments
+          that can't be bolted on later.
+        </p>
+      </div>
+
+      <div class="comparison-wrapper fade-up">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Feature</span></th>
+              <th scope="col">Single-Agent Tools</th>
+              <th scope="col">Always-On Daemons</th>
+              <th scope="col" class="helios-col">helios.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="row-label">How it works</th>
+              <td>1 agent does everything</td>
+              <td>Daemon runs 24/7</td>
+              <td class="helios-col">7 agents, each with one job</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Memory</th>
+              <td>Forgets each session</td>
+              <td>Markdown files</td>
+              <td class="helios-col">Knowledge graph (95k nodes)</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Self-control</th>
+              <td>None — you manage it</td>
+              <td>You write the rules</td>
+              <td class="helios-col">Manages itself — 10 rules</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Quality checks</th>
+              <td>Optional</td>
+              <td>None built-in</td>
+              <td class="helios-col">3-stage mandatory review</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Model lock-in</th>
+              <td>Usually one provider</td>
+              <td>Varies</td>
+              <td class="helios-col">None — any LLM</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Cost control</th>
+              <td>Token burn risk</td>
+              <td>Heartbeat overhead</td>
+              <td class="helios-col">Routes to cheapest model</td>
+            </tr>
+            <tr>
+              <th scope="row" class="row-label">Runs where</th>
+              <td>Cloud or local</td>
+              <td>Daemon on machine</td>
+              <td class="helios-col">Your terminal, no daemon</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── INSTALL ───────────────────────────────────────── -->
+  <section id="install">
+    <div class="container">
+
+      <div class="fade-up">
+        <div class="section-label">INSTALLATION</div>
+        <h2 class="section-title">Up and running in minutes.</h2>
+        <p class="section-subtitle">
+          No Docker required. No cloud account. No daemon to manage.
+          Install Pi, configure your API key, and Helios is active.
+        </p>
+      </div>
+
+      <div class="install-panels">
+        <div class="install-panel fade-up">
+          <div class="install-panel-label">Quick start</div>
+          <div class="code-block">
+            <span class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="code-cmd">npm install -g <span class="code-arg">@familiar/pi</span></span>
+            </span>
+            <span class="code-line">
+              <span class="code-comment"># set your API key</span>
+            </span>
+            <span class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="code-cmd">pi config set <span class="code-arg">ANTHROPIC_API_KEY</span> sk-...</span>
+            </span>
+            <span class="code-line">
+              <span class="code-comment"># run your first task</span>
+            </span>
+            <span class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="code-cmd">pi <span class="code-arg">"audit the auth module"</span></span>
+            </span>
+          </div>
+        </div>
+        <div class="install-panel fade-up">
+          <div class="install-panel-label">With memory (recommended)</div>
+          <div class="code-block">
+            <span class="code-line">
+              <span class="code-comment"># start Memgraph (Docker)</span>
+            </span>
+            <span class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="code-cmd">docker run -d <span class="code-arg">memgraph/memgraph</span></span>
+            </span>
+            <span class="code-line">
+              <span class="code-comment"># enable the skill-graph extension</span>
+            </span>
+            <span class="code-line">
+              <span class="code-prompt">$</span>
+              <span class="code-cmd">pi ext enable <span class="code-arg">skill-graph</span></span>
+            </span>
+            <span class="code-line">
+              <span class="code-comment"># cross-session memory is now active</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── CTA ──────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="warm-pulse-ring"></div>
+    <div class="container">
+      <div class="cta-inner fade-up">
+        <h2 class="cta-title">Stop managing your AI.<br>Start directing it.</h2>
+        <p class="cta-sub">
+          Seven agents. Zero daemons. One command to ship with confidence.
+        </p>
+        <a href="#install" class="btn-warm">Get Started →</a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <span class="footer-wordmark">helios.</span>
+        <span class="footer-tag">AI Operating Layer · v4.7</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <ul role="list">
+          <li><a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub</a></li>
+          <li><a href="#use-cases">Use Cases</a></li>
+          <li><a href="#agents">Agents</a></li>
+          <li><a href="#install">Install</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- ─── SCROLL REVEAL ─────────────────────────────────── -->
+  <script>
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const els = document.querySelectorAll('.fade-up');
+      const staggerGroups = {
+        'use-cases-header': 0,
+        'pillars-grid':     60,
+        'agents-grid':      80,
+        'capabilities-grid':80,
+        'telemetry-row':    120,
+      };
+
+      // Stagger siblings within the same parent
+      const seenParents = new WeakMap();
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const parent = el.parentElement;
+
+          if (!seenParents.has(parent)) {
+            seenParents.set(parent, 0);
+          }
+          const idx = seenParents.get(parent);
+          seenParents.set(parent, idx + 1);
+
+          const delay = idx * 70;
+          el.style.transitionDelay = delay + 'ms';
+          el.classList.add('visible');
+          io.unobserve(el);
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px',
+      });
+
+      els.forEach((el) => io.observe(el));
+    })();
+  </script>
+
+</body>
+</html>
