@@ -52,7 +52,7 @@
        RESET & BASE
     ───────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       background: var(--bg);
@@ -62,6 +62,7 @@
       font-size: 1rem;
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
       /* dual-temperature glow */
       background-image:
         radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34,211,238,0.05) 0%, transparent 60%),
@@ -1114,8 +1115,80 @@
       .container { padding: 0 20px; }
       .agents-grid        { grid-template-columns: 1fr; }
       .capabilities-grid  { grid-template-columns: 1fr; }
-      .telemetry-row { gap: 1px; }
-      .telemetry-cell { flex: 1 1 calc(33.33% - 1px); min-width: 0; }
+
+      /* Fix 1 — terminal-demo overflow */
+      .terminal-demo {
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 10px;
+        padding: 16px 14px;
+        line-height: 1.7;
+      }
+
+      /* Fix 2 — code-block overflow */
+      .code-block { font-size: 10px; padding: 16px 14px; }
+      .code-block .code-line { white-space: normal; word-break: break-all; }
+
+      /* Fix 4 — hero title sizing */
+      .hero-title { font-size: clamp(1.5rem, 7vw, 2rem); }
+      .hero-subtitle { font-size: 0.875rem; line-height: 1.6; }
+      .section-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
+      .section-subtitle { font-size: 0.8125rem; }
+
+      /* Fix 5 — telemetry row */
+      .telemetry-row {
+        flex-wrap: wrap;
+        gap: 1px;
+        justify-content: center;
+      }
+      .telemetry-cell { flex: 1 1 calc(33.33% - 1px); min-width: 64px; }
+      .telemetry-value { font-size: 1.25rem; }
+      .telemetry-label { font-size: 9px; }
+
+      /* Fix 6 — agent cards */
+      .agent-card { padding: 20px 16px; }
+      .agent-callsign { font-size: 10px; }
+      .agent-name { font-size: 0.875rem; }
+      .agent-role { font-size: 9px; }
+
+      /* Fix 7 — comparison table */
+      .comparison-wrapper { margin: 0 -20px; padding: 0 20px; }
+      .comparison-table { font-size: 11px; }
+      .comparison-table th, .comparison-table td { padding: 10px 8px; font-size: 11px; }
+
+      /* Fix 9 — use-case tags + section labels */
+      .use-case-tag { font-size: 10px; padding: 4px 10px; }
+      .section-label { font-size: 10px; letter-spacing: 0.12em; }
+      .section-label::before, .section-label::after { width: 16px; }
+
+      /* Fix 10 — CTA section */
+      .cta-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
+      .cta-sub { font-size: 0.8125rem; }
+
+      /* Fix 11 — evidence cards */
+      .evidence-card { padding: 20px 16px; }
+      .evidence-value { font-size: 1.5rem; }
+      .evidence-label { font-size: 9px; }
+      .evidence-source { font-size: 9px; }
+      .evidence-caption { font-size: 0.75rem; }
+
+      /* Fix 12 — model badges */
+      .model-badge { font-size: 10px; padding: 6px 12px; }
+
+      /* Fix 13 — footer */
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+        padding: 24px 20px;
+      }
+      .footer-links ul { justify-content: center; flex-wrap: wrap; }
+      .footer-wordmark { font-size: 1rem; }
+      .footer-tag { font-size: 10px; }
+
+      /* Retained */
       .hero-ctas { flex-direction: column; align-items: center; gap: 16px; }
       .btn-primary, .btn-secondary { padding: 16px 28px; width: 100%; max-width: 300px; text-align: center; }
       .btn-warm { padding: 16px 36px; }
@@ -1123,14 +1196,7 @@
       .install-modal-close { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 8px; }
       .install-tab { padding: 14px 12px; }
       .footer-links a, .footer-links li a { padding: 8px 4px; display: inline-block; }
-      .use-case-tag, .agent-callsign, .agent-role, .meta-key, .evidence-source, .evidence-label, .install-panel-label, .telemetry-label { font-size: 11px; }
-      .code-block { font-size: 11px; }
-      .code-block .code-line { white-space: nowrap; }
-      .footer-inner { padding: 0 20px; }
-      .terminal-demo {
-        position: relative;
-        -webkit-overflow-scrolling: touch;
-      }
+      .meta-key, .install-panel-label { font-size: 11px; }
     }
 
     /* ─────────────────────────────────────────────
@@ -1326,10 +1392,20 @@
     .install-docs-link:hover { color: var(--accent); }
 
     @media (max-width: 600px) {
-      .install-modal { padding: 28px 20px; max-height: calc(100vh - 52px); }
+      /* Fix 8 — install modal */
+      .install-modal {
+        margin: 12px;
+        padding: 24px 16px;
+        max-height: calc(100vh - 24px);
+      }
+      .install-modal-title { font-size: 1.25rem; }
+      .install-command-block code {
+        font-size: 10px;
+        word-break: break-all;
+        white-space: normal;
+      }
       .install-tab { padding: 14px 12px; font-size: 10px; }
       .install-command-block { flex-direction: column; align-items: stretch; }
-      .install-command-block code { font-size: 11px; }
       .install-modal-overlay { padding: 12px; padding-top: 40px; }
     }
   </style>
