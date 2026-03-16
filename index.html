@@ -263,7 +263,7 @@
     .hero-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(1.75rem, 5vw, 4rem);
       line-height: 1.15;
       letter-spacing: -0.03em;
       color: var(--text);
@@ -272,7 +272,7 @@
     .hero-title-line2 {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(1.75rem, 5vw, 4rem);
       line-height: 1.15;
       letter-spacing: -0.03em;
       color: var(--text);
@@ -281,7 +281,7 @@
     .hero-title-line3 {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(1.75rem, 5vw, 4rem);
       line-height: 1.15;
       letter-spacing: -0.03em;
       color: var(--text);
@@ -338,10 +338,11 @@
 
     /* Telemetry readout row */
     .telemetry-row {
-      display: inline-flex;
+      display: flex;
       flex-wrap: wrap;
       gap: 1px;
       justify-content: center;
+      max-width: 100%;
     }
     .telemetry-cell {
       background: var(--surface);
@@ -689,6 +690,19 @@
     .comparison-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      position: relative;
+    }
+    .comparison-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(to right, transparent, var(--bg));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
     .comparison-table {
       width: 100%;
@@ -773,6 +787,7 @@
       font-size: 12px;
       line-height: 1.8;
       color: var(--text-dim);
+      overflow-x: auto;
     }
     .code-line { display: block; }
     .code-prompt { color: var(--accent); margin-right: 8px; }
@@ -986,6 +1001,66 @@
     }
 
     /* ─────────────────────────────────────────────
+       HAMBURGER & MOBILE MENU
+    ───────────────────────────────────────────── */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      min-width: 44px;
+      min-height: 44px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--text-dim);
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(2, 9, 20, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 99;
+      flex-direction: column;
+      padding: 32px 24px;
+      gap: 0;
+      overflow-y: auto;
+    }
+    .mobile-menu.open {
+      display: flex;
+    }
+    .mobile-menu a {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+      display: block;
+    }
+    .mobile-menu a:hover, .mobile-menu a:focus { color: var(--accent); }
+    .mobile-menu a:last-child { border-bottom: none; color: var(--accent); }
+
+    /* ─────────────────────────────────────────────
        RESPONSIVE
     ───────────────────────────────────────────── */
     @media (max-width: 900px) {
@@ -1012,6 +1087,9 @@
       .agent-card.featured { grid-column: span 1; }
 
       .nav-links .nav-hide-mobile { display: none; }
+      body { background-attachment: scroll, scroll, scroll; }
+      .hamburger { display: flex; }
+      .comparison-wrapper::after { opacity: 1; }
     }
 
     .terminal-demo {
@@ -1032,13 +1110,27 @@
     .terminal-demo .d { color: #6b7e96; }
 
     @media (max-width: 600px) {
-      section { padding: 80px 0; }
+      section { padding: 48px 0; }
       .container { padding: 0 20px; }
       .agents-grid        { grid-template-columns: 1fr; }
       .capabilities-grid  { grid-template-columns: 1fr; }
       .telemetry-row { gap: 1px; }
-      .telemetry-cell { min-width: 80px; padding: 10px 14px; }
-      .hero-ctas { flex-direction: column; align-items: center; }
+      .telemetry-cell { flex: 1 1 calc(33.33% - 1px); min-width: 0; }
+      .hero-ctas { flex-direction: column; align-items: center; gap: 16px; }
+      .btn-primary, .btn-secondary { padding: 16px 28px; width: 100%; max-width: 300px; text-align: center; }
+      .btn-warm { padding: 16px 36px; }
+      .nav-cta { padding: 12px 16px !important; }
+      .install-modal-close { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 8px; }
+      .install-tab { padding: 14px 12px; }
+      .footer-links a, .footer-links li a { padding: 8px 4px; display: inline-block; }
+      .use-case-tag, .agent-callsign, .agent-role, .meta-key, .evidence-source, .evidence-label, .install-panel-label, .telemetry-label { font-size: 11px; }
+      .code-block { font-size: 11px; }
+      .code-block .code-line { white-space: nowrap; }
+      .footer-inner { padding: 0 20px; }
+      .terminal-demo {
+        position: relative;
+        -webkit-overflow-scrolling: touch;
+      }
     }
 
     /* ─────────────────────────────────────────────
@@ -1096,8 +1188,11 @@
       -webkit-backdrop-filter: blur(8px);
       z-index: 300;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       padding: 20px;
+      padding-top: 60px;
+      padding-bottom: 40px;
+      overflow-y: auto;
     }
     .install-modal-overlay.open {
       display: flex;
@@ -1109,6 +1204,8 @@
       width: 100%;
       padding: 40px;
       position: relative;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
     }
     .install-modal-close {
       position: absolute;
@@ -1229,10 +1326,11 @@
     .install-docs-link:hover { color: var(--accent); }
 
     @media (max-width: 600px) {
-      .install-modal { padding: 28px 20px; }
-      .install-tab { padding: 10px 12px; font-size: 10px; }
+      .install-modal { padding: 28px 20px; max-height: calc(100vh - 52px); }
+      .install-tab { padding: 14px 12px; font-size: 10px; }
       .install-command-block { flex-direction: column; align-items: stretch; }
       .install-command-block code { font-size: 11px; }
+      .install-modal-overlay { padding: 12px; padding-top: 40px; }
     }
   </style>
 </head>
@@ -1244,16 +1342,28 @@
   <nav class="nav" aria-label="Main">
     <div class="nav-inner">
       <a href="#hero" aria-label="helios — back to top" class="wordmark">helios.</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
       <ul class="nav-links">
         <li class="nav-hide-mobile"><a href="#use-cases">Use Cases</a></li>
         <li class="nav-hide-mobile"><a href="#agents">Agents</a></li>
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
         <li class="nav-hide-mobile"><a href="#install">Install</a></li>
-        <li><a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" class="nav-cta" aria-label="GitHub (opens in new tab)">GitHub →</a></li>
+        <li><a href="https://github.com/sweetcheeks72/helios-installer" target="_blank" rel="noopener" class="nav-cta" aria-label="GitHub (opens in new tab)">GitHub →</a></li>
       </ul>
     </div>
   </nav>
+
+  <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile menu">
+    <a href="#use-cases" onclick="closeMobileMenu()">Use Cases</a>
+    <a href="#agents" onclick="closeMobileMenu()">Agents</a>
+    <a href="#capabilities" onclick="closeMobileMenu()">Capabilities</a>
+    <a href="#comparison" onclick="closeMobileMenu()">Compare</a>
+    <a href="#install" onclick="closeMobileMenu()">Install</a>
+    <a href="https://github.com/sweetcheeks72/helios-installer" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub →</a>
+  </div>
 
   <main id="main-content">
 
@@ -1275,7 +1385,7 @@
 
       <div class="hero-ctas fade-up">
         <a href="#install" class="btn-primary" onclick="event.preventDefault(); openInstallModal();">Install</a>
-        <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="btn-secondary" aria-label="View source on GitHub (opens in new tab)">View Source →</a>
+        <a href="https://github.com/sweetcheeks72/helios-installer" target="_blank" rel="noopener" class="btn-secondary" aria-label="View source on GitHub (opens in new tab)">View Source →</a>
       </div>
 
       <div class="telemetry-row fade-up">
@@ -1920,7 +2030,7 @@
 
       <div class="install-tab-content active" id="tab-mac" role="tabpanel">
         <div class="install-command-block">
-          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</code>
+          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-installer/main/bootstrap.sh | bash</code>
           <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
         </div>
         <p class="install-note">Requires: macOS 13+, Node.js 18+</p>
@@ -1928,7 +2038,7 @@
 
       <div class="install-tab-content" id="tab-windows" role="tabpanel">
         <div class="install-command-block">
-          <code>irm https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/install.ps1 | iex</code>
+          <code>irm https://raw.githubusercontent.com/sweetcheeks72/helios-installer/main/install.ps1 | iex</code>
           <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
         </div>
         <p class="install-note">Run in PowerShell as Administrator. Requires: Windows 10+, Node.js 18+</p>
@@ -1936,7 +2046,7 @@
 
       <div class="install-tab-content" id="tab-linux" role="tabpanel">
         <div class="install-command-block">
-          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</code>
+          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-installer/main/bootstrap.sh | bash</code>
           <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
         </div>
         <p class="install-note">Requires: Ubuntu 20.04+ / Debian 11+ / Fedora 36+, Node.js 18+</p>
@@ -1951,7 +2061,7 @@
       </div>
 
       <div class="install-modal-footer">
-        <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="install-docs-link" aria-label="View full setup guide (opens in new tab)">Full setup guide →</a>
+        <a href="https://github.com/sweetcheeks72/helios-installer" target="_blank" rel="noopener" class="install-docs-link" aria-label="View full setup guide (opens in new tab)">Full setup guide →</a>
       </div>
     </div>
   </div>
@@ -1967,7 +2077,7 @@
       </div>
       <nav class="footer-links" aria-label="Footer">
         <ul role="list">
-          <li><a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub</a></li>
+          <li><a href="https://github.com/sweetcheeks72/helios-installer" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub</a></li>
           <li><a href="#use-cases">Use Cases</a></li>
           <li><a href="#agents">Agents</a></li>
           <li><a href="#install">Install</a></li>
@@ -2072,6 +2182,26 @@
     document.getElementById('installModal')?.addEventListener('click', function(e) {
       if (e.target === this) closeInstallModal();
     });
+
+    // ── Mobile Menu ────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', function() {
+        const isOpen = this.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        this.setAttribute('aria-expanded', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+    }
+
+    function closeMobileMenu() {
+      hamburger?.classList.remove('open');
+      mobileMenu?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
   </script>
 
 </body>
