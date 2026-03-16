@@ -1083,6 +1083,157 @@
       gap: 24px;
       flex-wrap: wrap;
     }
+
+    /* ─────────────────────────────────────────────
+       INSTALL MODAL
+    ───────────────────────────────────────────── */
+    .install-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 9, 20, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 300;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .install-modal-overlay.open {
+      display: flex;
+    }
+    .install-modal {
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      max-width: 640px;
+      width: 100%;
+      padding: 40px;
+      position: relative;
+    }
+    .install-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+    .install-modal-close:hover { color: var(--text); }
+    .install-modal-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    .install-modal-detected {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+    .install-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .install-tab {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .install-tab:hover { color: var(--text-dim); }
+    .install-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .install-tab-content {
+      display: none;
+      padding: 24px 0;
+    }
+    .install-tab-content.active {
+      display: block;
+    }
+    .install-command-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .install-command-block code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text);
+      word-break: break-all;
+      line-height: 1.6;
+      flex: 1;
+    }
+    .install-copy-btn {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .install-copy-btn:hover { background: rgba(34,211,238,0.2); }
+    .install-copy-btn.copied {
+      background: var(--green-dim);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .install-note {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      letter-spacing: 0.04em;
+    }
+    .install-modal-footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .install-docs-link {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      transition: color 0.15s;
+    }
+    .install-docs-link:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .install-modal { padding: 28px 20px; }
+      .install-tab { padding: 10px 12px; font-size: 10px; }
+      .install-command-block { flex-direction: column; align-items: stretch; }
+      .install-command-block code { font-size: 11px; }
+    }
   </style>
 </head>
 <body>
@@ -1123,8 +1274,8 @@
       </p>
 
       <div class="hero-ctas fade-up">
-        <a href="#install" class="btn-primary">Get Started</a>
-        <a href="https://github.com/sweetcheeks72/pi" target="_blank" rel="noopener" class="btn-secondary" aria-label="View on GitHub (opens in new tab)">View on GitHub →</a>
+        <a href="#install" class="btn-primary" onclick="event.preventDefault(); openInstallModal();">Install</a>
+        <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="btn-secondary" aria-label="View source on GitHub (opens in new tab)">View Source →</a>
       </div>
 
       <div class="telemetry-row fade-up">
@@ -1748,10 +1899,62 @@
         <p class="cta-sub">
           Seven agents. Zero daemons. One command to ship with confidence.
         </p>
-        <a href="#install" class="btn-warm">Get Started →</a>
+        <a href="#install" class="btn-warm" onclick="event.preventDefault(); openInstallModal();">Get Started →</a>
       </div>
     </div>
   </section>
+
+  <!-- ─── INSTALL MODAL ───────────────────────────────── -->
+  <div class="install-modal-overlay" id="installModal" role="dialog" aria-modal="true" aria-label="Install helios">
+    <div class="install-modal">
+      <button class="install-modal-close" aria-label="Close" onclick="closeInstallModal()">&times;</button>
+      <h2 class="install-modal-title">Install helios.</h2>
+      <p class="install-modal-detected" id="detectedOS"></p>
+
+      <div class="install-tabs" role="tablist">
+        <button class="install-tab active" role="tab" aria-selected="true" data-tab="mac" onclick="switchTab('mac')">macOS</button>
+        <button class="install-tab" role="tab" aria-selected="false" data-tab="windows" onclick="switchTab('windows')">Windows</button>
+        <button class="install-tab" role="tab" aria-selected="false" data-tab="linux" onclick="switchTab('linux')">Linux</button>
+        <button class="install-tab" role="tab" aria-selected="false" data-tab="npm" onclick="switchTab('npm')">npm</button>
+      </div>
+
+      <div class="install-tab-content active" id="tab-mac" role="tabpanel">
+        <div class="install-command-block">
+          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</code>
+          <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
+        </div>
+        <p class="install-note">Requires: macOS 13+, Node.js 18+</p>
+      </div>
+
+      <div class="install-tab-content" id="tab-windows" role="tabpanel">
+        <div class="install-command-block">
+          <code>irm https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/install.ps1 | iex</code>
+          <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
+        </div>
+        <p class="install-note">Run in PowerShell as Administrator. Requires: Windows 10+, Node.js 18+</p>
+      </div>
+
+      <div class="install-tab-content" id="tab-linux" role="tabpanel">
+        <div class="install-command-block">
+          <code>curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</code>
+          <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
+        </div>
+        <p class="install-note">Requires: Ubuntu 20.04+ / Debian 11+ / Fedora 36+, Node.js 18+</p>
+      </div>
+
+      <div class="install-tab-content" id="tab-npm" role="tabpanel">
+        <div class="install-command-block">
+          <code>npm install -g @familiar/pi</code>
+          <button class="install-copy-btn" onclick="copyCommand(this)" aria-label="Copy command">Copy</button>
+        </div>
+        <p class="install-note">Works on any platform with Node.js 18+ installed.</p>
+      </div>
+
+      <div class="install-modal-footer">
+        <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="install-docs-link" aria-label="View full setup guide (opens in new tab)">Full setup guide →</a>
+      </div>
+    </div>
+  </div>
 
   </main>
 
@@ -1814,6 +2017,61 @@
 
       els.forEach((el) => io.observe(el));
     })();
+
+    // ── Install Modal ────────────────────────
+    function detectOS() {
+      const ua = navigator.userAgent.toLowerCase();
+      const platform = navigator.platform?.toLowerCase() || '';
+      if (platform.includes('mac') || ua.includes('macintosh')) return 'mac';
+      if (platform.includes('win') || ua.includes('windows')) return 'windows';
+      return 'linux';
+    }
+
+    function openInstallModal() {
+      const modal = document.getElementById('installModal');
+      const os = detectOS();
+      const labels = { mac: 'macOS detected', windows: 'Windows detected', linux: 'Linux detected' };
+      document.getElementById('detectedOS').textContent = labels[os] || '';
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      switchTab(os);
+      // trap focus
+      modal.querySelector('.install-modal-close').focus();
+      // close on Esc
+      modal._escHandler = function(e) { if (e.key === 'Escape') closeInstallModal(); };
+      document.addEventListener('keydown', modal._escHandler);
+    }
+
+    function closeInstallModal() {
+      const modal = document.getElementById('installModal');
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      if (modal._escHandler) document.removeEventListener('keydown', modal._escHandler);
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.install-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === tab);
+        t.setAttribute('aria-selected', t.dataset.tab === tab);
+      });
+      document.querySelectorAll('.install-tab-content').forEach(c => {
+        c.classList.toggle('active', c.id === 'tab-' + tab);
+      });
+    }
+
+    function copyCommand(btn) {
+      const code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    // Close modal on overlay click (not inner modal click)
+    document.getElementById('installModal')?.addEventListener('click', function(e) {
+      if (e.target === this) closeInstallModal();
+    });
   </script>
 
 </body>
