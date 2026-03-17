@@ -167,10 +167,10 @@
       margin-bottom: 48px;
     }
     .gate-mark {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       color: var(--accent);
-      opacity: 0.12;
+      opacity: 0.5;
       margin-bottom: 24px;
     }
     .gate-title {
@@ -412,6 +412,48 @@
       opacity: 0.8;
     }
     .nav-links .nav-cta:hover { background: var(--accent-dim); opacity: 1; }
+
+    /* Persona switcher */
+    .persona-switcher {
+      display: flex;
+      gap: 2px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 2px;
+    }
+    .ps-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-mono);
+    }
+    .ps-btn:hover { background: rgba(255,255,255,0.04); }
+    .ps-btn.active { background: rgba(255,255,255,0.06); }
+    .ps-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .ps-btn.active .ps-dot { opacity: 1; }
+    .ps-btn:hover .ps-dot { opacity: 0.8; }
+    .ps-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .ps-btn.active .ps-label { opacity: 1; color: var(--text); }
+    .ps-btn:hover .ps-label { opacity: 0.9; }
 
     /* HELIOS wordmark — right side, barely visible */
     /* Brand identity */
@@ -2594,6 +2636,19 @@
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
         <li class="nav-hide-mobile"><a href="#install" onclick="event.preventDefault(); openInstallModal();">Install</a></li>
+        <li class="nav-hide-mobile">
+          <div class="persona-switcher" id="personaSwitcher" aria-label="Switch experience">
+            <button class="ps-btn" data-p="development" onclick="switchPersona('development')" title="Development">
+              <span class="ps-dot" style="background:#22D3EE;"></span><span class="ps-label">Dev</span>
+            </button>
+            <button class="ps-btn" data-p="business" onclick="switchPersona('business')" title="Business">
+              <span class="ps-dot" style="background:#d4a73a;"></span><span class="ps-label">Biz</span>
+            </button>
+            <button class="ps-btn" data-p="everyday" onclick="switchPersona('everyday')" title="Everyday Life">
+              <span class="ps-dot" style="background:#22C55E;"></span><span class="ps-label">Life</span>
+            </button>
+          </div>
+        </li>
         <li><a href="#install" onclick="event.preventDefault(); openInstallModal();" class="nav-cta" aria-label="Get Started">Get Started →</a></li>
       </ul>
 
@@ -4277,8 +4332,8 @@ initState();
   <!-- ═══ PRIVACY GLASS GATE — Controller ═══ -->
   <script>
   (function() {
-    const gate = document.getElementById('gate');
-    const page = document.getElementById('pageContent');
+    var gate = document.getElementById('gate');
+    var page = document.getElementById('pageContent');
 
     // Frost the page on load
     if (gate && page) {
@@ -4287,7 +4342,7 @@ initState();
     }
 
     // Check if user already chose (session persistence)
-    const saved = sessionStorage.getItem('helios-persona');
+    var saved = sessionStorage.getItem('helios-persona');
     if (saved && gate && page) {
       gate.style.display = 'none';
       page.classList.remove('frosted');
@@ -4295,23 +4350,16 @@ initState();
       applyPersona(saved);
     }
 
+    // Gate open (with dissolve animation)
     window.openGate = function(persona) {
       if (!gate || !page) return;
-
-      // Store choice
       sessionStorage.setItem('helios-persona', persona);
-
-      // Phase 1: gate dissolves (1.8s)
       gate.classList.add('dissolving');
-
-      // Phase 2: glass clears (starts 0.3s after gate begins dissolving)
       setTimeout(function() {
         page.classList.remove('frosted');
         page.classList.add('clearing');
         document.body.style.overflow = '';
       }, 300);
-
-      // Phase 3: cleanup
       setTimeout(function() {
         gate.style.display = 'none';
         page.classList.remove('clearing');
@@ -4319,31 +4367,57 @@ initState();
       }, 2000);
     };
 
+    // Switch persona from nav (instant, no dissolve)
+    window.switchPersona = function(persona) {
+      sessionStorage.setItem('helios-persona', persona);
+      applyPersona(persona);
+      // Smooth scroll to top to see the change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     function applyPersona(persona) {
       document.documentElement.setAttribute('data-persona', persona);
 
-      // Show/hide mission blocks
+      // ── 1. Mission blocks ──
       document.querySelectorAll('.mission-block[data-persona]').forEach(function(el) {
         var personas = el.getAttribute('data-persona').split(' ');
-        el.style.display = personas.indexOf(persona) !== -1 ? '' : 'none';
-      });
-
-      // Also hide connectors after hidden blocks
-      document.querySelectorAll('.mission-block[data-persona]').forEach(function(el) {
-        var connector = el.nextElementSibling;
-        if (connector && connector.classList.contains('section-connector')) {
-          connector.style.display = el.style.display;
+        var show = personas.indexOf(persona) !== -1;
+        el.style.display = show ? '' : 'none';
+        // Hide trailing connector too
+        var next = el.nextElementSibling;
+        if (next && next.classList.contains('section-connector')) {
+          next.style.display = show ? '' : 'none';
         }
       });
 
-      // Switch reel mode
-      if (persona === 'everyday' && typeof window.setMode === 'function') {
-        window.setMode('everyday');
-      } else if (typeof window.setMode === 'function') {
-        window.setMode('business');
+      // ── 2. Nav persona switcher state ──
+      document.querySelectorAll('.ps-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-p') === persona);
+      });
+
+      // ── 3. Hero eyebrow ──
+      var eyebrow = document.querySelector('.hero-eyebrow');
+      if (eyebrow) {
+        var eyebrows = {
+          development: 'helios. <span class="eyebrow-dim">for developers</span>',
+          business: 'helios. <span class="eyebrow-dim">for business</span>',
+          everyday: 'helios. <span class="eyebrow-dim">for everyday life</span>'
+        };
+        eyebrow.innerHTML = eyebrows[persona] || 'helios. <span class="eyebrow-dim">Personal AI</span>';
       }
 
-      // Update header
+      // ── 4. Hero headline ──
+      var headline = document.querySelector('.inst-headline');
+      if (headline) {
+        var headlines = {
+          development: 'Tell it what to build.<br>It ships the rest.',
+          business: 'Tell it what you need.<br>It handles the rest.',
+          everyday: 'Tell it what you need.<br>It takes care of the rest.'
+        };
+        headline.innerHTML = headlines[persona] || 'Tell it what you need.<br>It handles the rest.';
+      }
+
+      // ── 5. Use-cases section header ──
       var headerEl = document.getElementById('use-cases-header');
       if (headerEl) {
         var titles = {
@@ -4353,6 +4427,29 @@ initState();
         };
         headerEl.textContent = titles[persona] || 'What Helios does for you.';
       }
+
+      // ── 6. Reel mode ──
+      if (persona === 'everyday' && typeof window.setMode === 'function') {
+        window.setMode('everyday');
+      } else if (typeof window.setMode === 'function') {
+        window.setMode('business');
+      }
+
+      // ── 7. CTA text ──
+      document.querySelectorAll('.nav-cta').forEach(function(el) {
+        var ctas = {
+          development: 'Install →',
+          business: 'Get Started →',
+          everyday: 'Try It Free →'
+        };
+        el.textContent = ctas[persona] || 'Get Started →';
+      });
+
+      // ── 8. Generic persona-show elements ──
+      document.querySelectorAll('[data-persona-show]').forEach(function(el) {
+        var show = el.getAttribute('data-persona-show');
+        el.style.display = (show === persona || show === 'all') ? '' : 'none';
+      });
     }
   })();
   </script>
