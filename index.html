@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>helios. — AI Operating Layer</title>
-  <meta name="description" content="Terminal-native AI orchestration with seven specialized agents, self-enforcing governance, and cross-session memory." />
+  <meta name="description" content="Terminal-native AI that ships features, reviews code, and learns from every session. No daemons. Any model. One command." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -587,7 +587,7 @@
     }
 
     /* ─────────────────────────────────────────────
-       SEVEN AGENTS
+       HOW IT WORKS
     ───────────────────────────────────────────── */
     .agents-grid {
       display: grid;
@@ -1423,7 +1423,7 @@
       </button>
       <ul class="nav-links">
         <li class="nav-hide-mobile"><a href="#use-cases">Use Cases</a></li>
-        <li class="nav-hide-mobile"><a href="#agents">Agents</a></li>
+        <li class="nav-hide-mobile"><a href="#how-it-works">How It Works</a></li>
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
         <li class="nav-hide-mobile"><a href="#install">Install</a></li>
@@ -1434,7 +1434,7 @@
 
   <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile menu">
     <a href="#use-cases" onclick="closeMobileMenu()">Use Cases</a>
-    <a href="#agents" onclick="closeMobileMenu()">Agents</a>
+    <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
     <a href="#capabilities" onclick="closeMobileMenu()">Capabilities</a>
     <a href="#comparison" onclick="closeMobileMenu()">Compare</a>
     <a href="#install" onclick="closeMobileMenu()">Install</a>
@@ -1456,7 +1456,7 @@
       </h1>
 
       <p class="hero-subtitle fade-up">
-        Ships your features overnight. Reviews its own PRs. Researches markets with real sources. Debugs with memory from last month's bugs. Manages your email triage. Writes and distributes your content. Keeps itself in line with 10 self-enforcing rules.
+        Ship features, research markets, review code, debug production — all from one command in your terminal. No daemons. No cloud. Just results.
       </p>
 
       <div class="hero-ctas fade-up">
@@ -1466,20 +1466,20 @@
 
       <div class="telemetry-row fade-up">
         <div class="telemetry-cell">
-          <span class="telemetry-value">7</span>
-          <span class="telemetry-label">Agents</span>
+          <span class="telemetry-value">6 min</span>
+          <span class="telemetry-label">Avg Feature Ship</span>
         </div>
         <div class="telemetry-cell">
-          <span class="telemetry-value">50+</span>
-          <span class="telemetry-label">Skills</span>
+          <span class="telemetry-value">42</span>
+          <span class="telemetry-label">Source Citations</span>
         </div>
         <div class="telemetry-cell warm-cell">
-          <span class="telemetry-value">10+</span>
-          <span class="telemetry-label">Rules</span>
+          <span class="telemetry-value">3-Stage</span>
+          <span class="telemetry-label">Quality Review</span>
         </div>
         <div class="telemetry-cell">
-          <span class="telemetry-value">95k</span>
-          <span class="telemetry-label">Memory Nodes</span>
+          <span class="telemetry-value">Cross-Session</span>
+          <span class="telemetry-label">Memory</span>
         </div>
         <div class="telemetry-cell green-cell">
           <span class="telemetry-value">0</span>
@@ -1510,18 +1510,20 @@
             <h3 class="use-case-title">Ship a feature from a single sentence</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: shipping a Stripe billing feature"><span class="p">❯</span> helios "Add Stripe billing to the SaaS app"
 
-<span class="a">[scout]</span>    Mapping codebase... 847 files, Next.js + Prisma
-<span class="a">[planner]</span>  6 tasks decomposed, 3 parallelizable
-<span class="a">[worker]</span>   Wave 1: schema + API routes       ██████████ 3/3
-<span class="a">[worker]</span>   Wave 2: webhooks + checkout UI     ██████████ 3/3
-<span class="a">[reviewer]</span> Adversarial review: 1 finding → patching
-<span class="a">[verifier]</span> 23 tests passing. Stripe test mode verified.
-<span class="s">✅ PR #47 opened</span> <span class="d">"Add Stripe billing"</span></div>
+  Analyzing codebase... 847 files, Next.js + Prisma
+  Planning: 6 tasks, 3 parallelizable
+  Building ▸▸▸▸▸▸▸▸▸▸ schema + API routes       <span class="s">✓</span>
+  Building ▸▸▸▸▸▸▸▸▸▸ webhooks + checkout UI     <span class="s">✓</span>
+  Reviewing... 1 finding → auto-patched
+  Verified: 23 tests passing
+<span class="s">✅ PR #47 opened</span> <span class="d">"Add Stripe billing" · 6 tasks · 23 tests</span></div>
             <p class="use-case-desc">Six tasks. Two parallel waves. Adversarial review before the PR. You slept through it.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Scout → Planner → Workers → Reviewer → Verifier</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">6 tasks · 23 tests · 1 PR</span></div>
+          </div>
         </div>
       </div>
 
@@ -1533,15 +1535,17 @@
             <h3 class="use-case-title">Research a market in 5 minutes, not 5 hours</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: researching AI agent market"><span class="p">❯</span> helios "Research the AI agent landscape for our investor deck"
 
-<span class="a">[researcher]</span> Running 4 parallel searches...
-<span class="a">[researcher]</span> Cross-referencing 23 sources across 4 angles
-<span class="a">[researcher]</span> Synthesizing with citations
-<span class="s">✅ Report saved</span> <span class="d">ai-agent-landscape-2026.html (42 sources)</span></div>
+  Searching... 4 parallel angles
+  Cross-referencing 23 sources
+  Synthesizing with citations ▸▸▸▸▸▸▸▸▸▸              <span class="s">✓</span>
+<span class="s">✅ Report saved</span> <span class="d">ai-agent-landscape-2026.html · 42 sources cited</span></div>
             <p class="use-case-desc">Four search angles. Twenty-three sources. Forty-two citations. Not a summary — a proper analysis.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Researcher → Cross-reference → Synthesis</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">42 sources · 4 angles · 1 report</span></div>
+          </div>
         </div>
       </div>
 
@@ -1553,16 +1557,18 @@
             <h3 class="use-case-title">Automate the daily grind</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: automating email and CRM tasks"><span class="p">❯</span> helios "Summarize unread emails, draft replies, update CRM with new leads"
 
-<span class="a">[scout]</span>    Scanning inbox... 47 unread, 8 flagged urgent
-<span class="a">[worker]</span>   Drafting replies for 8 threads
-<span class="a">[worker]</span>   3 new leads → Salesforce
-<span class="a">[reviewer]</span> Checking tone + accuracy
+  Scanning inbox... 47 unread, 8 flagged urgent
+  Drafting replies for 8 threads ▸▸▸▸▸▸▸▸▸▸         <span class="s">✓</span>
+  3 new leads → Salesforce ▸▸▸▸▸▸▸▸▸▸               <span class="s">✓</span>
+  Checking tone + accuracy...                        <span class="s">✓</span>
 <span class="s">✅ Done</span> <span class="d">8 drafts ready · 3 leads added · summary sent</span></div>
             <p class="use-case-desc">Email triage, CRM updates, and draft replies — reviewed before anything sends.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Scout → Worker → Reviewer → Report</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">8 drafts · 3 leads · quality checked</span></div>
+          </div>
         </div>
       </div>
 
@@ -1571,18 +1577,20 @@
         <div class="use-case-content">
           <div class="use-case-card">
             <span class="use-case-tag">REVIEW</span>
-            <h3 class="use-case-title">Three agents review your code, not one</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: three-agent code review"><span class="p">❯</span> helios "Review PR #89 before we merge"
+            <h3 class="use-case-title">Three-stage review catches what one pass misses</h3>
+            <div class="terminal-demo" role="img" aria-label="Terminal: three-stage code review"><span class="p">❯</span> helios "Review PR #89 before we merge"
 
-<span class="a">[reviewer]</span> Adversarial review: security, architecture, style
-<span class="a">[verifier]</span> Tracing data flow across 12 files
-<span class="a">[auditor]</span>  Checking PR description vs actual diff
+  Adversarial review: security, architecture, style ▸▸▸▸
+  Tracing data flow across 12 files ▸▸▸▸▸▸▸▸▸▸
+  Verifying PR description vs actual diff ▸▸▸▸▸▸▸▸▸▸
 <span class="s">⚠️ 2 findings</span> <span class="d">SQL injection in /api/users · missing edge case test</span></div>
-            <p class="use-case-desc">Reviewer finds bugs. Verifier traces data flow. Auditor checks the PR description isn't lying.</p>
+            <p class="use-case-desc">Three independent review passes. Security. Data flow. Claim verification. Nothing gets through.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Reviewer → Verifier → Auditor</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">3 review passes · 12 files traced</span></div>
+          </div>
         </div>
       </div>
 
@@ -1594,16 +1602,18 @@
             <h3 class="use-case-title">Research, write, publish — one command</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: writing and publishing content"><span class="p">❯</span> helios "Blog post about our new API, publish and create social threads"
 
-<span class="a">[researcher]</span> Reading API docs + changelog + competitors
-<span class="a">[worker]</span>    Draft: 1,200 words, technical audience
-<span class="a">[reviewer]</span>  Tone + accuracy review passed
-<span class="a">[worker]</span>    Published: blog · Twitter (6) · LinkedIn
+  Reading API docs + changelog + competitors ▸▸▸▸▸▸   <span class="s">✓</span>
+  Drafting: 1,200 words, technical audience ▸▸▸▸▸▸▸▸  <span class="s">✓</span>
+  Tone + accuracy review passed                       <span class="s">✓</span>
+  Publishing: blog · Twitter (6) · LinkedIn ▸▸▸▸▸▸▸   <span class="s">✓</span>
 <span class="s">✅ Live</span> <span class="d">blog + 2 social platforms</span></div>
-            <p class="use-case-desc">Research. Draft. Review. Publish. Four agents, one command.</p>
+            <p class="use-case-desc">Research. Draft. Review. Publish. Four stages, one command.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Researcher → Worker → Reviewer → Publish</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">research · draft · review · publish</span></div>
+          </div>
         </div>
       </div>
 
@@ -1615,16 +1625,19 @@
             <h3 class="use-case-title">Debug with memory from last month</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: debugging with cross-session memory"><span class="p">❯</span> helios "Auth middleware returning 403s on valid tokens"
 
-<span class="a">[memory]</span>   Similar bug: Session #412 — JWT clock skew (Feb 14)
-<span class="a">[scout]</span>    Confirmed: expiry check ignores clock drift
-<span class="a">[worker]</span>   Added 30s leeway to jwt.verify()
-<span class="a">[verifier]</span> 14 auth tests passing. No regression.
+  Recalling similar issues from prior sessions...
+  Match found: JWT clock skew (Feb 14)
+  Analyzing: expiry check ignores clock drift       <span class="s">✓</span>
+  Patching: 30s leeway added to jwt.verify() ▸▸▸▸  <span class="s">✓</span>
+  Verifying: 14 auth tests passing, no regression   <span class="s">✓</span>
 <span class="s">✅ Fixed</span> <span class="d">Same root cause as last month — 4 min vs 2 hours</span></div>
             <p class="use-case-desc">Last month this took 2 hours. Helios remembered the fix. Four minutes.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Memory → Scout → Worker → Verifier</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">recalled · fixed · verified · 4 min</span></div>
+          </div>
         </div>
       </div>
 
@@ -1636,18 +1649,21 @@
             <h3 class="use-case-title">The agent that asks before it breaks things</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: governance confirmation before refactoring"><span class="p">❯</span> helios "Refactor the entire payments module"
 
-<span class="a">[governance]</span> Scope: 34 files, 6 services affected
-<span class="a">[governance]</span> Confirmation required
-<span class="d">  "This touches payments, auth, and billing.</span>
-<span class="d">   Should I preserve the legacy Stripe v2 fallback?"</span>
+  Scoping: 34 files, 6 services affected
+  Confirmation required:
+  <span class="d">"This touches payments, auth, and billing.</span>
+  <span class="d"> Should I preserve the legacy Stripe v2 fallback?"</span>
 <span class="p">❯</span> Yes, keep the fallback
-<span class="a">[planner]</span>   8 tasks, review after every 2 workers
-<span class="s">✅ Done</span> <span class="d">8 tasks · 4 review cycles · 0 violations</span></div>
-            <p class="use-case-desc">It asked before touching payments. Reviewed after every two tasks. Zero drift.</p>
+  Planning: 8 tasks decomposed ▸▸▸▸▸▸▸▸▸▸           <span class="s">✓</span>
+  Executing with quality gates after each phase...
+<span class="s">✅ Done</span> <span class="d">8 tasks · quality checks at every stage · 0 drift</span></div>
+            <p class="use-case-desc">It asked before touching payments. Quality checks at every stage. Zero drift.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Governance → Planner → Workers → Review Cycles</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">confirmed · planned · quality-gated</span></div>
+          </div>
         </div>
       </div>
 
@@ -1659,18 +1675,20 @@
             <h3 class="use-case-title">Coordinate a real migration</h3>
             <div class="terminal-demo" role="img" aria-label="Terminal: coordinating a monolith migration"><span class="p">❯</span> helios "Migrate user service out of the monolith"
 
-<span class="a">[planner]</span>  12 tasks across 4 waves
-<span class="a">[wave 1]</span>  Schema + API contracts        ██████████
-<span class="a">[wave 2]</span>  Service extraction + routing   ██████████
-<span class="a">[wave 3]</span>  Integration tests + sync       ██████████
-<span class="a">[reviewer]</span> Architecture review each wave
-<span class="a">[wave 4]</span>  Cutover + monitoring           ██████████
+  Planning: 12 tasks across 4 waves ▸▸▸▸▸▸▸▸▸▸      <span class="s">✓</span>
+  Wave 1: Schema + API contracts        ██████████   <span class="s">✓</span>
+  Wave 2: Service extraction + routing  ██████████   <span class="s">✓</span>
+  Wave 3: Integration tests + sync      ██████████   <span class="s">✓</span>
+  Architecture review after each wave              
+  Wave 4: Cutover + monitoring          ██████████   <span class="s">✓</span>
 <span class="s">✅ Migrated</span> <span class="d">12 tasks · 4 waves · 47 tests</span></div>
-            <p class="use-case-desc">Twelve tasks. Four waves. Parallel workers. Real coordination.</p>
+            <p class="use-case-desc">Twelve tasks. Four waves. Parallel execution. Architecture review built in.</p>
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="how-flow" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);line-height:2.2;">Planner → Wave 1 → Wave 2 → Wave 3 → Wave 4</div>
+          <div class="use-case-meta">
+            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">12 tasks · 4 waves · 47 tests</span></div>
+          </div>
         </div>
       </div>
 
@@ -1691,21 +1709,21 @@
           <div class="pillar-icon warm-icon" aria-hidden="true">⚖</div>
           <h3 class="pillar-title">Governance-first</h3>
           <p class="pillar-desc">
-            Every action logged with a reason. Asks before touching important code. Reviews its own work after every two tasks. Compliance score: 0 to 100. You don't have to watch it — it watches itself.
+            Every action is logged, scoped, and reviewed. It asks before touching important code and catches its own mistakes before you do. You don't have to watch it — it watches itself.
           </p>
         </div>
         <div class="pillar-card fade-up">
           <div class="pillar-icon cyan-icon" aria-hidden="true">◈</div>
           <h3 class="pillar-title">Self-solving architecture</h3>
           <p class="pillar-desc">
-            Searches the web when it doesn't know. Reviews failed sessions and adjusts. Extracts working patterns into reusable rules. Gets better the more you use it.
+            When something fails, it tries different approaches. When it learns something new, it remembers for next time. Improves with every session.
           </p>
         </div>
         <div class="pillar-card fade-up">
           <div class="pillar-icon green-icon" aria-hidden="true">◉</div>
           <h3 class="pillar-title">Human-in-control</h3>
           <p class="pillar-desc">
-            You set the autonomy level — fully autonomous, approval-required, or advisory-only. Pause mid-task without losing state. Stalled agents get killed and restarted automatically.
+            You set the autonomy level — fully autonomous, approval-required, or advisory-only. Pause, redirect, or override at any point.
           </p>
         </div>
       </div>
@@ -1713,100 +1731,39 @@
     </div>
   </section>
 
-  <!-- ─── SEVEN AGENTS ──────────────────────────────────── -->
-  <section id="agents">
+  <!-- ─── HOW IT WORKS ──────────────────────────────────── -->
+  <section id="how-it-works">
     <div class="container">
 
       <div class="fade-up">
-        <div class="section-label">THE CREW</div>
-        <h2 class="section-title">Seven specialized agents.<br>Each owns a lane.</h2>
+        <div class="section-label">HOW IT WORKS</div>
+        <h2 class="section-title">Three stages. One command.</h2>
         <p class="section-subtitle">
-          Named after physicists. Each is a specialist, not a generalist.
-          Role boundaries are enforced by governance — a reviewer can't write code,
-          a scout can't make edits.
+          Every task goes through the same disciplined process — no shortcuts, no guessing.
         </p>
       </div>
 
-      <div class="agents-grid">
-        <div class="agent-card featured fade-up">
-          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> ARLINE</div>
-          <h3 class="agent-name">Scout</h3>
-          <div class="agent-role">Reconnaissance</div>
-          <div class="agent-desc">
-            Maps the codebase before any work begins. Identifies patterns, entities, dependencies,
-            and data flow. Produces the intelligence that all other agents rely on. Cannot edit
-            source files — read-only by governance rule.
-          </div>
+      <div class="pillars-grid">
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon cyan-icon" aria-hidden="true">◈</div>
+          <h3 class="pillar-title">Understand</h3>
+          <p class="pillar-desc">
+            Analyzes your codebase, maps dependencies, identifies what matters before touching anything. Plans tasks, defines acceptance criteria, and confirms scope with you on consequential work.
+          </p>
         </div>
-        <div class="agent-card featured fade-up">
-          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> WHEELER</div>
-          <h3 class="agent-name">Planner</h3>
-          <div class="agent-role">Decomposition</div>
-          <div class="agent-desc">
-            Converts scout findings and requirements into executable task graphs with dependencies,
-            verification criteria, and file boundaries. Uses goal-backward planning — starts from
-            the desired outcome, works back to the first step.
-          </div>
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon warm-icon" aria-hidden="true">⊞</div>
+          <h3 class="pillar-title">Execute</h3>
+          <p class="pillar-desc">
+            Decomposes work into parallel tasks. Independent workstreams run simultaneously with conflict-free coordination. Every task starts with a failing test and ends with passing verification.
+          </p>
         </div>
-        <div class="agent-card worker-card fade-up">
-          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> DYSON</div>
-          <h3 class="agent-name">Worker</h3>
-          <div class="agent-role">Implementation</div>
-          <div class="agent-desc">
-            The only agent allowed to write source code. Operates under strict TDD —
-            RED → GREEN → refactor. Deep Execution Standard: no partial reports, no stubs.
-            100% completion or escalate.
-          </div>
-        </div>
-        <div class="agent-card fade-up">
-          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> MURRAY</div>
-          <h3 class="agent-name">Reviewer</h3>
-          <div class="agent-role">Adversarial Review</div>
-          <div class="agent-desc">
-            Assumes all worker output is subtly wrong until proven otherwise. Multi-technique
-            rotation across type tracing, state mutation, spec contradiction, and security
-            scans. Cannot fix — only flags.
-          </div>
-        </div>
-        <div class="agent-card fade-up">
-          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> HANS</div>
-          <h3 class="agent-name">Verifier</h3>
-          <div class="agent-role">Invariant Analysis</div>
-          <div class="agent-desc">
-            Traces data flow and checks invariant preservation. Verifies that worker
-            implementation matches the approved data model. Vacuous test detection —
-            deletes the implementation and checks if tests still pass.
-          </div>
-        </div>
-        <div class="agent-card fade-up">
-          <div class="agent-callsign"><span class="led led-cyan" aria-hidden="true"></span> DIRAC</div>
-          <h3 class="agent-name">Auditor</h3>
-          <div class="agent-role">Claim Verification</div>
-          <div class="agent-desc">
-            Checks that what agents claim matches ground truth. Every assertion needs evidence —
-            file:line citations, test output, direct observation. Trust-but-verify at the
-            orchestration layer.
-          </div>
-        </div>
-        <div class="agent-card fade-up">
-          <div class="agent-callsign"><span class="led led-amber" aria-hidden="true"></span> TUKEY</div>
-          <h3 class="agent-name">Researcher</h3>
-          <div class="agent-role">Web Research</div>
-          <div class="agent-desc">
-            Live web search via Perplexity — no stale training data. Multi-angle research
-            across 2–4 queries per topic. Synthesizes findings into actionable intelligence
-            before planning starts.
-          </div>
-        </div>
-        <div class="agent-card fade-up">
-          <div class="agent-callsign"><span class="led" aria-hidden="true"></span> EXTENDED CREW</div>
-          <h3 class="agent-name">+5 Specialists</h3>
-          <div class="agent-role">Conditional Dispatch</div>
-          <div class="agent-desc">
-            Oracle (architecture decisions), Metis (plan consulting), Momus (adversarial plan
-            review), Pauli (governance critic), Noether (library research). Dispatched
-            conditionally based on task complexity.
-          </div>
+        <div class="pillar-card fade-up">
+          <div class="pillar-icon green-icon" aria-hidden="true">◉</div>
+          <h3 class="pillar-title">Verify</h3>
+          <p class="pillar-desc">
+            Multi-stage adversarial review. Every change is tested, traced, and independently verified before you see it. Nothing ships with stubs, broken pipes, or unverified claims.
+          </p>
         </div>
       </div>
 
@@ -1819,69 +1776,39 @@
 
       <div class="fade-up">
         <div class="section-label">SYSTEM CAPABILITIES</div>
-        <h2 class="section-title">Twelve systems, one orchestrator.</h2>
+        <h2 class="section-title">Six things built in from day one.</h2>
       </div>
 
       <div class="capabilities-grid">
         <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">◈</div>
-          <h3 class="cap-name">GSD Lane Routing</h3>
-          <div class="cap-desc">Scores 8 complexity signals every task. Routes to lite, collaboration, or full-lane execution automatically.</div>
-        </div>
-        <div class="cap-cell fade-up">
           <div class="cap-glyph" aria-hidden="true">◉</div>
-          <h3 class="cap-name">Cross-Session Memory</h3>
-          <div class="cap-desc">95k+ nodes in a local Memgraph database. Vector-embedded semantic search. HEMA auto-injects prior experience into every dispatch.</div>
+          <h3 class="cap-name">Persistent Memory</h3>
+          <div class="cap-desc">Learns from every session. Recalls similar bugs, successful patterns, and past decisions. The more you use it, the faster it gets.</div>
         </div>
         <div class="cap-cell fade-up">
           <div class="cap-glyph" aria-hidden="true">⊞</div>
           <h3 class="cap-name">Parallel Execution</h3>
-          <div class="cap-desc">Independent subtasks run simultaneously. File reservations prevent conflicts. Wave-based coordination via pi_messenger mesh.</div>
+          <div class="cap-desc">Independent tasks run simultaneously. Conflict-free coordination keeps quality high even at speed.</div>
         </div>
         <div class="cap-cell fade-up">
           <div class="cap-glyph" aria-hidden="true">⌘</div>
-          <h3 class="cap-name">Governance Engine</h3>
-          <div class="cap-desc">10+ hard rules enforced by extension every turn. Compliance score 0–100. Events logged to audit trail. Cannot be bypassed.</div>
-        </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⊙</div>
-          <h3 class="cap-name">Coding Matrix</h3>
-          <div class="cap-desc">Live Sigma.js dependency graph from Memgraph. Visualize architecture, identify hotspots, explore coupling before touching code.</div>
+          <h3 class="cap-name">Self-Governing</h3>
+          <div class="cap-desc">Built-in quality enforcement. Asks before touching critical code. Reviews its own work before you see it.</div>
         </div>
         <div class="cap-cell fade-up">
           <div class="cap-glyph" aria-hidden="true">≡</div>
-          <h3 class="cap-name">TDD Enforcement</h3>
-          <div class="cap-desc">Dirty-bit protocol — no completion accepted without RED→GREEN evidence. Stub scanner. Pipe verification. Vacuous test detection.</div>
-        </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">↻</div>
-          <h3 class="cap-name">Self-Repair Loop</h3>
-          <div class="cap-desc">Workers attempt 5 different repair strategies before escalating. Scratchpad prevents repeating failed approaches. Loop detection cuts thrashing.</div>
-        </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⊿</div>
-          <h3 class="cap-name">Warm Proactive System</h3>
-          <div class="cap-desc">Ambient watch loop queries the knowledge graph between dispatches. Speculative pre-warming caches likely next agents. Sub-5s activation latency.</div>
-        </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">◳</div>
-          <h3 class="cap-name">Data-Model-First</h3>
-          <div class="cap-desc">Entities and relationships designed before code. Data model approval gate on full-lane tasks — workers blocked until user approves the schema.</div>
+          <h3 class="cap-name">Test-Driven</h3>
+          <div class="cap-desc">Every task starts with a failing test. No code ships without passing verification. No stubs. No shortcuts.</div>
         </div>
         <div class="cap-cell fade-up">
           <div class="cap-glyph" aria-hidden="true">⟳</div>
-          <h3 class="cap-name">Provider Failover</h3>
-          <div class="cap-desc">Automatic failover across Anthropic → OpenAI → Google on rate limits. Failover path logged in session recap. No interruption to workflows.</div>
+          <h3 class="cap-name">Model Freedom</h3>
+          <div class="cap-desc">Works with any LLM — Claude, GPT, Gemini, Llama, or your own. Switch providers without changing workflows.</div>
         </div>
         <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">◫</div>
-          <h3 class="cap-name">Design System</h3>
-          <div class="cap-desc">IBM Plex Sans + Space Mono. Deep navy + cyan phosphor + amber warmth. Every HTML artifact follows the visual system automatically.</div>
-        </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⊛</div>
-          <h3 class="cap-name">Multi-Provider</h3>
-          <div class="cap-desc">Anthropic, OpenAI, Google, OpenRouter. Per-agent model overrides. Cost-optimized routing with the GSD execution standard.</div>
+          <div class="cap-glyph" aria-hidden="true">◈</div>
+          <h3 class="cap-name">Zero Infrastructure</h3>
+          <div class="cap-desc">Runs in your terminal. No daemon. No Docker. No cloud account. One command to install.</div>
         </div>
       </div>
 
@@ -1898,7 +1825,7 @@
       </div>
 
       <p class="model-agnostic-text fade-up">
-        Helios is the harness, not the model. Use Claude, GPT, Gemini, Llama, Mistral, or any local model through Ollama. The orchestration layer — the governance, the memory, the multi-agent coordination — that's what makes the difference. Models are commodities. The harness is the competitive moat.
+        Helios works with any model. The intelligence isn't in the model — it's in the orchestration. Governance, memory, coordination, and quality enforcement work the same regardless of which LLM you choose.
       </p>
 
       <div class="model-badges-row fade-up">
@@ -1933,7 +1860,7 @@
       </div>
 
       <p class="evidence-quote fade-up">
-        "A 3B specialist with the right harness beats a 400B generalist without one." — synthesized from NVIDIA ToolOrchestra, AutoHarness, and ThinkSLM research.
+        "The right orchestration makes a small model outperform a large one without it." — derived from NVIDIA, Google DeepMind, and Microsoft research, 2025–2026.
       </p>
 
     </div>
@@ -1967,25 +1894,25 @@
               <th scope="row" class="row-label">How it works</th>
               <td>1 agent does everything</td>
               <td>Daemon runs 24/7</td>
-              <td class="helios-col">7 agents, each with one job</td>
+              <td class="helios-col">Specialized agents, each with one job</td>
             </tr>
             <tr>
               <th scope="row" class="row-label">Memory</th>
               <td>Forgets each session</td>
               <td>Markdown files</td>
-              <td class="helios-col">Knowledge graph (95k nodes)</td>
+              <td class="helios-col">Persistent knowledge graph</td>
             </tr>
             <tr>
               <th scope="row" class="row-label">Self-control</th>
               <td>None — you manage it</td>
               <td>You write the rules</td>
-              <td class="helios-col">Manages itself — 10 rules</td>
+              <td class="helios-col">Self-governing quality system</td>
             </tr>
             <tr>
               <th scope="row" class="row-label">Quality checks</th>
               <td>Optional</td>
               <td>None built-in</td>
-              <td class="helios-col">3-stage mandatory review</td>
+              <td class="helios-col">Multi-stage mandatory review</td>
             </tr>
             <tr>
               <th scope="row" class="row-label">Model lock-in</th>
@@ -2076,7 +2003,7 @@
       <div class="cta-inner fade-up">
         <h2 class="cta-title">Stop managing your AI.<br>Start directing it.</h2>
         <p class="cta-sub">
-          Seven agents. Zero daemons. One command to ship with confidence.
+          Specialized agents. Zero daemons. One command to ship with confidence.
         </p>
         <a href="#install" class="btn-warm" onclick="event.preventDefault(); openInstallModal();">Get Started →</a>
       </div>
@@ -2134,13 +2061,13 @@
     <div class="footer-inner">
       <div class="footer-left">
         <span class="footer-wordmark">helios.</span>
-        <span class="footer-tag">AI Operating Layer · v4.7</span>
+        <span class="footer-tag">AI Operating Layer</span>
       </div>
       <nav class="footer-links" aria-label="Footer">
         <ul role="list">
           <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub</a></li>
           <li><a href="#use-cases">Use Cases</a></li>
-          <li><a href="#agents">Agents</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#install">Install</a></li>
         </ul>
       </nav>
