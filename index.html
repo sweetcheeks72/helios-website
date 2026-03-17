@@ -111,6 +111,148 @@
     }
 
     /* ─────────────────────────────────────────────
+       PRIVACY GLASS GATE
+       Switchable glass. Rams × NASA × Bauhaus.
+    ───────────────────────────────────────────── */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0s;
+    }
+    .gate.dissolving {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 1.8s;
+    }
+    .gate-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 480px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    /* Orbital mark — large, spectral */
+    .gate-mark {
+      width: 64px;
+      height: 64px;
+      color: var(--accent);
+      opacity: 0.15;
+      margin-bottom: 48px;
+    }
+
+    /* Question */
+    .gate-question {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(20px, 3vw, 28px);
+      color: var(--text);
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+      margin-bottom: 32px;
+    }
+
+    /* Code block */
+    .gate-code {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: var(--accent);
+      background: var(--surface);
+      border: 1px solid var(--border-bright);
+      padding: 16px 32px;
+      border-radius: 0;
+      margin-bottom: 40px;
+      letter-spacing: 0.04em;
+      user-select: none;
+    }
+    .gate-prompt {
+      color: var(--text-dim);
+      margin-right: 8px;
+    }
+
+    /* Buttons */
+    .gate-buttons {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .gate-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 14px 48px;
+      border: 1px solid var(--border-bright);
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: 0;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gate-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(34, 211, 238, 0.04);
+    }
+    .gate-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .gate-btn--yes:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(34, 211, 238, 0.06);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.08);
+    }
+    .gate-btn--no:hover {
+      color: #d4a73a;
+      border-color: #d4a73a;
+      background: rgba(212, 167, 58, 0.06);
+      box-shadow: 0 0 20px rgba(212, 167, 58, 0.08);
+    }
+
+    /* Footnote */
+    .gate-footnote {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.3;
+    }
+
+    /* Page content — privacy glass */
+    .page-content {
+      filter: blur(0px);
+      transition: filter 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .page-content.frosted {
+      filter: blur(20px) saturate(0.5);
+      pointer-events: none;
+      user-select: none;
+    }
+    .page-content.clearing {
+      filter: blur(0px) saturate(1);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .gate { transition: opacity 0.3s; }
+      .gate.dissolving { transition: opacity 0.3s, visibility 0s linear 0.3s; }
+      .page-content { transition: filter 0.3s; }
+    }
+
+    /* ─────────────────────────────────────────────
        NAV — Mission Control Status Strip
     ───────────────────────────────────────────── */
     .nav {
@@ -2281,6 +2423,38 @@
 </head>
 <body>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       PRIVACY GLASS GATE
+       Rams walks into NASA, 1965. The gate IS the brand.
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="Welcome to helios">
+    <div class="gate-inner">
+
+      <!-- Orbital mark — large, centered, barely visible -->
+      <svg class="gate-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="currentColor" stroke-width="1.2" transform="rotate(-25 50 50)"/>
+        <circle cx="50" cy="50" r="3" fill="currentColor"/>
+      </svg>
+
+      <div class="gate-question">Do you know what this does?</div>
+
+      <div class="gate-code">
+        <span class="gate-prompt">❯</span> npm run dev
+      </div>
+
+      <div class="gate-buttons">
+        <button class="gate-btn gate-btn--yes" onclick="openGate('technical')" aria-label="Yes, I know what this does">Yes</button>
+        <button class="gate-btn gate-btn--no" onclick="openGate('everyone')" aria-label="No, I don't know what this does">No</button>
+      </div>
+
+      <div class="gate-footnote">This determines your experience.</div>
+    </div>
+  </div>
+
+  <!-- All page content — blurred until gate opens -->
+  <div class="page-content" id="pageContent">
+
   <!-- ─── NAV — Mission Control Status Strip ─── -->
   <nav class="nav" aria-label="Main">
     <div class="nav-inner">
@@ -3610,6 +3784,70 @@ initState();
       hamburger?.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
+  </script>
+
+  </div><!-- /.page-content -->
+
+  <!-- ═══ PRIVACY GLASS GATE — Controller ═══ -->
+  <script>
+  (function() {
+    const gate = document.getElementById('gate');
+    const page = document.getElementById('pageContent');
+
+    // Frost the page on load
+    if (gate && page) {
+      page.classList.add('frosted');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Check if user already chose (session persistence)
+    const saved = sessionStorage.getItem('helios-persona');
+    if (saved && gate && page) {
+      gate.style.display = 'none';
+      page.classList.remove('frosted');
+      document.body.style.overflow = '';
+      applyPersona(saved);
+    }
+
+    window.openGate = function(persona) {
+      if (!gate || !page) return;
+
+      // Store choice
+      sessionStorage.setItem('helios-persona', persona);
+
+      // Phase 1: gate dissolves (1.8s)
+      gate.classList.add('dissolving');
+
+      // Phase 2: glass clears (starts 0.3s after gate begins dissolving)
+      setTimeout(function() {
+        page.classList.remove('frosted');
+        page.classList.add('clearing');
+        document.body.style.overflow = '';
+      }, 300);
+
+      // Phase 3: cleanup
+      setTimeout(function() {
+        gate.style.display = 'none';
+        page.classList.remove('clearing');
+        applyPersona(persona);
+      }, 2000);
+    };
+
+    function applyPersona(persona) {
+      document.documentElement.setAttribute('data-persona', persona);
+
+      // Toggle visibility of persona-specific content
+      document.querySelectorAll('[data-persona-show]').forEach(function(el) {
+        var show = el.getAttribute('data-persona-show');
+        el.style.display = (show === persona || show === 'all') ? '' : 'none';
+      });
+
+      // If everyday mode selected, auto-switch the reel toggle
+      if (persona === 'everyone' && typeof window.setMode === 'function') {
+        window.setMode('everyday');
+      }
+    }
+  })();
   </script>
 
 </body>
