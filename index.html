@@ -45,7 +45,7 @@
       /* Typography */
       --font-body:    'IBM Plex Sans', system-ui, sans-serif;
       --font-mono:    'Space Mono', 'IBM Plex Mono', monospace;
-      --nav-h:        48px;
+      --nav-h:        64px;
     }
 
     /* ─────────────────────────────────────────────
@@ -196,6 +196,29 @@
       letter-spacing: 0.25em;
       color: var(--accent);
     }
+    .nav-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-logo {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 0.18em;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .nav-brand:hover .nav-logo { color: var(--accent); }
+    .nav-descriptor {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
     .nav-links {
       display: flex;
       gap: 32px;
@@ -203,7 +226,7 @@
     }
     .nav-links a {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-dim);
@@ -500,20 +523,79 @@
       color: var(--text-muted);
     }
 
-    /* Use case detail column — supporting visual */
+    /* Use case detail column — instrument readout panel */
     .use-case-detail {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 24px;
+      gap: 20px;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      position: relative;
+    }
+    .use-case-detail::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--accent), transparent);
+      opacity: 0.3;
     }
     .use-case-number {
       font-family: var(--font-mono);
-      font-size: 4rem;
+      font-size: 5rem;
       font-weight: 700;
-      color: rgba(240,160,48,0.08);
+      color: rgba(34, 211, 238, 0.10);
       line-height: 1;
       letter-spacing: -0.05em;
+    }
+    .readout-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+    .readout-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .readout-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .readout-num {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .readout-unit {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .readout-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .readout-clock {
+      color: var(--accent);
+      font-weight: 700;
     }
     .use-case-meta {
       display: flex;
@@ -1417,7 +1499,10 @@
   <!-- ─── NAV ──────────────────────────────────────────── -->
   <nav class="nav" aria-label="Main">
     <div class="nav-inner">
-      <a href="#hero" aria-label="helios — back to top" class="wordmark">helios.</a>
+      <a href="#hero" class="nav-brand" aria-label="helios — Personal AI">
+  <span class="nav-logo">helios.</span>
+  <span class="nav-descriptor">Personal AI</span>
+</a>
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
@@ -1426,8 +1511,8 @@
         <li class="nav-hide-mobile"><a href="#how-it-works">How It Works</a></li>
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
-        <li class="nav-hide-mobile"><a href="#install">Install</a></li>
-        <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="nav-cta" aria-label="GitHub (opens in new tab)">GitHub →</a></li>
+        <li class="nav-hide-mobile"><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" style="opacity:0.6">GitHub</a></li>
+        <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="nav-cta">Get Started →</a></li>
       </ul>
     </div>
   </nav>
@@ -1521,9 +1606,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">6 tasks · 23 tests · 1 PR</span></div>
+          <div class="use-case-number">01</div>
+          <div class="readout-label">DEVELOPMENT</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">6</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">23</span><span class="readout-unit">tests</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">PR opened</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">6 min avg</span> · parallel execution</div>
         </div>
       </div>
 
@@ -1543,9 +1633,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">42 sources · 4 angles · 1 report</span></div>
+          <div class="use-case-number">02</div>
+          <div class="readout-label">RESEARCH</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">42</span><span class="readout-unit">sources</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">angles</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">report</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">5 min</span> · cross-referenced</div>
         </div>
       </div>
 
@@ -1566,9 +1661,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">8 drafts · 3 leads · quality checked</span></div>
+          <div class="use-case-number">03</div>
+          <div class="readout-label">OUTREACH</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">drafts</span></div>
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">leads</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">quality checked</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">3 min</span> · personalized</div>
         </div>
       </div>
 
@@ -1588,9 +1688,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">3 review passes · 12 files traced</span></div>
+          <div class="use-case-number">04</div>
+          <div class="readout-label">CODE REVIEW</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">review passes</span></div>
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">files traced</span></div>
+            <div class="readout-stat"><span class="readout-num">2</span><span class="readout-unit">findings</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · adversarial review</div>
         </div>
       </div>
 
@@ -1611,9 +1716,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">research · draft · review · publish</span></div>
+          <div class="use-case-number">05</div>
+          <div class="readout-label">CONTENT</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">stages</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">draft</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">fact-checked</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">8 min</span> · research to publish</div>
         </div>
       </div>
 
@@ -1635,9 +1745,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">recalled · fixed · verified · 4 min</span></div>
+          <div class="use-case-number">06</div>
+          <div class="readout-label">DEBUGGING</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">bug recalled</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">auto-fixed</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">verified</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · memory-assisted</div>
         </div>
       </div>
 
@@ -1661,9 +1776,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">confirmed · planned · quality-gated</span></div>
+          <div class="use-case-number">07</div>
+          <div class="readout-label">PLANNING</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">scope confirmed</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">planned</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">quality-gated</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">2 min</span> · goal-backward</div>
         </div>
       </div>
 
@@ -1686,9 +1806,14 @@
           </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">12 tasks · 4 waves · 47 tests</span></div>
+          <div class="use-case-number">08</div>
+          <div class="readout-label">MIGRATION</div>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">phases</span></div>
+            <div class="readout-stat"><span class="readout-num">47</span><span class="readout-unit">tests</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">overnight</span> · zero downtime</div>
         </div>
       </div>
 
