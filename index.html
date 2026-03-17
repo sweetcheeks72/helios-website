@@ -111,6 +111,212 @@
     }
 
     /* ─────────────────────────────────────────────
+       PRIVACY GLASS GATE
+       Rams × NASA, 1965. Technical manual cover.
+    ───────────────────────────────────────────── */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 32px;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 0s;
+    }
+    .gate.dissolving {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0s linear 1.8s;
+    }
+
+    /* Document header strip */
+    .gate-doc-header {
+      width: 100%;
+      max-width: 760px;
+      margin-bottom: auto;
+    }
+    .gate-doc-id {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.4;
+      padding: 6px 0;
+    }
+    .gate-doc-line {
+      width: 100%;
+      height: 1px;
+      background: var(--border-bright);
+    }
+
+    /* Title block */
+    .gate-title-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+    .gate-mark {
+      width: 56px;
+      height: 56px;
+      color: var(--accent);
+      opacity: 0.5;
+      margin-bottom: 24px;
+    }
+    .gate-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: 0.2em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .gate-subtitle {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: clamp(14px, 2vw, 18px);
+      color: var(--text-dim);
+      letter-spacing: 0.02em;
+    }
+
+    /* Section label */
+    .gate-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.35;
+      margin-bottom: 20px;
+    }
+
+    /* Three doors — mission modules */
+    .gate-doors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border-bright);
+      width: 100%;
+      max-width: 760px;
+      margin-bottom: auto;
+    }
+    .gate-door {
+      background: var(--bg);
+      border: none;
+      padding: 28px 24px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      font-family: inherit;
+      transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gate-door:hover {
+      background: var(--door-bg);
+    }
+    .gate-door:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .gate-door--dev {
+      --door-color: #22D3EE;
+      --door-bg: rgba(34, 211, 238, 0.03);
+    }
+    .gate-door--biz {
+      --door-color: #d4a73a;
+      --door-bg: rgba(212, 167, 58, 0.03);
+    }
+    .gate-door--life {
+      --door-color: #22C55E;
+      --door-bg: rgba(34, 197, 94, 0.03);
+    }
+
+    .gate-door-num {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--door-color);
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .gate-door:hover .gate-door-num { opacity: 0.5; }
+    .gate-door-line {
+      width: 24px;
+      height: 1px;
+      background: var(--door-color);
+      opacity: 0.3;
+      margin-bottom: 12px;
+      transition: width 0.3s, opacity 0.3s;
+    }
+    .gate-door:hover .gate-door-line { width: 48px; opacity: 0.7; }
+    .gate-door-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 14px;
+      transition: color 0.3s;
+    }
+    .gate-door:hover .gate-door-title { color: var(--door-color); }
+    .gate-door-examples { display: flex; flex-direction: column; gap: 5px; }
+    .gate-door-ex {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-dim);
+      opacity: 0.6;
+      line-height: 1.4;
+    }
+    .gate-door:hover .gate-door-ex { opacity: 0.9; }
+
+    /* Classification footer */
+    .gate-classification {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    /* Page content — privacy glass */
+    .page-content {
+      filter: blur(0px);
+      transition: filter 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .page-content.frosted {
+      filter: blur(20px) saturate(0.5);
+      pointer-events: none;
+      user-select: none;
+    }
+    .page-content.clearing {
+      filter: blur(0px) saturate(1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gate { transition: opacity 0.3s; }
+      .gate.dissolving { transition: opacity 0.3s, visibility 0s linear 0.3s; }
+      .page-content { transition: filter 0.3s; }
+    }
+    @media (max-width: 640px) {
+      .gate { padding: 32px 20px; }
+      .gate-doors { grid-template-columns: 1fr; }
+      .gate-door { padding: 20px; }
+      .gate-doc-id { font-size: 7px; }
+      .gate-title { letter-spacing: 0.12em; }
+    }
+
+    /* ─────────────────────────────────────────────
        NAV — Mission Control Status Strip
     ───────────────────────────────────────────── */
     .nav {
@@ -206,6 +412,48 @@
       opacity: 0.8;
     }
     .nav-links .nav-cta:hover { background: var(--accent-dim); opacity: 1; }
+
+    /* Persona switcher */
+    .persona-switcher {
+      display: flex;
+      gap: 2px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 2px;
+    }
+    .ps-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-mono);
+    }
+    .ps-btn:hover { background: rgba(255,255,255,0.04); }
+    .ps-btn.active { background: rgba(255,255,255,0.06); }
+    .ps-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .ps-btn.active .ps-dot { opacity: 1; }
+    .ps-btn:hover .ps-dot { opacity: 0.8; }
+    .ps-label {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .ps-btn.active .ps-label { opacity: 1; color: var(--text); }
+    .ps-btn:hover .ps-label { opacity: 0.9; }
 
     /* HELIOS wordmark — right side, barely visible */
     /* Brand identity */
@@ -2281,6 +2529,88 @@
 </head>
 <body>
 
+  <!-- ═══════════════════════════════════════════════════════════
+       PRIVACY GLASS GATE
+       Rams walks into NASA, 1965. The gate IS the brand.
+  ═══════════════════════════════════════════════════════════════ -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="Choose your experience">
+
+    <!-- Document header strip -->
+    <div class="gate-doc-header">
+      <div class="gate-doc-id">
+        <span>HELIOS SYSTEMS</span>
+        <span>DOC HLS-2026-001</span>
+      </div>
+      <div class="gate-doc-line"></div>
+      <div class="gate-doc-id">
+        <span>PERSONAL AI SYSTEM</span>
+        <span>REV 17 MARCH 2026</span>
+      </div>
+    </div>
+
+    <!-- Center title block -->
+    <div class="gate-title-block">
+      <svg class="gate-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="currentColor" stroke-width="1" transform="rotate(-25 50 50)"/>
+        <circle cx="50" cy="50" r="3" fill="currentColor"/>
+      </svg>
+      <div class="gate-title">helios.</div>
+      <div class="gate-subtitle">Your AI partner for every part of life.</div>
+    </div>
+
+    <!-- Mission selection modules -->
+    <div class="gate-label">SELECT PRIMARY USE CASE</div>
+
+    <div class="gate-doors">
+      <button class="gate-door gate-door--dev" onclick="openGate('development')">
+        <div class="gate-door-num">01</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Development</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Ship features overnight</div>
+          <div class="gate-door-ex">Review your own PRs</div>
+          <div class="gate-door-ex">Debug with memory</div>
+          <div class="gate-door-ex">Migrate entire codebases</div>
+        </div>
+      </button>
+      <button class="gate-door gate-door--biz" onclick="openGate('business')">
+        <div class="gate-door-num">02</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Business</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Close your next 10 clients</div>
+          <div class="gate-door-ex">Launch campaigns in minutes</div>
+          <div class="gate-door-ex">Automate invoices & contracts</div>
+          <div class="gate-door-ex">Build content pipelines</div>
+        </div>
+      </button>
+      <button class="gate-door gate-door--life" onclick="openGate('everyday')">
+        <div class="gate-door-num">03</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Everyday Life</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Plan a week of meals</div>
+          <div class="gate-door-ex">Coordinate family schedules</div>
+          <div class="gate-door-ex">Manage bills & subscriptions</div>
+          <div class="gate-door-ex">Plan trips door-to-door</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Classification footer -->
+    <div class="gate-classification">
+      <div class="gate-doc-line"></div>
+      <div class="gate-doc-id">
+        <span>CLASSIFICATION: UNRESTRICTED</span>
+        <span>DISTRIBUTION: UNLIMITED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- All page content — blurred until gate opens -->
+  <div class="page-content" id="pageContent">
+
   <!-- ─── NAV — Mission Control Status Strip ─── -->
   <nav class="nav" aria-label="Main">
     <div class="nav-inner">
@@ -2306,6 +2636,19 @@
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
         <li class="nav-hide-mobile"><a href="#install" onclick="event.preventDefault(); openInstallModal();">Install</a></li>
+        <li class="nav-hide-mobile">
+          <div class="persona-switcher" id="personaSwitcher" aria-label="Switch experience">
+            <button class="ps-btn" data-p="development" onclick="switchPersona('development')" title="Development">
+              <span class="ps-dot" style="background:#22D3EE;"></span><span class="ps-label">Dev</span>
+            </button>
+            <button class="ps-btn" data-p="business" onclick="switchPersona('business')" title="Business">
+              <span class="ps-dot" style="background:#d4a73a;"></span><span class="ps-label">Biz</span>
+            </button>
+            <button class="ps-btn" data-p="everyday" onclick="switchPersona('everyday')" title="Everyday Life">
+              <span class="ps-dot" style="background:#22C55E;"></span><span class="ps-label">Life</span>
+            </button>
+          </div>
+        </li>
         <li><a href="#install" onclick="event.preventDefault(); openInstallModal();" class="nav-cta" aria-label="Get Started">Get Started →</a></li>
       </ul>
 
@@ -2379,12 +2722,12 @@
 
       <div class="use-cases-header fade-up">
         <div class="section-tag">WHAT PEOPLE BUILD</div>
-        <h2 class="section-title">Eight ways Helios works<br>across every domain.</h2>
+        <h2 class="section-title" id="use-cases-header">What Helios does for you.</h2>
         <p class="section-subtitle" style="margin: 0 auto;">One command. Here's what happens next.</p>
       </div>
 
       <!-- MISSION 01 — DEVELOPMENT -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 26L18 4" fill="none"/><path d="M16 4l6 3-4 2" fill="rgba(34,211,238,0.06)"/><path d="M8 28Q4 20 10 12" stroke-width="1" stroke-dasharray="2 2" fill="none"/></svg></div>
         <div class="mission-label">01 — DEVELOPMENT</div>
         <h3 class="mission-title">Ship a feature from a single sentence</h3>
@@ -2417,7 +2760,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 02 — RESEARCH -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development business">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="9" fill="rgba(34,211,238,0.06)"/><line x1="14" y1="14" x2="20" y2="8" stroke-width="1"/><circle cx="14" cy="14" r="3"/><circle cx="14" cy="14" r="6" stroke-width="0.5" stroke-dasharray="1.5 2"/><circle cx="22" cy="9" r="1" fill="rgba(34,211,238,0.06)"/><circle cx="8" cy="22" r="1" fill="rgba(34,211,238,0.06)"/><circle cx="24" cy="20" r="1" fill="rgba(34,211,238,0.06)"/></svg></div>
         <div class="mission-label">02 — RESEARCH</div>
         <h3 class="mission-title">Research a market in 5 minutes, not 5 hours</h3>
@@ -2447,7 +2790,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 03 — OPERATIONS -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="business">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="3" fill="rgba(34,211,238,0.06)"/><path d="M16 16L24 10" stroke-width="1"/><path d="M24 8l-2 4 4-2" stroke-width="1" fill="rgba(34,211,238,0.06)"/><path d="M24 8l2 0 0 2" stroke-width="1"/></svg></div>
         <div class="mission-label">03 — OPERATIONS</div>
         <h3 class="mission-title">Automate the daily grind</h3>
@@ -2478,7 +2821,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 04 — REVIEW -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="13" r="7" fill="rgba(34,211,238,0.06)"/><line x1="18" y1="18" x2="26" y2="26"/><polyline points="10 13 12.5 15.5 17 10" stroke-width="1"/></svg></div>
         <div class="mission-label">04 — REVIEW</div>
         <h3 class="mission-title">Three-stage review catches what one pass misses</h3>
@@ -2508,7 +2851,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 05 — CONTENT -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="business">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="14" r="4"/><path d="M16 18v6" stroke-width="1"/><path d="M8 14a8 8 0 0 1 0 0" stroke-width="0"/><path d="M10 8a8 8 0 0 1 12 0" stroke-width="1" stroke-dasharray="2 2" fill="none"/><path d="M7 20l4-2" stroke-width="1"/><path d="M25 20l-4-2" stroke-width="1"/><path d="M4 22l5-2" stroke-width="1"/><path d="M28 22l-5-2" stroke-width="1"/></svg></div>
         <div class="mission-label">05 — CONTENT</div>
         <h3 class="mission-title">Research, write, publish — one command</h3>
@@ -2539,7 +2882,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 06 — DEBUGGING -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="7" fill="rgba(34,211,238,0.06)"/><path d="M16 16l5-5" stroke-width="1"/><circle cx="22" cy="10" r="2"/><path d="M12 10l-2-4" stroke-width="1"/><path d="M20 22l2 4" stroke-width="1"/><path d="M9 16H5" stroke-width="1"/><path d="M27 16h-4" stroke-width="1"/></svg></div>
         <div class="mission-label">06 — DEBUGGING</div>
         <h3 class="mission-title">Debug with memory from last month</h3>
@@ -2571,7 +2914,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 07 — GOVERNANCE -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10" fill="rgba(34,211,238,0.06)"/><path d="M11 16a5 5 0 0 1 10 0" fill="none"/><line x1="16" y1="11" x2="16" y2="16"/><circle cx="16" cy="16" r="1.5" fill="rgba(34,211,238,0.06)"/><line x1="16" y1="6" x2="16" y2="8" stroke-width="1"/><line x1="16" y1="24" x2="16" y2="26" stroke-width="1"/><line x1="6" y1="16" x2="8" y2="16" stroke-width="1"/><line x1="24" y1="16" x2="26" y2="16" stroke-width="1"/></svg></div>
         <div class="mission-label">07 — GOVERNANCE</div>
         <h3 class="mission-title">The agent that asks before it breaks things</h3>
@@ -2605,7 +2948,7 @@
       <div class="section-connector"><div class="section-connector-line"></div></div>
 
       <!-- MISSION 08 — ORCHESTRATION -->
-      <div class="mission-block fade-up">
+      <div class="mission-block fade-up" data-persona="development">
         <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="16" x2="12" y2="10" stroke-width="1"/><line x1="6" y1="16" x2="12" y2="22" stroke-width="1"/><line x1="12" y1="10" x2="20" y2="10"/><line x1="12" y1="22" x2="20" y2="22"/><circle cx="6" cy="16" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="10" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="22" r="2" fill="rgba(34,211,238,0.06)"/><line x1="24" y1="10" x2="28" y2="10" stroke-dasharray="1.5 1.5" stroke-width="1"/><line x1="24" y1="22" x2="28" y2="22" stroke-dasharray="1.5 1.5" stroke-width="1"/></svg></div>
         <div class="mission-label">08 — ORCHESTRATION</div>
         <h3 class="mission-title">Coordinate a real migration</h3>
@@ -2632,6 +2975,378 @@
             <div class="readout-stat"><span class="readout-num">47</span><span class="readout-unit">tests</span></div>
           </div>
           <div class="readout-time"><span class="readout-clock">overnight</span> · zero downtime</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B1 — CLIENT ACQUISITION -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="5" fill="rgba(212,167,58,0.06)"/><path d="M6 26c0-5.5 4.5-10 10-10s10 4.5 10 10"/><path d="M22 8l4-4" stroke-width="1"/><circle cx="27" cy="3" r="1.5" fill="rgba(212,167,58,0.06)"/></svg></div>
+        <div class="mission-label">B1 — CLIENT ACQUISITION</div>
+        <h3 class="mission-title">Find and close your next 10 clients</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Market research. Personalized emails. Automated follow-ups. One command built your entire sales pipeline.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: building a client outreach pipeline">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Build a client outreach pipeline for my consulting firm"
+
+  Researching market... 15 competitors
+  Building sequences                                  <span class="s">✓</span>
+  Drafting 8 emails                                   <span class="s">✓</span>
+  Setting up follow-ups                               <span class="s">✓</span>
+<span class="s">✅ Pipeline ready</span> <span class="d">"Client system" · 8 emails · 3 sequences</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B1</div>
+          <span class="readout-label">CLIENT ACQUISITION</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">emails</span></div>
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">sequences</span></div>
+            <div class="readout-stat"><span class="readout-num">15</span><span class="readout-unit">competitors</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · personalized</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B2 — MARKETING -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l8-10v6h8v8h-8v6z" fill="rgba(212,167,58,0.06)"/><line x1="24" y1="8" x2="24" y2="24" stroke-width="1"/><line x1="28" y1="10" x2="28" y2="22" stroke-width="1"/></svg></div>
+        <div class="mission-label">B2 — MARKETING</div>
+        <h3 class="mission-title">Launch a campaign while you eat lunch</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Ad copy. Email sequences. Social content. Twelve pieces from a single sentence.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: creating a launch campaign">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Create a launch campaign for our new feature"
+
+  Analyzing audience                                  <span class="s">✓</span>
+  Writing ad copy — 4 variants                        <span class="s">✓</span>
+  Building email sequence — 5 touches                 <span class="s">✓</span>
+  Generating social — 12 pieces                       <span class="s">✓</span>
+<span class="s">✅ Campaign ready</span> <span class="d">4 ads · 5 emails · 12 posts</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B2</div>
+          <span class="readout-label">MARKETING</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">ad variants</span></div>
+            <div class="readout-stat"><span class="readout-num">5</span><span class="readout-unit">emails</span></div>
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">posts</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">6 min</span> · multi-channel</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B3 — OPERATIONS -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="20" height="20" rx="2" fill="rgba(212,167,58,0.06)"/><line x1="10" y1="12" x2="22" y2="12" stroke-width="1"/><line x1="10" y1="16" x2="22" y2="16" stroke-width="1"/><line x1="10" y1="20" x2="18" y2="20" stroke-width="1"/><polyline points="20 18 22 20 20 22" stroke-width="1"/></svg></div>
+        <div class="mission-label">B3 — OPERATIONS</div>
+        <h3 class="mission-title">Build the system that runs your business</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Process. Templates. Checklists. Reminders. Your entire onboarding system from one description.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: creating an employee onboarding workflow">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Create an employee onboarding workflow"
+
+  Mapping process                                     <span class="s">✓</span>
+  Building templates                                  <span class="s">✓</span>
+  Creating checklists — 4 roles                       <span class="s">✓</span>
+  Setting reminders                                   <span class="s">✓</span>
+<span class="s">✅ Workflow ready</span> <span class="d">"Onboarding" · 4 roles · 23 tasks</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B3</div>
+          <span class="readout-label">OPERATIONS</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">roles</span></div>
+            <div class="readout-stat"><span class="readout-num">23</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">automated</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">5 min</span> · end-to-end</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B4 — STRATEGY -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 28L14 4l6 12h8" fill="none"/><circle cx="14" cy="4" r="2" fill="rgba(212,167,58,0.06)"/><circle cx="28" cy="16" r="2" fill="rgba(212,167,58,0.06)"/></svg></div>
+        <div class="mission-label">B4 — STRATEGY</div>
+        <h3 class="mission-title">From blank page to investor deck in minutes</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Research. Narrative. Slides. Projections. Your fundraising story, structured and ready.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: building a pitch deck outline">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Build a pitch deck outline for our Series A"
+
+  Researching comparables                             <span class="s">✓</span>
+  Structuring narrative                               <span class="s">✓</span>
+  Writing 12 slides                                   <span class="s">✓</span>
+  Generating projections                              <span class="s">✓</span>
+<span class="s">✅ Deck ready</span> <span class="d">12 slides · market data · projections</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B4</div>
+          <span class="readout-label">STRATEGY</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">slides</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">research</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">projections</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">7 min</span> · data-backed</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E1 — MEAL PLANNING -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="18" r="8" fill="rgba(34,197,94,0.06)"/><path d="M16 10v-6" stroke-width="1"/><path d="M12 6h8" stroke-width="1"/><line x1="12" y1="16" x2="20" y2="16" stroke-width="1"/><line x1="12" y1="20" x2="20" y2="20" stroke-width="1"/></svg></div>
+        <div class="mission-label">E1 — MEAL PLANNING</div>
+        <h3 class="mission-title">A week of dinners from what's in your fridge</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Seven dinners. One grocery list. Sorted by aisle. From what's already in your kitchen.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: planning meals for the week">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Plan meals for the week — chicken, rice, lots of vegetables"
+
+  Checking preferences                                <span class="s">✓</span>
+  Generating 7 recipes                                <span class="s">✓</span>
+  Building grocery list                               <span class="s">✓</span>
+  Sorting by aisle                                    <span class="s">✓</span>
+<span class="s">✅ Meal plan ready</span> <span class="d">7 dinners · grocery list · sorted by aisle</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E1</div>
+          <span class="readout-label">MEALS</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">7</span><span class="readout-unit">dinners</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">list</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">sorted</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">2 min</span> · personalized</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E2 — FAMILY SCHEDULE -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="24" height="20" rx="2" fill="rgba(34,197,94,0.06)"/><line x1="4" y1="12" x2="28" y2="12" stroke-width="1"/><line x1="10" y1="6" x2="10" y2="2" stroke-width="1"/><line x1="22" y1="6" x2="22" y2="2" stroke-width="1"/><circle cx="10" cy="18" r="1.5" fill="rgba(34,197,94,0.06)"/><circle cx="16" cy="18" r="1.5" fill="rgba(34,197,94,0.06)"/><circle cx="22" cy="18" r="1.5" fill="rgba(34,197,94,0.06)"/></svg></div>
+        <div class="mission-label">E2 — FAMILY</div>
+        <h3 class="mission-title">Every kid, every activity, nothing missed</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Three kids. Twelve activities. Zero conflicts. Reminders set. Carpool coordinated.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: organizing family schedule">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Organize family schedule — 3 kids, sports, tutoring, doctors"
+
+  Importing calendars                                 <span class="s">✓</span>
+  Resolving 2 conflicts                               <span class="s">✓</span>
+  Setting reminders                                   <span class="s">✓</span>
+  Building carpool plan                               <span class="s">✓</span>
+<span class="s">✅ Schedule ready</span> <span class="d">3 kids · 12 activities · 0 conflicts</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E2</div>
+          <span class="readout-label">FAMILY</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">kids</span></div>
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">activities</span></div>
+            <div class="readout-stat"><span class="readout-num">0</span><span class="readout-unit">conflicts</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">3 min</span> · synced</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E3 — TRIP PLANNING -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 24l8-16 4 8 4-4 8 12" fill="rgba(34,197,94,0.06)"/><circle cx="12" cy="8" r="2" fill="rgba(34,197,94,0.06)"/><circle cx="24" cy="6" r="1.5" fill="none"/></svg></div>
+        <div class="mission-label">E3 — TRAVEL</div>
+        <h3 class="mission-title">A full itinerary before you finish your coffee</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Five days. Eight stops. Budget tracked. Kid-friendly everything.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: planning a family road trip">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Plan a 5-day trip from Atlanta to Nashville with two kids"
+
+  Researching routes                                  <span class="s">✓</span>
+  Finding kid-friendly stops                          <span class="s">✓</span>
+  Booking recommendations                             <span class="s">✓</span>
+  Building itinerary                                  <span class="s">✓</span>
+<span class="s">✅ Trip planned</span> <span class="d">5 days · 8 stops · budget $1,200</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E3</div>
+          <span class="readout-label">TRAVEL</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">5</span><span class="readout-unit">days</span></div>
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">stops</span></div>
+            <div class="readout-stat"><span class="readout-num">$1.2k</span><span class="readout-unit">budget</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · family-ready</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E4 — HOME -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16L16 4l12 12" fill="none"/><rect x="8" y="16" width="16" height="12" fill="rgba(34,197,94,0.06)"/><rect x="13" y="22" width="6" height="6" fill="none"/></svg></div>
+        <div class="mission-label">E4 — HOME</div>
+        <h3 class="mission-title">Your house runs itself</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Four seasons of maintenance. Twenty-four tasks. Local providers found. Move in and forget about it.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: setting up home maintenance system">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Set up home maintenance — we just moved in"
+
+  Building seasonal calendar                          <span class="s">✓</span>
+  Finding local providers                             <span class="s">✓</span>
+  Setting reminders — 24 tasks/year                   <span class="s">✓</span>
+  Creating emergency contacts                         <span class="s">✓</span>
+<span class="s">✅ Home system ready</span> <span class="d">4 seasons · 24 tasks · providers saved</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E4</div>
+          <span class="readout-label">HOME</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">seasons</span></div>
+            <div class="readout-stat"><span class="readout-num">24</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">providers</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">3 min</span> · year-round</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B5 — DOCUMENT INTELLIGENCE -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="20" height="24" rx="2" fill="rgba(212,167,58,0.06)"/><line x1="10" y1="10" x2="22" y2="10" stroke-width="1"/><line x1="10" y1="14" x2="22" y2="14" stroke-width="1"/><line x1="10" y1="18" x2="18" y2="18" stroke-width="1"/><path d="M18 22l2 2 4-4" stroke-width="1.5"/></svg></div>
+        <div class="mission-label">B5 — DOCUMENTS</div>
+        <h3 class="mission-title">Review every contract before you sign</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Three red flags you would have missed. Auto-renewal trap caught. Missing SLA surfaced. Thirty seconds, not thirty minutes.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: reviewing a vendor contract">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Review this vendor contract and flag anything unusual"
+
+  Extracting terms from PDF ▸▸▸▸▸▸▸▸▸▸             <span class="s">✓</span>
+  Comparing against standard clauses ▸▸▸▸▸▸▸▸▸▸    <span class="s">✓</span>
+  Flagging risks — 3 issues found ▸▸▸▸▸▸▸▸▸▸      <span class="s">✓</span>
+  Generating summary + recommendations ▸▸▸▸▸▸▸▸▸▸ <span class="s">✓</span>
+<span class="s">✅ Review complete</span> <span class="d"> 3 flags · auto-renewal trap · missing SLA · 30-day exit clause</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B5</div>
+          <span class="readout-label">DOCUMENTS</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">flags</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">contract</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">recommendations</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">30 sec</span> · compliance</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B6 — CONTENT PIPELINE -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h24v16H4z" fill="rgba(212,167,58,0.06)"/><line x1="8" y1="12" x2="24" y2="12" stroke-width="1"/><line x1="8" y1="16" x2="20" y2="16" stroke-width="1"/><line x1="8" y1="20" x2="16" y2="20" stroke-width="1"/><path d="M22 18l4 4-4 4" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="mission-label">B6 — CONTENT</div>
+        <h3 class="mission-title">Research, write, optimize, publish — while you sleep</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">One prompt. One blog post. One LinkedIn article. Three tweets. SEO score: 94. Published everywhere.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: creating multi-platform content">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Write a blog post about AI automation for small businesses"
+
+  Researching — 18 sources, 4 competitor articles ▸▸▸▸ <span class="s">✓</span>
+  Drafting 1,200 words ▸▸▸▸▸▸▸▸▸▸                    <span class="s">✓</span>
+  SEO optimization — keywords, meta, structure ▸▸▸▸▸▸ <span class="s">✓</span>
+  Formatting for WordPress + LinkedIn + Twitter ▸▸▸▸▸▸ <span class="s">✓</span>
+<span class="s">✅ Content ready</span> <span class="d"> 1 blog · 1 LinkedIn post · 3 tweets · SEO score 94</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B6</div>
+          <span class="readout-label">CONTENT</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">18</span><span class="readout-unit">sources</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">formats</span></div>
+            <div class="readout-stat"><span class="readout-num">94</span><span class="readout-unit">SEO</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">8 min</span> · multi-platform</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E5 — SCHOOL & ACTIVITIES -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l12 6-12 6L4 10z" fill="rgba(34,197,94,0.06)"/><path d="M4 10v8l12 6 12-6v-8" fill="none"/><line x1="28" y1="10" x2="28" y2="22" stroke-width="1"/><circle cx="28" cy="23" r="1.5" fill="rgba(34,197,94,0.06)"/></svg></div>
+        <div class="mission-label">E5 — SCHOOL</div>
+        <h3 class="mission-title">Every newsletter, every deadline, nothing lost</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Twelve emails from three schools. Eight events extracted. Zero missed. Reminders set for everything.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: parsing school emails and updating calendar">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Parse these school emails and update our family calendar"
+
+  Reading 12 emails from 3 schools ▸▸▸▸▸▸▸▸▸▸        <span class="s">✓</span>
+  Extracting dates — 8 events found ▸▸▸▸▸▸▸▸▸▸       <span class="s">✓</span>
+  Checking conflicts with existing schedule ▸▸▸▸▸▸▸▸▸ <span class="s">✓</span>
+  Adding to calendar with reminders ▸▸▸▸▸▸▸▸▸▸       <span class="s">✓</span>
+<span class="s">✅ Calendar updated</span> <span class="d"> 8 events · 3 schools · 0 conflicts · reminders set</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E5</div>
+          <span class="readout-label">SCHOOL</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">emails</span></div>
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">events</span></div>
+            <div class="readout-stat"><span class="readout-num">0</span><span class="readout-unit">missed</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">1 min</span> · auto-parsed</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E6 — BUDGET & BILLS -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="16" rx="2" fill="rgba(34,197,94,0.06)"/><line x1="4" y1="14" x2="28" y2="14" stroke-width="1"/><circle cx="22" cy="20" r="2" fill="none"/><line x1="8" y1="20" x2="14" y2="20" stroke-width="1"/></svg></div>
+        <div class="mission-label">E6 — BUDGET</div>
+        <h3 class="mission-title">Stop overpaying for everything</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Eight hundred forty-seven dollars a year. Three downgrades. Two cancellations. Found in sixty seconds.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: reviewing subscriptions and finding savings">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Review our subscriptions and find where we're overpaying"
+
+  Scanning bank statements — 3 months ▸▸▸▸▸▸▸▸▸▸     <span class="s">✓</span>
+  Identifying 14 recurring charges ▸▸▸▸▸▸▸▸▸▸        <span class="s">✓</span>
+  Comparing plans — 3 cheaper alternatives found ▸▸▸▸ <span class="s">✓</span>
+  Calculating potential savings ▸▸▸▸▸▸▸▸▸▸           <span class="s">✓</span>
+<span class="s">✅ Savings found</span> <span class="d"> $847/year · 3 downgrades · 2 cancellations recommended</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E6</div>
+          <span class="readout-label">BUDGET</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">$847</span><span class="readout-unit">yr savings</span></div>
+            <div class="readout-stat"><span class="readout-num">14</span><span class="readout-unit">subscriptions</span></div>
+            <div class="readout-stat"><span class="readout-num">5</span><span class="readout-unit">actions</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">1 min</span> · money saved</div>
         </div>
       </div>
 
@@ -3610,6 +4325,133 @@ initState();
       hamburger?.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
+  </script>
+
+  </div><!-- /.page-content -->
+
+  <!-- ═══ PRIVACY GLASS GATE — Controller ═══ -->
+  <script>
+  (function() {
+    var gate = document.getElementById('gate');
+    var page = document.getElementById('pageContent');
+
+    // Frost the page on load
+    if (gate && page) {
+      page.classList.add('frosted');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Check if user already chose (session persistence)
+    var saved = sessionStorage.getItem('helios-persona');
+    if (saved && gate && page) {
+      gate.style.display = 'none';
+      page.classList.remove('frosted');
+      document.body.style.overflow = '';
+      applyPersona(saved);
+    }
+
+    // Gate open (with dissolve animation)
+    window.openGate = function(persona) {
+      if (!gate || !page) return;
+      sessionStorage.setItem('helios-persona', persona);
+      gate.classList.add('dissolving');
+      setTimeout(function() {
+        page.classList.remove('frosted');
+        page.classList.add('clearing');
+        document.body.style.overflow = '';
+      }, 300);
+      setTimeout(function() {
+        gate.style.display = 'none';
+        page.classList.remove('clearing');
+        applyPersona(persona);
+      }, 2000);
+    };
+
+    // Switch persona from nav (instant, no dissolve)
+    window.switchPersona = function(persona) {
+      sessionStorage.setItem('helios-persona', persona);
+      applyPersona(persona);
+      // Smooth scroll to top to see the change
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    function applyPersona(persona) {
+      document.documentElement.setAttribute('data-persona', persona);
+
+      // ── 1. Mission blocks ──
+      document.querySelectorAll('.mission-block[data-persona]').forEach(function(el) {
+        var personas = el.getAttribute('data-persona').split(' ');
+        var show = personas.indexOf(persona) !== -1;
+        el.style.display = show ? '' : 'none';
+        // Hide trailing connector too
+        var next = el.nextElementSibling;
+        if (next && next.classList.contains('section-connector')) {
+          next.style.display = show ? '' : 'none';
+        }
+      });
+
+      // ── 2. Nav persona switcher state ──
+      document.querySelectorAll('.ps-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-p') === persona);
+      });
+
+      // ── 3. Hero eyebrow ──
+      var eyebrow = document.querySelector('.hero-eyebrow');
+      if (eyebrow) {
+        var eyebrows = {
+          development: 'helios. <span class="eyebrow-dim">for developers</span>',
+          business: 'helios. <span class="eyebrow-dim">for business</span>',
+          everyday: 'helios. <span class="eyebrow-dim">for everyday life</span>'
+        };
+        eyebrow.innerHTML = eyebrows[persona] || 'helios. <span class="eyebrow-dim">Personal AI</span>';
+      }
+
+      // ── 4. Hero headline ──
+      var headline = document.querySelector('.inst-headline');
+      if (headline) {
+        var headlines = {
+          development: 'Tell it what to build.<br>It ships the rest.',
+          business: 'Tell it what you need.<br>It handles the rest.',
+          everyday: 'Tell it what you need.<br>It takes care of the rest.'
+        };
+        headline.innerHTML = headlines[persona] || 'Tell it what you need.<br>It handles the rest.';
+      }
+
+      // ── 5. Use-cases section header ──
+      var headerEl = document.getElementById('use-cases-header');
+      if (headerEl) {
+        var titles = {
+          development: 'What Helios ships for you.',
+          business: 'What Helios builds for you.',
+          everyday: 'What Helios handles for you.'
+        };
+        headerEl.textContent = titles[persona] || 'What Helios does for you.';
+      }
+
+      // ── 6. Reel mode ──
+      if (persona === 'everyday' && typeof window.setMode === 'function') {
+        window.setMode('everyday');
+      } else if (typeof window.setMode === 'function') {
+        window.setMode('business');
+      }
+
+      // ── 7. CTA text ──
+      document.querySelectorAll('.nav-cta').forEach(function(el) {
+        var ctas = {
+          development: 'Install →',
+          business: 'Get Started →',
+          everyday: 'Try It Free →'
+        };
+        el.textContent = ctas[persona] || 'Get Started →';
+      });
+
+      // ── 8. Generic persona-show elements ──
+      document.querySelectorAll('[data-persona-show]').forEach(function(el) {
+        var show = el.getAttribute('data-persona-show');
+        el.style.display = (show === persona || show === 'all') ? '' : 'none';
+      });
+    }
+  })();
   </script>
 
 </body>
