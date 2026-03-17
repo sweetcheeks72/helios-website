@@ -3,49 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>helios. — AI Operating Layer</title>
-  <meta name="description" content="Terminal-native AI that ships features, reviews code, and learns from every session. No daemons. Any model. One command." />
+  <title>helios. — Personal AI</title>
+  <meta name="description" content="helios. Personal AI — tell it what you need, it handles the rest. Ships features, reviews code, researches markets, and plans your week. One command. Any model." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <style>
+    /* ═══════════════════════════════════════════
+       GARGANTUA SITE CSS
+    ═══════════════════════════════════════════ */
     /* ─────────────────────────────────────────────
-       DESIGN TOKENS
+       DESIGN TOKENS — Rams at NASA, 1965
     ───────────────────────────────────────────── */
     :root {
-      /* Base */
-      --bg:           #020914;
-      --surface:      #060f1f;
-      --surface2:     #0a1628;
-      --surface3:     #0d1f38;
-      --border:       rgba(34, 211, 238, 0.10);
-      --border-bright:rgba(34, 211, 238, 0.28);
+      --bg:            #020914;
+      --surface:       #060f1f;
+      --surface2:      #0a1628;
+      --border:        rgba(34, 211, 238, 0.03);
+      --border-bright: rgba(34, 211, 238, 0.06);
 
-      /* Text — slightly warmer */
-      --text:         #f0f4f8;
-      --text-dim:     #8a9bb5;
-      --text-muted:   #6b7e96;
+      --text:          #f0f4f8;
+      --text-dim:      #8A9BB0;
+      --text-muted:    #6b7e96;
 
-      /* Primary accent — cyan phosphor */
-      --accent:       #22D3EE;
-      --accent-dim:   rgba(34, 211, 238, 0.10);
-      --accent-glow:  rgba(34, 211, 238, 0.06);
+      --accent:        #22D3EE;
+      --accent-dim:    rgba(34, 211, 238, 0.08);
+      --accent-glow:   rgba(34, 211, 238, 0.04);
 
-      /* Warm secondary accent — amber/gold for human-facing elements */
-      --warm:         #f0a030;
-      --warm-dim:     rgba(240, 160, 48, 0.10);
-      --warm-glow:    rgba(240, 160, 48, 0.04);
-      --warm-border:  rgba(240, 160, 48, 0.20);
+      --warm:          rgba(240, 160, 48, 1);
+      --green:         #3fb950;
+      --green-dim:     rgba(63, 185, 80, 0.06);
 
-      /* Status colors */
-      --green:        #3fb950;
-      --green-dim:    rgba(63, 185, 80, 0.12);
-      --purple:       #bc8cff;
-
-      /* Typography */
-      --font-body:    'IBM Plex Sans', system-ui, sans-serif;
-      --font-mono:    'Space Mono', 'IBM Plex Mono', monospace;
-      --nav-h:        48px;
+      --font-body:     'IBM Plex Sans', system-ui, sans-serif;
+      --font-mono:     'Space Mono', 'IBM Plex Mono', monospace;
+      --nav-h:         64px;
     }
 
     /* ─────────────────────────────────────────────
@@ -63,13 +54,10 @@
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      /* dual-temperature glow */
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34,211,238,0.05) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 85% 90%, rgba(240,160,48,0.03) 0%, transparent 50%),
-        radial-gradient(circle, rgba(34,211,238,0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 24px 24px;
-      background-attachment: fixed, fixed, fixed;
+      /* dot grid only — dual-temperature glow removed */
+      background-image: radial-gradient(circle, rgba(34,211,238,0.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-attachment: fixed;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -77,109 +65,66 @@
     ul { list-style: none; }
 
     /* ─────────────────────────────────────────────
-       UTILITY
+       KEYFRAME ANIMATIONS
     ───────────────────────────────────────────── */
-    .mono    { font-family: var(--font-mono); }
-    .accent  { color: var(--accent); }
-    .warm    { color: var(--warm); }
-    .dim     { color: var(--text-dim); }
-    .muted   { color: var(--text-muted); }
-
-    /* Section label */
-    .section-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
+    @keyframes checkIn {
+      0%   { opacity: 0; transform: scale(0.5); }
+      60%  { transform: scale(1.15); }
+      100% { opacity: 1; transform: scale(1); }
     }
-    .section-label::before,
-    .section-label::after {
-      content: '';
-      display: block;
-      height: 1px;
-      width: 24px;
-      background: var(--accent);
-      opacity: 0.4;
+    @keyframes glowPulse {
+      0%   { box-shadow: none; }
+      50%  { box-shadow: 0 0 20px rgba(63, 185, 80, 0.06); }
+      100% { box-shadow: none; }
+    }
+    @keyframes lineGrow {
+      from { height: 0; opacity: 0; }
+      to   { height: 40px; opacity: 1; }
+    }
+    @keyframes cyanGlowPulse {
+      0%, 100% { box-shadow: 0 0 40px rgba(34,211,238,0.02); }
+      50%       { box-shadow: 0 0 60px rgba(34,211,238,0.06); }
     }
 
-    /* Warm section label variant */
-    .section-label-warm {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--warm);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .section-label-warm::before,
-    .section-label-warm::after {
-      content: '';
-      display: block;
-      height: 1px;
-      width: 24px;
-      background: var(--warm);
-      opacity: 0.4;
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1 !important; transform: none !important; transition: none !important; }
+      .section-connector-line { animation: none !important; height: 40px !important; opacity: 1 !important; }
+      .mission-terminal.in-view .terminal-content .s { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .mission-terminal.in-view { animation: none !important; }
+      .trajectory-path { stroke-dashoffset: 0 !important; animation: none !important; }
+      .waypoint { opacity: 1 !important; animation: none !important; }
+      .trajectory-particle, .trajectory-particle + circle { animation: none !important; display: none; }
+      .ship-ring { animation: none !important; }
     }
 
-    /* LED dot */
-    .led {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 4px var(--green);
-      flex-shrink: 0;
-    }
-    .led-amber { background: var(--warm); box-shadow: 0 0 4px var(--warm); }
-    .led-cyan  { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
-
-    /* Inset panel */
-    .inset-panel {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 14px 16px;
-      border-radius: 0;
-    }
-
-    /* Fade-up animation */
+    /* ─────────────────────────────────────────────
+       FADE-UP — 12px translate, 0.8s
+    ───────────────────────────────────────────── */
     .fade-up {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      transform: translateY(12px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
     .fade-up.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .fade-up { opacity: 1; transform: none; transition: none; }
-      .warm-pulse-ring { animation: none !important; }
-    }
-
     /* ─────────────────────────────────────────────
-       NAV
+       NAV — Mission Control Status Strip
     ───────────────────────────────────────────── */
     .nav {
       position: sticky;
       top: 0;
       z-index: 100;
       height: var(--nav-h);
-      background: rgba(2, 9, 20, 0.92);
+      background: rgba(2, 9, 20, 0.96);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(34,211,238,0.03);
       display: flex;
       align-items: center;
-      padding: 0 40px;
+      padding: 0 32px;
     }
     .nav-inner {
       width: 100%;
@@ -187,38 +132,148 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 20px;
     }
-    .wordmark {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 1.125rem;
-      letter-spacing: 0.25em;
-      color: var(--accent);
+
+    /* LED status indicators */
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
     }
+    .nav-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      position: relative;
+    }
+    .nav-led {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .nav-led.green { background: var(--green); box-shadow: 0 0 3px var(--green); }
+    .nav-led.cyan  { background: var(--accent); box-shadow: 0 0 3px var(--accent); }
+    /* Speedmaster dot hairline — extends from the dot */
+    .nav-led::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 7px;
+      height: 1px;
+      opacity: 0.25;
+    }
+    .nav-led.green::after { background: var(--green); }
+    .nav-led.cyan::after  { background: var(--accent); }
+
+    .nav-indicator-label {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    /* Nav links — center strip */
     .nav-links {
       display: flex;
-      gap: 32px;
       align-items: center;
+      gap: 20px;
+      flex: 1;
+      justify-content: center;
     }
     .nav-links a {
       font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.15s ease-out;
+      opacity: 0.6;
+    }
+    .nav-links a:hover { color: var(--accent); opacity: 1; }
+    .nav-links .nav-cta {
+      color: var(--accent);
+      border: 1px solid rgba(34,211,238,0.2);
+      padding: 3px 10px;
+      opacity: 0.8;
+    }
+    .nav-links .nav-cta:hover { background: var(--accent-dim); opacity: 1; }
+
+    /* HELIOS wordmark — right side, barely visible */
+    /* Brand identity */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-icon {
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .nav-brand:hover .nav-icon {
+      filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.4));
+    }
+    .nav-gh-icon {
+      width: 14px;
+      height: 14px;
+      vertical-align: -2px;
+      margin-right: 4px;
+    }
+    .nav-logo {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 20px;
+      letter-spacing: 0.18em;
+      color: var(--text);
+      transition: color 0.2s;
+    }
+    .nav-brand:hover .nav-logo {
+      color: var(--accent);
+    }
+    .nav-descriptor {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-dim);
-      transition: color 0.15s ease-out;
     }
-    .nav-links a:hover { color: var(--accent); }
-    .nav-links .nav-cta {
-      background: var(--accent-dim);
-      border: 1px solid var(--accent);
+    .nav-github-link {
+      color: var(--text-dim) !important;
+      font-size: 13px;
+      transition: color 0.2s;
+      opacity: 0.7;
+    }
+    .nav-github-link:hover {
+      color: var(--accent) !important;
+      opacity: 1;
+    }
+
+    /* Hero eyebrow */
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
       color: var(--accent);
-      padding: 6px 14px;
-      border-radius: 0;
-      transition: background 0.15s ease-out;
+      margin-bottom: 16px;
+      text-align: center;
+      opacity: 0.8;
     }
-    .nav-links .nav-cta:hover { background: rgba(34,211,238,0.2); }
+    .eyebrow-dim {
+      color: var(--text-dim);
+    }
 
     /* ─────────────────────────────────────────────
        LAYOUT
@@ -229,493 +284,681 @@
       padding: 0 40px;
     }
     section { padding: 120px 0; }
-
-    section + section {
-      border-top: 1px solid var(--border);
-    }
+    section + section { border-top: 1px solid var(--border); }
 
     /* ─────────────────────────────────────────────
-       HERO — Centered, Apple-style
+       HERO — Two-column, 55/45 split
     ───────────────────────────────────────────── */
     #hero {
-      padding-top: 140px;
+      padding-top: 100px;
       padding-bottom: 120px;
-      text-align: center;
     }
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      margin-bottom: 32px;
-      display: inline-flex;
+    .hero-split {
+      display: grid;
+      grid-template-columns: 50fr 50fr;
+      gap: 56px;
       align-items: center;
-      gap: 12px;
     }
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
-      content: '';
+
+    /* Headline lines */
+    .hero-line-1 {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+      color: var(--text);
       display: block;
-      width: 40px;
+    }
+    .hero-line-2 {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+      color: var(--text);
+      display: block;
+    }
+    .hero-line-3 {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(34,211,238,0.18);
+      display: block;
+      margin-bottom: 32px;
+    }
+
+    .hero-divider {
+      width: 100%;
       height: 1px;
-      background: var(--accent);
-      opacity: 0.4;
+      background: rgba(34,211,238,0.05);
+      margin-bottom: 32px;
     }
-    .hero-title {
-      font-family: var(--font-body);
-      font-weight: 200;
-      font-size: clamp(1.75rem, 5vw, 4rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .hero-title-line2 {
-      font-family: var(--font-body);
-      font-weight: 200;
-      font-size: clamp(1.75rem, 5vw, 4rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .hero-title-line3 {
-      font-family: var(--font-body);
-      font-weight: 200;
-      font-size: clamp(1.75rem, 5vw, 4rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      color: var(--text);
-      margin-bottom: 48px;
-    }
-    .hero-title-line3 .accent-word { color: var(--accent); }
+
     .hero-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 1.125rem;
-      color: var(--text-dim);
-      max-width: 640px;
-      margin: 0 auto 56px;
+      font-size: 14px;
       line-height: 1.75;
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      max-width: 520px;
     }
 
-    /* CTA buttons */
     .hero-ctas {
       display: flex;
       gap: 12px;
-      justify-content: center;
-      margin-bottom: 96px;
+      margin-bottom: 48px;
       flex-wrap: wrap;
     }
+
     .btn-primary {
       font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.1em;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       background: var(--accent);
       color: var(--bg);
       border: 1px solid var(--accent);
-      padding: 12px 28px;
-      border-radius: 0;
+      padding: 11px 24px;
       cursor: pointer;
       transition: opacity 0.15s ease-out;
-      font-weight: 700;
+      display: inline-block;
     }
     .btn-primary:hover { opacity: 0.85; }
+
     .btn-secondary {
       font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.1em;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       background: transparent;
       color: var(--text-dim);
-      border: 1px solid var(--border-bright);
-      padding: 12px 28px;
-      border-radius: 0;
+      border: 1px solid rgba(34,211,238,0.15);
+      padding: 11px 24px;
       cursor: pointer;
       transition: color 0.15s ease-out, border-color 0.15s ease-out;
+      display: inline-block;
     }
-    .btn-secondary:hover { color: var(--text); border-color: var(--text-dim); }
+    .btn-secondary:hover { color: var(--text); border-color: rgba(34,211,238,0.3); }
 
-    /* Telemetry readout row */
-    .telemetry-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1px;
-      justify-content: center;
-      max-width: 100%;
+    /* Sub-dial metrics + tachymeter arc */
+    .hero-tachymeter {
+      margin-bottom: 12px;
     }
-    .telemetry-cell {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 16px 28px;
+    .hero-dials {
+      display: flex;
+      gap: 36px;
+      align-items: flex-start;
+    }
+    .hero-dial {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-width: 104px;
-      position: relative;
+      gap: 4px;
     }
-    .telemetry-value {
+    .dial-value {
       font-family: var(--font-mono);
-      font-size: 1.75rem;
-      font-weight: 700;
+      font-size: 1.375rem;
+      font-weight: 500;
       color: var(--accent);
+      letter-spacing: -0.02em;
       line-height: 1;
+      text-shadow: 0 0 16px rgba(34,211,238,0.12);
     }
-    .telemetry-cell.warm-cell .telemetry-value { color: var(--warm); }
-    .telemetry-cell.green-cell .telemetry-value { color: var(--green); }
-    .telemetry-cell.dim-val .telemetry-value {
-      color: var(--text-dim);
-      font-size: 1rem;
-    }
-    .telemetry-label {
+    .dial-label {
       font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.1em;
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
+      opacity: 0.6;
     }
 
     /* ─────────────────────────────────────────────
-       USE CASES
+       MISSION CONSOLE SEPARATOR + TELEMETRY
     ───────────────────────────────────────────── */
-    #use-cases {
-      padding: 120px 0;
+    .console-sep {
+      margin-bottom: 12px;
     }
-    .use-cases-header {
-      text-align: center;
-      margin-bottom: 96px;
+    .console-rule-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
     }
+    .console-rule-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(34,211,238,0.06);
+    }
+    .console-rule-label {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.35;
+      white-space: nowrap;
+    }
+    .hero-telemetry {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+    .telem-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      flex: 1;
+      padding-right: 24px;
+    }
+    .telem-item + .telem-item {
+      padding-left: 24px;
+      padding-right: 24px;
+      border-left: 1px solid rgba(34,211,238,0.05);
+    }
+    .telem-item:last-child { padding-right: 0; }
+    .telem-value {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .telem-key {
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    /* Section tachymeter arc — reused across sections */
+    .section-tachymeter {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 0;
+    }
+
+    /* Trajectory arc — right side */
+    .trajectory-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      min-height: 520px;
+      position: relative;
+    }
+    .trajectory-svg {
+      width: 110%;
+      max-width: 560px;
+      height: auto;
+      margin-right: -40px;
+    }
+    /* Path draw-in animation */
+    .trajectory-path {
+      stroke-dasharray: 800;
+      stroke-dashoffset: 800;
+      animation: drawPath 3s ease-out 0.5s forwards;
+    }
+    @keyframes drawPath {
+      to { stroke-dashoffset: 0; }
+    }
+    /* Waypoint dots pulse in sequentially */
+    .waypoint { opacity: 0; animation: waypointIn 0.6s ease-out forwards; }
+    .wp-1 { animation-delay: 1.0s; }
+    .wp-2 { animation-delay: 1.6s; }
+    .wp-3 { animation-delay: 2.2s; }
+    .wp-4 { animation-delay: 2.8s; }
+    .wp-5 { animation-delay: 3.4s; }
+    @keyframes waypointIn {
+      0% { opacity: 0; transform: scale(0); }
+      60% { transform: scale(1.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    /* Traveling particle along the path */
+    .trajectory-particle {
+      offset-path: path('M 30 580 Q 240 310 520 40');
+      offset-distance: 0%;
+      animation: travel 4s ease-in-out 0.5s infinite;
+    }
+    @keyframes travel {
+      0% { offset-distance: 0%; opacity: 0; }
+      5% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0; }
+    }
+    /* Ship dot breathe */
+    .ship-ring {
+      animation: shipBreathe 3s ease-in-out 3.5s infinite;
+    }
+    @keyframes shipBreathe {
+      0%, 100% { r: 10; opacity: 0.12; }
+      50% { r: 14; opacity: 0.2; }
+    }
+    /* Subtle grid lines behind trajectory */
+    .trajectory-grid line {
+      stroke: rgba(34,211,238,0.018);
+      stroke-width: 0.5;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION TYPOGRAPHY — general
+    ───────────────────────────────────────────── */
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      /* amber ghost — spec says amber ONLY on section labels at ~0.08 opacity */
+      color: rgba(240, 160, 48, 0.08);
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-tag::before,
+    .section-tag::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 20px;
+      background: rgba(240,160,48,0.06);
+    }
+
     .section-title {
       font-family: var(--font-body);
-      font-weight: 300;
-      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+      font-weight: 200;
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      line-height: 1.2;
+      letter-spacing: -0.045em;
       color: var(--text);
       margin-bottom: 16px;
     }
     .section-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 1rem;
+      font-size: 14px;
       color: var(--text-dim);
-      max-width: 560px;
-      margin: 0 auto;
       line-height: 1.7;
+      max-width: 560px;
+    }
+    .section-header {
+      margin-bottom: 80px;
+    }
+    .section-header.centered {
+      text-align: center;
+    }
+    .section-header.centered .section-subtitle { margin: 0 auto; }
+    .section-header.centered .section-tag { display: inline-flex; }
+
+    /* ─────────────────────────────────────────────
+       USE CASES — Mission Briefing
+    ───────────────────────────────────────────── */
+    #use-cases { padding: 120px 0; }
+
+    .use-cases-header {
+      text-align: center;
+      margin-bottom: 96px;
     }
 
-    /* Use case cards — alternating layout */
-    .use-case-block {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-      padding: 80px 0;
-      border-top: 1px solid var(--border);
-    }
-    .use-case-block:first-of-type { border-top: none; }
-    .use-case-block.reverse .use-case-content { order: 2; }
-    .use-case-block.reverse .use-case-detail  { order: 1; }
-
-    /* warm card style for use cases */
-    .use-case-card {
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(240,160,48,0.02) 100%);
-      border: 1px solid var(--border);
-      padding: 36px;
-      border-radius: 0;
-      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
-    }
-    .use-case-card:hover {
-      border-color: var(--warm-border);
-      box-shadow: 0 0 32px rgba(240,160,48,0.04);
-    }
-
-    .use-case-tag {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      background: rgba(240,160,48,0.12);
-      color: var(--warm);
-      border: 1px solid rgba(240,160,48,0.22);
-      padding: 3px 8px;
-      border-radius: 0;
-      display: inline-block;
-      margin-bottom: 16px;
-    }
-    .use-case-title {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 1.375rem;
-      line-height: 1.3;
-      color: var(--text);
-      margin-bottom: 14px;
-      letter-spacing: -0.01em;
-    }
-    .use-case-desc {
-      font-size: 0.9375rem;
-      color: var(--text-dim);
-      line-height: 1.75;
-      margin-bottom: 24px;
-    }
-
-    /* How panel */
-    .how-panel {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 0;
-      padding: 16px 18px;
-      margin-bottom: 16px;
-    }
-    .how-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-    .how-flow {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
-      line-height: 1.6;
-      word-break: break-word;
-    }
-    .how-flow .arrow { color: var(--accent); opacity: 0.6; margin: 0 4px; }
-    .vs-note {
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      font-style: italic;
-    }
-    .vs-note::before {
-      content: 'vs. ';
-      font-style: normal;
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    /* Use case detail column — supporting visual */
-    .use-case-detail {
+    /* Connector lines between missions */
+    .section-connector {
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      gap: 24px;
+      padding: 0;
+      height: 80px;
+      align-items: center;
     }
-    .use-case-number {
+    .section-connector-line {
+      width: 1px;
+      background: rgba(34,211,238,0.06);
+      height: 0;
+      opacity: 0;
+    }
+    .section-connector-line.animate {
+      animation: lineGrow 0.6s ease-out forwards;
+    }
+
+    /* Mission briefing block */
+    .mission-block {
+      padding-bottom: 0;
+    }
+
+    .mission-label {
       font-family: var(--font-mono);
-      font-size: 4rem;
-      font-weight: 700;
-      color: rgba(240,160,48,0.08);
-      line-height: 1;
-      letter-spacing: -0.05em;
-    }
-    .use-case-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .meta-row {
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(34,211,238,0.06);
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .mission-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(34,211,238,0.03);
+      max-width: 160px;
+    }
+
+    .mission-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+      line-height: 1.2;
+      letter-spacing: -0.045em;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .mission-accent-line {
+      width: 20px;
+      height: 1px;
+      background: rgba(34,211,238,0.04);
+      margin-bottom: 20px;
+    }
+
+    .mission-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.75;
+      max-width: 680px;
+      margin-bottom: 32px;
+    }
+
+    /* RECORD terminal */
+    .mission-terminal {
+      position: relative;
+      background: rgba(6, 15, 31, 0.4);
+      border-top: 1px solid rgba(34,211,238,0.03);
+      border-bottom: 1px solid rgba(34,211,238,0.03);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .mission-terminal.in-view {
+      animation: glowPulse 2s ease-in-out 0.8s;
+    }
+
+    .terminal-record-label {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-family: var(--font-mono);
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(34,211,238,0.12);
+    }
+    .terminal-record-label::before {
+      content: '● ';
+      color: rgba(240, 160, 48, 0.25);
+    }
+
+    .terminal-content {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.9;
+      color: var(--text-muted);
+      white-space: pre;
+    }
+    .terminal-content .p { color: var(--accent); }
+    .terminal-content .a { color: rgba(240, 160, 48, 0.65); }
+    .terminal-content .d { color: var(--text-muted); opacity: 0.55; }
+    .terminal-content .s {
+      color: var(--green);
+      opacity: 0;
+      transform: scale(0.5);
+      display: inline;
+    }
+    .mission-terminal.in-view .terminal-content .s {
+      animation: checkIn 0.3s ease-out forwards;
+    }
+    .mission-terminal.in-view .terminal-content .s:nth-of-type(1) { animation-delay: 0.05s; }
+    .mission-terminal.in-view .terminal-content .s:nth-of-type(2) { animation-delay: 0.2s; }
+    .mission-terminal.in-view .terminal-content .s:nth-of-type(3) { animation-delay: 0.35s; }
+    .mission-terminal.in-view .terminal-content .s:nth-of-type(4) { animation-delay: 0.5s; }
+    .mission-terminal.in-view .terminal-content .s:nth-of-type(5) { animation-delay: 0.65s; }
+
+    /* Metadata row below terminal */
+    .mission-meta {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
     }
     .meta-key {
       font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.1em;
+      font-size: 7px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
-      min-width: 64px;
+      opacity: 0.4;
     }
     .meta-val {
       font-family: var(--font-mono);
       font-size: 10px;
       color: var(--text-dim);
     }
-    .meta-dot {
-      width: 4px; height: 4px;
-      border-radius: 50%;
-      background: var(--warm);
-      opacity: 0.5;
-      flex-shrink: 0;
-    }
 
     /* ─────────────────────────────────────────────
-       THREE PILLARS
+       GHOSTLY CARDS
     ───────────────────────────────────────────── */
-    .pillars-grid {
+    .ghost-grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       margin-top: 56px;
     }
-    .pillar-card {
+    .ghost-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 48px;
+    }
+    .ghost-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 36px;
-      position: relative;
+      padding: 40px;
       transition: border-color 0.2s ease-out;
     }
-    .pillar-card:hover { border-color: var(--border-bright); }
-    .pillar-icon {
-      font-family: var(--font-mono);
-      font-size: 1.375rem;
+    .ghost-card:hover { border-color: var(--border-bright); }
+
+    /* Capability card meta footer */
+    .cap-meta {
+      margin-top: 16px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .ghost-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
       margin-bottom: 20px;
       line-height: 1;
     }
-    .pillar-icon.warm-icon  { color: var(--warm); }
-    .pillar-icon.cyan-icon  { color: var(--accent); }
-    .pillar-icon.green-icon { color: var(--green); }
-    .pillar-title {
+    .ghost-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    .ghost-num {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      color: rgba(34,211,238,0.25);
+      margin-bottom: 16px;
+    }
+    .cap-icon {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 10px;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+    .cap-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    .mission-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 12px;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+    .mission-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+    .ghost-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 1rem;
-      letter-spacing: 0.02em;
+      font-size: 0.9375rem;
       color: var(--text);
       margin-bottom: 12px;
+      letter-spacing: 0.01em;
     }
-    .pillar-desc {
-      font-size: 0.9rem;
+    .ghost-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
       color: var(--text-dim);
       line-height: 1.7;
     }
 
     /* ─────────────────────────────────────────────
-       HOW IT WORKS
+       MODEL-AGNOSTIC
     ───────────────────────────────────────────── */
-    .agents-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      margin-top: 48px;
+    .model-agnostic-text {
+      font-weight: 300;
+      font-size: 14px;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 32px;
+      line-height: 1.75;
+      text-align: center;
     }
-    .agent-card {
+    .model-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 56px;
+    }
+    .model-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .model-badge:hover { border-color: var(--border-bright); color: var(--text-dim); }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-bottom: 40px;
+    }
+    .evidence-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 28px;
-      position: relative;
+      padding: 32px 24px;
+      text-align: center;
       transition: border-color 0.2s ease-out;
-      overflow: hidden;
     }
-    .agent-card:hover { border-color: var(--border-bright); }
-    .agent-card.worker-card { background: var(--surface2); }
-    .agent-callsign {
+    .evidence-card:hover { border-color: var(--border-bright); }
+    .evidence-number {
       font-family: var(--font-mono);
-      font-size: 9px;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 16px rgba(34,211,238,0.12);
+    }
+    .evidence-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--text-muted);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      opacity: 0.7;
     }
-    .agent-name {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 1rem;
-      color: var(--text);
-      margin-bottom: 12px;
-      letter-spacing: 0.01em;
-    }
-    .agent-role {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 16px;
-    }
-    .agent-desc {
-      font-size: 0.875rem;
+    .evidence-detail {
+      font-size: 12px;
       color: var(--text-dim);
-      line-height: 1.65;
+      line-height: 1.5;
     }
-    .agent-card.featured {
-      grid-column: span 2;
-    }
-
-    /* ─────────────────────────────────────────────
-       CAPABILITIES
-    ───────────────────────────────────────────── */
-    .capabilities-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      margin-top: 48px;
-    }
-    .cap-cell {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 28px;
-      position: relative;
-      transition: border-color 0.2s ease-out;
-    }
-    .cap-cell:hover { border-color: var(--border-bright); }
-    .cap-glyph {
+    .evidence-source {
       font-family: var(--font-mono);
-      font-size: 1.1rem;
-      color: var(--accent);
-      margin-bottom: 16px;
-      line-height: 1;
+      font-size: 8px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      opacity: 0.5;
     }
-    .cap-name {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 0.875rem;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .cap-desc {
-      font-size: 0.8125rem;
+    .evidence-quote {
+      font-style: italic;
+      font-size: 14px;
       color: var(--text-dim);
-      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+      text-align: center;
     }
 
     /* ─────────────────────────────────────────────
        COMPARISON TABLE
     ───────────────────────────────────────────── */
-    #comparison {
-      padding: 120px 0;
-    }
-    .comparison-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
+    #comparison { padding: 120px 0; }
     .comparison-wrapper {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      position: relative;
-    }
-    .comparison-wrapper::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 40px;
-      background: linear-gradient(to right, transparent, var(--bg));
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
     }
     .comparison-table {
       width: 100%;
       border-collapse: collapse;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
     }
     .comparison-table th {
-      padding: 14px 20px;
+      padding: 12px 18px;
       text-align: left;
       border-bottom: 1px solid var(--border);
-      color: var(--text-muted);
+      color: rgba(107,126,150,0.5);
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 400;
@@ -723,34 +966,35 @@
     }
     .comparison-table th.helios-col {
       color: var(--accent);
-      background: var(--accent-dim);
-      border-left: 1px solid rgba(34,211,238,0.2);
-      border-right: 1px solid rgba(34,211,238,0.2);
+      background: rgba(34,211,238,0.02);
+      border-left: 1px solid rgba(34,211,238,0.04);
+      border-right: 1px solid rgba(34,211,238,0.04);
     }
     .comparison-table td {
-      padding: 14px 20px;
-      border-bottom: 1px solid rgba(34,211,238,0.06);
-      color: var(--text-dim);
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(34,211,238,0.02);
+      color: rgba(138,155,181,0.4);
       vertical-align: top;
       line-height: 1.5;
     }
     .comparison-table td:first-child {
-      color: var(--text-muted);
+      color: rgba(107,126,150,0.45);
       white-space: nowrap;
     }
     .comparison-table td.helios-col {
-      color: var(--accent);
-      background: rgba(34,211,238,0.03);
-      border-left: 1px solid rgba(34,211,238,0.1);
-      border-right: 1px solid rgba(34,211,238,0.1);
+      color: rgba(34,211,238,0.7);
+      background: rgba(34,211,238,0.02);
+      border-left: 1px solid rgba(34,211,238,0.04);
+      border-right: 1px solid rgba(34,211,238,0.04);
     }
-    .comparison-table tbody tr:hover td { background: rgba(34,211,238,0.02); }
-    .comparison-table tbody tr:hover td.helios-col { background: rgba(34,211,238,0.06); }
+    .comparison-table tbody tr:hover td { background: rgba(34,211,238,0.01); }
+    .comparison-table tbody tr:hover td.helios-col { background: rgba(34,211,238,0.04); }
     .comparison-table .row-label {
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
+    .comparison-table th[scope="row"] { font-weight: 400; text-align: left; }
 
     /* ─────────────────────────────────────────────
        INSTALL
@@ -765,17 +1009,19 @@
       background: var(--surface);
       border: 1px solid var(--border);
       padding: 28px 32px;
+      position: relative;
     }
     .install-panel-label {
       font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.1em;
+      font-size: 8px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
       margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 8px;
+      opacity: 0.6;
     }
     .install-panel-label::after {
       content: '';
@@ -785,19 +1031,19 @@
     }
     .code-block {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.8;
       color: var(--text-dim);
       overflow-x: auto;
     }
     .code-line { display: block; }
     .code-prompt { color: var(--accent); margin-right: 8px; }
-    .code-comment { color: var(--text-muted); }
-    .code-cmd    { color: var(--text); }
-    .code-arg    { color: var(--warm); }
+    .code-comment { color: var(--text-muted); opacity: 0.5; }
+    .code-cmd    { color: var(--text); opacity: 0.75; }
+    .code-arg    { color: rgba(240,160,48,0.65); }
 
     /* ─────────────────────────────────────────────
-       WARM CTA
+       CTA — Cyan glow, no warm pulse ring
     ───────────────────────────────────────────── */
     #cta {
       padding: 120px 0;
@@ -809,8 +1055,9 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(240,160,48,0.05) 0%, transparent 70%);
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(34,211,238,0.03) 0%, transparent 70%);
       pointer-events: none;
+      animation: cyanGlowPulse 5s ease-in-out infinite;
     }
     .cta-inner {
       position: relative;
@@ -819,58 +1066,43 @@
     .cta-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
       line-height: 1.2;
-      letter-spacing: -0.025em;
+      letter-spacing: -0.045em;
       color: var(--text);
       margin-bottom: 12px;
-      max-width: 640px;
+      max-width: 600px;
       margin-left: auto;
       margin-right: auto;
     }
     .cta-sub {
-      font-size: 0.9375rem;
+      font-size: 14px;
       color: var(--text-dim);
       margin-bottom: 40px;
-      line-height: 1.65;
+      line-height: 1.7;
     }
-    .btn-warm {
+    .btn-cta {
       font-family: var(--font-mono);
       font-size: 11px;
+      font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      background: var(--warm);
+      background: var(--accent);
       color: var(--bg);
-      border: 1px solid var(--warm);
+      border: 1px solid var(--accent);
       padding: 14px 36px;
-      border-radius: 0;
       cursor: pointer;
-      font-weight: 700;
       transition: opacity 0.15s ease-out;
       display: inline-block;
     }
-    .btn-warm:hover { opacity: 0.88; }
-
-    /* Warm pulse animation on CTA section */
-    @keyframes warm-pulse {
-      0%, 100% { opacity: 0.7; }
-      50%       { opacity: 1; }
-    }
-    .warm-pulse-ring {
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      border: 1px solid rgba(240,160,48,0.08);
-      animation: warm-pulse 4s ease-in-out infinite;
-      pointer-events: none;
-    }
+    .btn-cta:hover { opacity: 0.85; }
 
     /* ─────────────────────────────────────────────
        FOOTER
     ───────────────────────────────────────────── */
     .footer {
       border-top: 1px solid var(--border);
-      padding: 40px 0;
+      padding: 32px 0;
     }
     .footer-inner {
       max-width: 1200px;
@@ -885,121 +1117,39 @@
     .footer-left {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     .footer-wordmark {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       letter-spacing: 0.2em;
       color: var(--accent);
-      opacity: 0.7;
+      opacity: 0.45;
     }
     .footer-tag {
       font-family: var(--font-mono);
-      font-size: 9px;
+      font-size: 8px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-muted);
+      opacity: 0.4;
     }
-    .footer-links {
+    .footer-links ul[role="list"] {
       display: flex;
       gap: 24px;
+      flex-wrap: wrap;
     }
     .footer-links a {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-muted);
-      transition: color 0.15s ease-out;
+      opacity: 0.45;
+      transition: opacity 0.15s ease-out;
     }
-    .footer-links a:hover { color: var(--text-dim); }
-
-    /* ─────────────────────────────────────────────
-       MODEL-AGNOSTIC SECTION
-    ───────────────────────────────────────────── */
-    #model-agnostic {
-      text-align: center;
-    }
-    .model-agnostic-text {
-      font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 1.125rem;
-      color: var(--text-dim);
-      max-width: 640px;
-      margin: 0 auto 32px;
-      line-height: 1.75;
-    }
-    .model-badges-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 56px;
-    }
-    .model-badge {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-      padding: 4px 12px;
-      border-radius: 999px;
-      display: inline-block;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .model-badge:hover {
-      border-color: var(--border-bright);
-      color: var(--text);
-    }
-    .evidence-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      margin-bottom: 32px;
-    }
-    .evidence-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 24px;
-      text-align: center;
-    }
-    .evidence-number {
-      font-family: var(--font-mono);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .evidence-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-    .evidence-detail {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
-    .evidence-source {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      color: var(--text-muted);
-      margin-top: 8px;
-    }
-    .evidence-quote {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      max-width: 640px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
+    .footer-links a:hover { opacity: 0.85; }
 
     /* ─────────────────────────────────────────────
        HAMBURGER & MOBILE MENU
@@ -1009,195 +1159,52 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px;
-      min-width: 44px;
-      min-height: 44px;
+      padding: 4px;
+      min-width: 36px;
+      min-height: 28px;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     .hamburger span {
       display: block;
-      width: 20px;
-      height: 1.5px;
-      background: var(--text-dim);
+      width: 16px;
+      height: 1px;
+      background: var(--text-muted);
       transition: transform 0.25s, opacity 0.25s;
     }
-    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
 
     .mobile-menu {
       display: none;
       position: fixed;
       top: var(--nav-h);
-      left: 0;
-      right: 0;
-      bottom: 0;
+      left: 0; right: 0; bottom: 0;
       background: rgba(2, 9, 20, 0.97);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       z-index: 99;
       flex-direction: column;
-      padding: 32px 24px;
-      gap: 0;
+      padding: 24px;
       overflow-y: auto;
     }
-    .mobile-menu.open {
-      display: flex;
-    }
+    .mobile-menu.open { display: flex; }
     .mobile-menu a {
       font-family: var(--font-mono);
-      font-size: 14px;
+      font-size: 13px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 16px 0;
+      color: var(--text-muted);
+      padding: 14px 0;
       border-bottom: 1px solid var(--border);
       transition: color 0.15s;
       display: block;
     }
     .mobile-menu a:hover, .mobile-menu a:focus { color: var(--accent); }
     .mobile-menu a:last-child { border-bottom: none; color: var(--accent); }
-
-    /* ─────────────────────────────────────────────
-       RESPONSIVE
-    ───────────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .container { padding: 0 24px; }
-      .nav { padding: 0 24px; }
-      section { padding: 64px 0; }
-      #hero { padding-top: 72px; padding-bottom: 64px; }
-
-      .pillars-grid { grid-template-columns: 1fr; }
-      .agents-grid  { grid-template-columns: 1fr 1fr; }
-      .capabilities-grid { grid-template-columns: 1fr 1fr; }
-      .evidence-grid { grid-template-columns: 1fr; }
-      .install-panels { grid-template-columns: 1fr; }
-
-      .use-case-block {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        padding: 48px 0;
-      }
-      .use-case-block.reverse .use-case-content { order: 1; }
-      .use-case-block.reverse .use-case-detail  { order: 2; }
-      .use-case-detail { display: none; }
-
-      .agent-card.featured { grid-column: span 1; }
-
-      .nav-links .nav-hide-mobile { display: none; }
-      body { background-attachment: scroll, scroll, scroll; }
-      .hamburger { display: flex; }
-      .comparison-wrapper::after { opacity: 1; }
-    }
-
-    .terminal-demo {
-      background: #0a0e14;
-      border: 1px solid rgba(34, 211, 238, 0.12);
-      padding: 24px 28px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      line-height: 1.9;
-      color: var(--text-dim);
-      overflow-x: auto;
-      white-space: pre;
-      margin: 20px 0 12px;
-    }
-    .terminal-demo .p { color: #22D3EE; }
-    .terminal-demo .a { color: #f0a030; }
-    .terminal-demo .s { color: #3fb950; }
-    .terminal-demo .d { color: #6b7e96; }
-
-    @media (max-width: 600px) {
-      section { padding: 48px 0; }
-      .container { padding: 0 20px; }
-      .agents-grid        { grid-template-columns: 1fr; }
-      .capabilities-grid  { grid-template-columns: 1fr; }
-
-      /* Fix 1 — terminal-demo overflow */
-      .terminal-demo {
-        position: relative;
-        -webkit-overflow-scrolling: touch;
-        white-space: pre-wrap;
-        word-break: break-word;
-        font-size: 10px;
-        padding: 16px 14px;
-        line-height: 1.7;
-      }
-
-      /* Fix 2 — code-block overflow */
-      .code-block { font-size: 10px; padding: 16px 14px; }
-      .code-block .code-line { white-space: normal; word-break: break-all; }
-
-      /* Fix 4 — hero title sizing */
-      .hero-title { font-size: clamp(1.5rem, 7vw, 2rem); }
-      .hero-subtitle { font-size: 0.875rem; line-height: 1.6; }
-      .section-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
-      .section-subtitle { font-size: 0.8125rem; }
-
-      /* Fix 5 — telemetry row */
-      .telemetry-row {
-        flex-wrap: wrap;
-        gap: 1px;
-        justify-content: center;
-      }
-      .telemetry-cell { flex: 1 1 calc(33.33% - 1px); min-width: 64px; }
-      .telemetry-value { font-size: 1.25rem; }
-      .telemetry-label { font-size: 9px; }
-
-      /* Fix 6 — agent cards */
-      .agent-card { padding: 20px 16px; }
-      .agent-callsign { font-size: 10px; }
-      .agent-name { font-size: 0.875rem; }
-      .agent-role { font-size: 9px; }
-
-      /* Fix 7 — comparison table */
-      .comparison-wrapper { margin: 0 -20px; padding: 0 20px; }
-      .comparison-table { font-size: 11px; }
-      .comparison-table th, .comparison-table td { padding: 10px 8px; font-size: 11px; }
-
-      /* Fix 9 — use-case tags + section labels */
-      .use-case-tag { font-size: 10px; padding: 4px 10px; }
-      .section-label { font-size: 10px; letter-spacing: 0.12em; }
-      .section-label::before, .section-label::after { width: 16px; }
-
-      /* Fix 10 — CTA section */
-      .cta-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
-      .cta-sub { font-size: 0.8125rem; }
-
-      /* Fix 11 — evidence cards */
-      .evidence-card { padding: 20px 16px; }
-      .evidence-value { font-size: 1.5rem; }
-      .evidence-label { font-size: 9px; }
-      .evidence-source { font-size: 9px; }
-      .evidence-caption { font-size: 0.75rem; }
-
-      /* Fix 12 — model badges */
-      .model-badge { font-size: 10px; padding: 6px 12px; }
-
-      /* Fix 13 — footer */
-      .footer-inner {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-        padding: 24px 20px;
-      }
-      .footer-links ul { justify-content: center; flex-wrap: wrap; }
-      .footer-wordmark { font-size: 1rem; }
-      .footer-tag { font-size: 10px; }
-
-      /* Retained */
-      .hero-ctas { flex-direction: column; align-items: center; gap: 16px; }
-      .btn-primary, .btn-secondary { padding: 16px 28px; width: 100%; max-width: 300px; text-align: center; }
-      .btn-warm { padding: 16px 36px; }
-      .nav-cta { padding: 12px 16px !important; }
-      .install-modal-close { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 8px; }
-      .install-tab { padding: 14px 12px; }
-      .footer-links a, .footer-links li a { padding: 8px 4px; display: inline-block; }
-      .meta-key, .install-panel-label { font-size: 11px; }
-    }
 
     /* ─────────────────────────────────────────────
        ACCESSIBILITY
@@ -1214,32 +1221,12 @@
       z-index: 200;
       text-decoration: none;
     }
-    .skip-link:focus-visible {
-      top: 8px;
-    }
-    :focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
+    .skip-link:focus-visible { top: 8px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-    .comparison-table th[scope="row"] { font-weight: 400; text-align: left; }
-    .hero-title,
-    .hero-title-line2,
-    .hero-title-line3 { display: block; }
-    .footer-links ul[role="list"] {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
 
     /* ─────────────────────────────────────────────
@@ -1249,7 +1236,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(2, 9, 20, 0.85);
+      background: rgba(2, 9, 20, 0.88);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 300;
@@ -1260,12 +1247,10 @@
       padding-bottom: 40px;
       overflow-y: auto;
     }
-    .install-modal-overlay.open {
-      display: flex;
-    }
+    .install-modal-overlay.open { display: flex; }
     .install-modal {
       background: var(--surface);
-      border: 1px solid var(--border-bright);
+      border: 1px solid rgba(34,211,238,0.08);
       max-width: 640px;
       width: 100%;
       padding: 40px;
@@ -1275,15 +1260,12 @@
     }
     .install-modal-close {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
+      top: 16px; right: 16px;
+      background: none; border: none;
       color: var(--text-muted);
       font-size: 24px;
       cursor: pointer;
-      padding: 4px 8px;
-      line-height: 1;
+      padding: 4px 8px; line-height: 1;
       transition: color 0.15s;
     }
     .install-modal-close:hover { color: var(--text); }
@@ -1304,39 +1286,29 @@
     }
     .install-tabs {
       display: flex;
-      gap: 0;
-      margin-bottom: 0;
       border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
     }
     .install-tab {
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      background: none;
-      border: none;
+      background: none; border: none;
       border-bottom: 2px solid transparent;
       color: var(--text-muted);
-      padding: 12px 20px;
+      padding: 10px 18px;
       cursor: pointer;
       transition: color 0.15s, border-color 0.15s;
     }
     .install-tab:hover { color: var(--text-dim); }
-    .install-tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-    .install-tab-content {
-      display: none;
-      padding: 24px 0;
-    }
-    .install-tab-content.active {
-      display: block;
-    }
+    .install-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .install-tab-content { display: none; padding: 24px 0; }
+    .install-tab-content.active { display: block; }
     .install-command-block {
       background: var(--bg);
       border: 1px solid var(--border);
-      padding: 16px 20px;
+      padding: 14px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1344,7 +1316,7 @@
     }
     .install-command-block code {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text);
       word-break: break-all;
       line-height: 1.6;
@@ -1358,28 +1330,25 @@
       background: var(--accent-dim);
       border: 1px solid var(--accent);
       color: var(--accent);
-      padding: 6px 12px;
+      padding: 5px 10px;
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.15s;
       flex-shrink: 0;
     }
-    .install-copy-btn:hover { background: rgba(34,211,238,0.2); }
-    .install-copy-btn.copied {
-      background: var(--green-dim);
-      border-color: var(--green);
-      color: var(--green);
-    }
+    .install-copy-btn:hover { background: rgba(34,211,238,0.15); }
+    .install-copy-btn.copied { background: var(--green-dim); border-color: var(--green); color: var(--green); }
     .install-note {
       font-family: var(--font-mono);
       font-size: 10px;
       color: var(--text-muted);
-      margin-top: 12px;
+      margin-top: 10px;
       letter-spacing: 0.04em;
+      opacity: 0.55;
     }
     .install-modal-footer {
-      margin-top: 28px;
-      padding-top: 20px;
+      margin-top: 24px;
+      padding-top: 16px;
       border-top: 1px solid var(--border);
     }
     .install-docs-link {
@@ -1391,124 +1360,1021 @@
     }
     .install-docs-link:hover { color: var(--accent); }
 
+    /* ─────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────── */
+    /* ─────────────────────────────────────────────
+       INSTRUMENT DIAL — Rams at NASA 1965
+    ───────────────────────────────────────────── */
+    .dial-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      min-height: 520px;
+      position: relative;
+    }
+    .dial-svg {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+    }
+
+    /* Sweep hand — main operation pointer */
+    @keyframes dialSweep {
+      0%   { transform: rotate(-148deg); }
+      82%  { transform: rotate(148deg); }
+      100% { transform: rotate(-148deg); }
+    }
+    .dial-sweep-group {
+      transform-origin: 240px 238px;
+      animation: dialSweep 9s cubic-bezier(0.35, 0.04, 0.65, 0.96) infinite;
+    }
+
+    /* Sub-dial chronograph hands */
+    @keyframes subDialSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .sub-dial-hand-1 {
+      transform-origin: 154px 356px;
+      animation: subDialSpin 5s linear infinite;
+    }
+    .sub-dial-hand-2 {
+      transform-origin: 326px 356px;
+      animation: subDialSpin 2.8s linear infinite;
+    }
+
+    /* Live pulse dot */
+    @keyframes livePulse {
+      0%, 100% { opacity: 0.5; r: 3; }
+      50%       { opacity: 1;   r: 3.8; }
+    }
+    .dial-live-dot { animation: livePulse 1.4s ease-in-out infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dial-sweep-group { animation: none !important; transform: rotate(60deg); }
+      .sub-dial-hand-1, .sub-dial-hand-2 { animation: none !important; transform: rotate(45deg); }
+      .dial-live-dot { animation: none !important; }
+    }
+
+    /* ─────────────────────────────────────────────
+       MISSION ARTIFACT CARD
+    ───────────────────────────────────────────── */
+    .artifact-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      min-height: 520px;
+    }
+    .artifact-card {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      background: #080f1e;
+      border: 1px solid rgba(34,211,238,0.07);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.5),
+        0 8px 32px rgba(0,0,0,0.7),
+        inset 0 1px 0 rgba(34,211,238,0.04),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+    }
+    .artifact-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(3,7,16,0.8);
+      border-bottom: 1px solid rgba(34,211,238,0.05);
+      padding: 11px 22px;
+    }
+    .artifact-header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .artifact-mission-id {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: rgba(34,211,238,0.45);
+    }
+    .artifact-date {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: rgba(107,126,150,0.4);
+    }
+    .artifact-status-badge {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: rgba(63,185,80,0.75);
+      border: 1px solid rgba(63,185,80,0.2);
+      padding: 2px 9px;
+    }
+    .artifact-body {
+      padding: 32px 28px 20px;
+    }
+    .artifact-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(34,211,238,0.18);
+      margin-bottom: 10px;
+    }
+    .artifact-title {
+      font-family: var(--font-body);
+      font-weight: 200;
+      font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      opacity: 0.92;
+      margin-bottom: 28px;
+    }
+    .artifact-rule {
+      height: 1px;
+      background: linear-gradient(to right, rgba(34,211,238,0.08), transparent);
+      margin-bottom: 24px;
+    }
+    .artifact-params {
+      display: flex;
+      flex-direction: column;
+    }
+    .artifact-param-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(34,211,238,0.03);
+    }
+    .artifact-param-row:last-child { border-bottom: none; }
+    .param-key {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(107,126,150,0.42);
+      white-space: nowrap;
+      min-width: 108px;
+      flex-shrink: 0;
+    }
+    .param-val {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: rgba(138,155,181,0.62);
+      letter-spacing: 0.03em;
+    }
+    .param-val.green  { color: rgba(63,185,80,0.72); }
+    .param-val.accent { color: rgba(34,211,238,0.6); }
+    .artifact-footer {
+      background: rgba(3,7,16,0.6);
+      border-top: 1px solid rgba(34,211,238,0.04);
+      padding: 11px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .artifact-barcode {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      letter-spacing: -0.07em;
+      color: rgba(34,211,238,0.06);
+      line-height: 1;
+    }
+    .artifact-serial {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      color: rgba(107,126,150,0.28);
+    }
+    /* Registration corner marks */
+    .artifact-corner {
+      position: absolute;
+      width: 11px;
+      height: 11px;
+    }
+    .artifact-corner.tl { top: -1px; left: -1px; border-top: 1px solid rgba(34,211,238,0.18); border-left: 1px solid rgba(34,211,238,0.18); }
+    .artifact-corner.tr { top: -1px; right: -1px; border-top: 1px solid rgba(34,211,238,0.18); border-right: 1px solid rgba(34,211,238,0.18); }
+    .artifact-corner.bl { bottom: -1px; left: -1px; border-bottom: 1px solid rgba(34,211,238,0.18); border-left: 1px solid rgba(34,211,238,0.18); }
+    .artifact-corner.br { bottom: -1px; right: -1px; border-bottom: 1px solid rgba(34,211,238,0.18); border-right: 1px solid rgba(34,211,238,0.18); }
+
+    /* ─────────────────────────────────────────────
+       VIEW-SWITCHER NAV LINK
+    ───────────────────────────────────────────── */
+    .nav-view-link {
+      color: rgba(34,211,238,0.38) !important;
+      border-left: 1px solid rgba(34,211,238,0.06) !important;
+      padding-left: 14px !important;
+      opacity: 0.9 !important;
+    }
+    .nav-view-link:hover { color: var(--accent) !important; opacity: 1 !important; }
+    .footer-view-link { color: rgba(34,211,238,0.4) !important; }
+    .footer-view-link:hover { opacity: 1 !important; color: var(--accent) !important; }
+
+    @media (max-width: 900px) {
+      .container { padding: 0 24px; }
+      .nav { padding: 0 24px; }
+      section { padding: 80px 0; }
+      #hero { padding-top: 64px; padding-bottom: 80px; }
+      .hero-split { grid-template-columns: 1fr; gap: 0; }
+      .hero-right { display: none; }
+      .ghost-grid-3 { grid-template-columns: 1fr; }
+      .ghost-grid-6 { grid-template-columns: 1fr 1fr; }
+      .evidence-grid { grid-template-columns: 1fr; }
+      .install-panels { grid-template-columns: 1fr; }
+      .nav-links .nav-hide-mobile { display: none; }
+      body { background-attachment: scroll; }
+      .hamburger { display: flex; }
+      .nav-brand .nav-descriptor { display: none; }
+    }
+
     @media (max-width: 600px) {
-      /* Fix 8 — install modal */
-      .install-modal {
-        margin: 12px;
-        padding: 24px 16px;
-        max-height: calc(100vh - 24px);
-      }
+      section { padding: 56px 0; }
+      .container { padding: 0 20px; }
+      .ghost-grid-6 { grid-template-columns: 1fr; }
+      .hero-line-1, .hero-line-2, .hero-line-3 { font-size: clamp(1.5rem, 8vw, 2.5rem); }
+      .section-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
+      .hero-ctas { flex-direction: column; gap: 10px; }
+      .btn-primary, .btn-secondary, .btn-cta { width: 100%; max-width: 280px; text-align: center; }
+      .terminal-content { font-size: 10px; white-space: pre-wrap; word-break: break-word; }
+      .code-block { font-size: 10px; }
+      .comparison-wrapper { margin: 0 -20px; padding: 0 20px; }
+      .comparison-table { font-size: 10px; }
+      .comparison-table th, .comparison-table td { padding: 10px 8px; }
+      .hero-dials { gap: 20px; }
+      .nav-indicator-label { display: none; }
+      .install-modal { padding: 24px 16px; margin: 12px; max-height: calc(100vh - 24px); }
       .install-modal-title { font-size: 1.25rem; }
-      .install-command-block code {
-        font-size: 10px;
-        word-break: break-all;
-        white-space: normal;
-      }
-      .install-tab { padding: 14px 12px; font-size: 10px; }
       .install-command-block { flex-direction: column; align-items: stretch; }
+      .install-command-block code { font-size: 10px; white-space: normal; word-break: break-all; }
+      .install-tab { padding: 12px 10px; font-size: 10px; }
       .install-modal-overlay { padding: 12px; padding-top: 40px; }
+      .footer-inner { flex-direction: column; gap: 12px; text-align: center; padding: 24px 20px; }
+      .footer-links ul { justify-content: center; }
+      .mission-meta { gap: 16px; }
+      .ghost-card { padding: 28px 24px; }
+    }
+
+    /* ═══════════════════════════════════════════
+       INSTRUMENT PANEL CSS (hero override)
+    ═══════════════════════════════════════════ */
+
+    /* Override: body no longer flex-centers since there's content below */
+    body {
+      display: block;
+    }
+
+    /* Instrument hero section */
+    #hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+      padding: 48px 40px 80px;
+    }
+
+    .instrument-wrapper {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    /* Instrument headline */
+    .inst-headline {
+      font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 200;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      color: var(--text, #f0f4f8);
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    /* Instrument panel */
+    .instrument {
+      border: 1px solid rgba(34, 211, 238, 0.10);
+      position: relative;
+      margin-bottom: 0;
+    }
+    .instrument::before,
+    .instrument::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      z-index: 2;
+    }
+    .instrument::before {
+      top: -1px; left: -1px;
+      border-top: 1px solid rgba(34,211,238,0.28);
+      border-left: 1px solid rgba(34,211,238,0.28);
+    }
+    .instrument::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 1px solid rgba(34,211,238,0.28);
+      border-right: 1px solid rgba(34,211,238,0.28);
+    }
+
+    .reels {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .reel {
+      border-right: 1px solid rgba(34, 211, 238, 0.10);
+      display: flex;
+      flex-direction: column;
+    }
+    .reel:last-child { border-right: none; }
+
+    .reel-label {
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--text-muted, #56687a);
+      text-transform: uppercase;
+      padding: 12px 18px 10px;
+      border-bottom: 1px solid rgba(34, 211, 238, 0.10);
+    }
+
+    .readout {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 18px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .readout:hover { background: rgba(34,211,238,0.03); }
+
+    .readout-value {
+      font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text, #f0f4f8);
+      text-align: center;
+      line-height: 1.45;
+      transition: opacity 0.18s ease;
+    }
+    .readout-value.updating { opacity: 0; }
+
+    /* ─────────────────────────────────────────────
+       USE-CASE READOUT PANELS
+    ───────────────────────────────────────────── */
+    .use-case-detail {
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .use-case-number {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+    .readout-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); opacity: 0.6; margin-bottom: 16px; display: block; }
+    .readout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    .readout-stat { display: flex; flex-direction: column; gap: 4px; }
+    .readout-num { font-family: var(--font-mono); font-size: 24px; font-weight: 700; color: var(--accent); line-height: 1; }
+    .readout-unit { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; }
+    .readout-time { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.05em; padding-top: 12px; border-top: 1px solid var(--border); }
+    .readout-clock { color: var(--accent); font-weight: 700; }
+
+    .toggle-row {
+      display: flex;
+      justify-content: center;
+      padding: 8px 14px 10px;
+      border-top: 1px solid rgba(34, 211, 238, 0.10);
+    }
+
+    .toggle {
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      padding: 3px 10px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.12s;
+      border: 1px solid;
+      user-select: none;
+      background: transparent;
+    }
+    .toggle.open {
+      color: var(--text-muted, #56687a);
+      border-color: rgba(34,211,238,0.18);
+    }
+    .toggle.set {
+      color: var(--bg, #020914);
+      border-color: var(--green, #3fb950);
+      background: var(--green, #3fb950);
+    }
+
+    .synth-row {
+      border-top: 1px solid rgba(34, 211, 238, 0.10);
+      padding: 14px 18px;
+      display: flex;
+    }
+
+    .btn-synth {
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      padding: 12px 0;
+      width: 100%;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.12s;
+      border: 1px solid var(--accent, #22D3EE);
+      background: var(--accent, #22D3EE);
+      color: var(--bg, #020914);
+      font-weight: 700;
+    }
+    .btn-synth:hover { background: #1ec8e3; border-color: #1ec8e3; }
+    .btn-synth:active { transform: scale(0.995); }
+
+    .inst-output {
+      border-top: 1px solid rgba(34, 211, 238, 0.10);
+      padding: 18px 18px;
+    }
+
+    .inst-output-label {
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      color: var(--text-muted, #56687a);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .inst-mission {
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 11px;
+      line-height: 1.65;
+      letter-spacing: 0.03em;
+    }
+    .inst-mission .who { color: var(--accent, #22D3EE); }
+    .inst-mission .goal { color: var(--warm, rgba(240,160,48,1)); }
+    .inst-mission .action { color: var(--green, #3fb950); }
+    .inst-mission .conn { color: var(--text-muted, #56687a); }
+
+    .inst-hint {
+      text-align: center;
+      margin-top: 28px;
+      font-family: var(--font-mono, 'Space Mono', monospace);
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      color: rgba(86,104,122,0.5);
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 560px) {
+      .reels { grid-template-columns: 1fr; }
+      .reel { border-right: none; border-bottom: 1px solid rgba(34, 211, 238, 0.10); }
+      .reel:last-child { border-bottom: none; }
+      .readout { min-height: 64px; }
+    }
+
+    /* ─────────────────────────────────────────────
+       HIGH CONTRAST MODE
+    ───────────────────────────────────────────── */
+    @media (prefers-contrast: more) {
+      :root {
+        --text-dim: #B0C4D8;
+        --border: rgba(34, 211, 238, 0.12);
+        --border-bright: rgba(34, 211, 238, 0.2);
+      }
+    }
+
+    /* ─────────────────────────────────────────────
+       REEL DROPDOWN SELECTORS
+    ───────────────────────────────────────────── */
+    .mode-toggle-row {
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      margin-bottom: 16px;
+    }
+    .mode-toggle-btn {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      cursor: pointer;
+      border: 1px solid rgba(34,211,238,0.12);
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .mode-toggle-btn.active {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .mode-toggle-btn:first-child { border-radius: 2px 0 0 2px; }
+    .mode-toggle-btn:last-child { border-radius: 0 2px 2px 0; }
+
+    .reel { position: relative; }
+    .reel-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--surface);
+      border: 1px solid rgba(34,211,238,0.12);
+      max-height: 240px;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .reel-dropdown.open { display: block; }
+    .reel-dropdown-item {
+      font-family: var(--font-body);
+      font-size: 13px;
+      padding: 10px 18px;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(34,211,238,0.03);
+      transition: background 0.1s, color 0.1s;
+    }
+    .reel-dropdown-item:hover { background: rgba(34,211,238,0.06); color: var(--text); }
+    .reel-dropdown-item.selected { color: var(--accent); background: rgba(34,211,238,0.04); }
+    .reel-dropdown-item:last-child { border-bottom: none; }
+
+    .inst-role-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-top: 8px;
+      min-height: 40px;
+      transition: opacity 0.2s;
+    }
+
+    /* ─────────────────────────────────────────────
+       SOCIAL PROOF
+    ───────────────────────────────────────────── */
+    #social-proof { padding: 120px 0; }
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+    }
+    .persona-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      transition: border-color 0.2s;
+    }
+    .persona-card:hover { border-color: var(--border-bright); }
+    .persona-emoji { font-size: 28px; margin-bottom: 14px; }
+    .persona-name {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .persona-badge {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+    .persona-badge.cyan   { color: var(--accent); border-color: rgba(34,211,238,0.2); }
+    .persona-badge.gold   { color: var(--warm); border-color: rgba(240,160,48,0.2); }
+    .persona-badge.purple { color: #a78bfa; border-color: rgba(167,139,250,0.2); }
+    .persona-badge.green  { color: var(--green); border-color: rgba(63,185,80,0.2); }
+    .persona-quote {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      font-style: italic;
+    }
+    .persona-summary {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .persona-summary-tag {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+    .persona-summary-text {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .persona-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .persona-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─────────────────────────────────────────────
+       COST TRANSPARENCY
+    ───────────────────────────────────────────── */
+    #cost-transparency { padding: 120px 0; }
+    .cost-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+    .cost-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px 32px;
+    }
+    .cost-card.without {
+      border-color: rgba(239,68,68,0.12);
+    }
+    .cost-card-tag {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .cost-card.without .cost-card-tag { color: #ef4444; }
+    .cost-card.with .cost-card-tag { color: var(--accent); }
+    .cost-pain {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(239,68,68,0.06);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .cost-pain::before { content: '✕'; color: rgba(239,68,68,0.5); font-size: 11px; flex-shrink: 0; }
+    .estimator-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .estimator-key {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .estimator-val {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .estimator-val.accent { color: var(--accent); }
+    .estimator-total {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 20px;
+      letter-spacing: -0.02em;
+    }
+    .estimator-savings {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--green);
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 900px) {
+      .cost-split { grid-template-columns: 1fr; }
+    }
+
+    /* ─────────────────────────────────────────────
+       COACHING MODE
+    ───────────────────────────────────────────── */
+    #coaching { padding: 120px 0; }
+    .coaching-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .coaching-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .coaching-step-num {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      opacity: 0.4;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .coaching-step-title {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .coaching-step-desc {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .coaching-connector {
+      width: 1px;
+      height: 20px;
+      background: rgba(34,211,238,0.08);
+      margin: 0 0 28px 8px;
+    }
+    .coaching-chat-mockup {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .coaching-chat-header {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    .coaching-bubble {
+      background: rgba(34,211,238,0.04);
+      border: 1px solid rgba(34,211,238,0.08);
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .coaching-bubble.tip {
+      border-color: rgba(63,185,80,0.15);
+      background: rgba(63,185,80,0.03);
+    }
+    .coaching-bubble .tip-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .growth-loop {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .growth-stage {
+      text-align: center;
+      flex: 1;
+    }
+    .growth-stage-label {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+    .growth-stage-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .growth-arrow {
+      color: rgba(34,211,238,0.15);
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+    @media (max-width: 900px) {
+      .coaching-split { grid-template-columns: 1fr; }
+    }
+
+    /* ─────────────────────────────────────────────
+       BRICKYARD PORTFOLIO
+    ───────────────────────────────────────────── */
+    #brickyard { padding: 120px 0; }
+    .brickyard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+    }
+    .brickyard-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      transition: border-color 0.2s;
+    }
+    .brickyard-card:hover { border-color: var(--border-bright); }
+    .brickyard-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-bottom: 14px;
+    }
+    .brickyard-dot.cyan { background: var(--accent); box-shadow: 0 0 6px rgba(34,211,238,0.3); }
+    .brickyard-dot.gold { background: var(--warm); box-shadow: 0 0 6px rgba(240,160,48,0.3); }
+    .brickyard-dot.green { background: var(--green); box-shadow: 0 0 6px rgba(63,185,80,0.3); }
+    .brickyard-dot.purple { background: #a78bfa; box-shadow: 0 0 6px rgba(167,139,250,0.3); }
+    .brickyard-dot.amber { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.3); }
+    .brickyard-name {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .brickyard-cases {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+    .brickyard-using {
+      font-family: var(--font-mono);
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.5;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .brickyard-summary {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    @media (max-width: 900px) {
+      .brickyard-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .brickyard-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-
-  <!-- ─── NAV ──────────────────────────────────────────── -->
+  <!-- ─── NAV — Mission Control Status Strip ─── -->
   <nav class="nav" aria-label="Main">
     <div class="nav-inner">
-      <a href="#hero" aria-label="helios — back to top" class="wordmark">helios.</a>
+
+      <!-- Brand identity — FIRST, prominent, clear -->
+      <a href="#hero" class="nav-brand" aria-label="helios — Personal AI">
+        <svg class="nav-icon" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="3"/><ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-25 50 50)"/><circle cx="50" cy="50" r="4.5" fill="currentColor"/></svg>
+        <span class="nav-logo">helios.</span>
+        <span class="nav-descriptor">Personal AI</span>
+      </a>
+
       <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
+
+      <!-- Nav links -->
       <ul class="nav-links">
         <li class="nav-hide-mobile"><a href="#use-cases">Use Cases</a></li>
         <li class="nav-hide-mobile"><a href="#how-it-works">How It Works</a></li>
         <li class="nav-hide-mobile"><a href="#capabilities">Capabilities</a></li>
         <li class="nav-hide-mobile"><a href="#comparison">Compare</a></li>
-        <li class="nav-hide-mobile"><a href="#install">Install</a></li>
-        <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="nav-cta" aria-label="GitHub (opens in new tab)">GitHub →</a></li>
+        <li class="nav-hide-mobile"><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="nav-github-link" style="opacity:0.6"><svg class="nav-gh-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a></li>
+        <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="nav-cta" aria-label="Get Started">Get Started →</a></li>
       </ul>
+
     </div>
   </nav>
 
-  <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile menu">
-    <a href="#use-cases" onclick="closeMobileMenu()">Use Cases</a>
-    <a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a>
-    <a href="#capabilities" onclick="closeMobileMenu()">Capabilities</a>
-    <a href="#comparison" onclick="closeMobileMenu()">Compare</a>
-    <a href="#install" onclick="closeMobileMenu()">Install</a>
-    <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" aria-label="GitHub (opens in new tab)">GitHub →</a>
-  </div>
-
+  <!-- ─── MAIN CONTENT ─── -->
   <main id="main-content">
 
-  <!-- ─── HERO ─────────────────────────────────────────── -->
+  <!-- ─── HERO — Instrument Panel ─── -->
   <section id="hero">
-    <div class="container">
+    <div class="instrument-wrapper">
+  <div class="hero-eyebrow">helios. <span class="eyebrow-dim">Personal AI</span></div>
+  <h1 class="inst-headline">Tell it what you need.<br>It handles the rest.</h1>
 
-      <div class="hero-eyebrow fade-up">AI OPERATING LAYER</div>
+  <div class="mode-toggle-row" id="mode-toggle">
+    <button class="mode-toggle-btn active" data-mode="business" onclick="switchMode('business')">Business</button>
+    <button class="mode-toggle-btn" data-mode="everyday" onclick="switchMode('everyday')">Everyday Life</button>
+  </div>
 
-      <h1>
-        <span class="hero-title fade-up">The AI that does things.</span>
-        <span class="hero-title-line2 fade-up">Then reviews its own work.</span>
-        <span class="hero-title-line3 fade-up">Then remembers what it <span class="accent-word">learned</span>.</span>
-      </h1>
-
-      <p class="hero-subtitle fade-up">
-        Ship features, research markets, review code, debug production — all from one command in your terminal. No daemons. No cloud. Just results.
-      </p>
-
-      <div class="hero-ctas fade-up">
-        <a href="#install" class="btn-primary" onclick="event.preventDefault(); openInstallModal();">Install</a>
-        <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="btn-secondary" aria-label="View source on GitHub (opens in new tab)">View Source →</a>
+  <div class="instrument" id="instrument">
+    <div class="reels">
+      <div class="reel" id="reel-0">
+        <div class="reel-label">I am a</div>
+        <div class="readout" tabindex="0" onclick="toggleDropdown(0)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown(0)}">
+          <div class="readout-value" id="r0">Restaurant Owner</div>
+        </div>
+        <div class="reel-dropdown" id="dd0" role="listbox" aria-label="Select who you are"></div>
       </div>
-
-      <div class="telemetry-row fade-up">
-        <div class="telemetry-cell">
-          <span class="telemetry-value">6 min</span>
-          <span class="telemetry-label">Avg Feature Ship</span>
+      <div class="reel" id="reel-1">
+        <div class="reel-label">I want to</div>
+        <div class="readout" tabindex="0" onclick="toggleDropdown(1)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown(1)}">
+          <div class="readout-value" id="r1">Get More Clients</div>
         </div>
-        <div class="telemetry-cell">
-          <span class="telemetry-value">42</span>
-          <span class="telemetry-label">Source Citations</span>
-        </div>
-        <div class="telemetry-cell warm-cell">
-          <span class="telemetry-value">3-Stage</span>
-          <span class="telemetry-label">Quality Review</span>
-        </div>
-        <div class="telemetry-cell">
-          <span class="telemetry-value">Cross-Session</span>
-          <span class="telemetry-label">Memory</span>
-        </div>
-        <div class="telemetry-cell green-cell">
-          <span class="telemetry-value">0</span>
-          <span class="telemetry-label">Daemons</span>
-        </div>
+        <div class="reel-dropdown" id="dd1" role="listbox" aria-label="Select what you want"></div>
       </div>
+      <div class="reel" id="reel-2">
+        <div class="reel-label">So helios will</div>
+        <div class="readout" tabindex="0" onclick="toggleDropdown(2)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown(2)}">
+          <div class="readout-value" id="r2">Write the emails</div>
+        </div>
+        <div class="reel-dropdown" id="dd2" role="listbox" aria-label="Select how helios helps"></div>
+      </div>
+    </div>
 
+    <div class="synth-row">
+      <button class="btn-synth" id="btn" onclick="synth()">Show me another</button>
+    </div>
+
+    <div class="inst-output" id="output-panel">
+      <div class="inst-output-label">Here's what Helios does for you</div>
+      <div class="inst-mission" id="mission">
+        <span class="who" id="mw">Restaurant Owner</span>
+        <span class="conn"> · </span>
+        <span class="goal" id="mg">Get More Clients</span>
+        <span class="conn"> · </span>
+        <span class="action" id="ma">Write the emails</span>
+      </div>
+      <div class="inst-role-desc" id="role-desc"></div>
+    </div>
+  </div>
+
+  <div class="inst-hint">Press space to shuffle · Click any column to browse</div>
     </div>
   </section>
 
-  <!-- ─── USE CASES ─────────────────────────────────────── -->
+  <!-- ─── REST OF SITE (from gargantua-halo) ─── -->
+  <!-- ─── USE CASES — Mission Briefings ─────────── -->
   <section id="use-cases">
     <div class="container">
 
       <div class="use-cases-header fade-up">
-        <div class="section-label-warm">WHAT PEOPLE BUILD</div>
+        <div class="section-tag">WHAT PEOPLE BUILD</div>
         <h2 class="section-title">Eight ways Helios works<br>across every domain.</h2>
-        <p class="section-subtitle">
-          One command. Here's what happens next.
-        </p>
+        <p class="section-subtitle" style="margin: 0 auto;">One command. Here's what happens next.</p>
       </div>
 
-      <!-- 1 -->
-      <div class="use-case-block fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">DEVELOPMENT</span>
-            <h3 class="use-case-title">Ship a feature from a single sentence</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: shipping a Stripe billing feature"><span class="p">❯</span> helios "Add Stripe billing to the SaaS app"
+      <!-- MISSION 01 — DEVELOPMENT -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 26L18 4" fill="none"/><path d="M16 4l6 3-4 2" fill="rgba(34,211,238,0.06)"/><path d="M8 28Q4 20 10 12" stroke-width="1" stroke-dasharray="2 2" fill="none"/></svg></div>
+        <div class="mission-label">01 — DEVELOPMENT</div>
+        <h3 class="mission-title">Ship a feature from a single sentence</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Six tasks. Two parallel waves. Adversarial review before the PR. You slept through it.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: shipping a Stripe billing feature">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Add Stripe billing to the SaaS app"
 
   Analyzing codebase... 847 files, Next.js + Prisma
   Planning: 6 tasks, 3 parallelizable
@@ -1517,113 +2383,153 @@
   Reviewing... 1 finding → auto-patched
   Verified: 23 tests passing
 <span class="s">✅ PR #47 opened</span> <span class="d">"Add Stripe billing" · 6 tasks · 23 tests</span></div>
-            <p class="use-case-desc">Six tasks. Two parallel waves. Adversarial review before the PR. You slept through it.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">6 tasks · 23 tests · 1 PR</span></div>
+          <div class="use-case-number">01</div>
+          <span class="readout-label">DEVELOPMENT</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">6</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">23</span><span class="readout-unit">tests</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">PR</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">6 min</span> · parallel</div>
         </div>
       </div>
 
-      <!-- 2 -->
-      <div class="use-case-block reverse fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">RESEARCH</span>
-            <h3 class="use-case-title">Research a market in 5 minutes, not 5 hours</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: researching AI agent market"><span class="p">❯</span> helios "Research the AI agent landscape for our investor deck"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 02 — RESEARCH -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="9" fill="rgba(34,211,238,0.06)"/><line x1="14" y1="14" x2="20" y2="8" stroke-width="1"/><circle cx="14" cy="14" r="3"/><circle cx="14" cy="14" r="6" stroke-width="0.5" stroke-dasharray="1.5 2"/><circle cx="22" cy="9" r="1" fill="rgba(34,211,238,0.06)"/><circle cx="8" cy="22" r="1" fill="rgba(34,211,238,0.06)"/><circle cx="24" cy="20" r="1" fill="rgba(34,211,238,0.06)"/></svg></div>
+        <div class="mission-label">02 — RESEARCH</div>
+        <h3 class="mission-title">Research a market in 5 minutes, not 5 hours</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Four search angles. Twenty-three sources. Forty-two citations. Not a summary — a proper analysis.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: researching AI agent market">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Research the AI agent landscape for our investor deck"
 
   Searching... 4 parallel angles
   Cross-referencing 23 sources
   Synthesizing with citations ▸▸▸▸▸▸▸▸▸▸              <span class="s">✓</span>
 <span class="s">✅ Report saved</span> <span class="d">ai-agent-landscape-2026.html · 42 sources cited</span></div>
-            <p class="use-case-desc">Four search angles. Twenty-three sources. Forty-two citations. Not a summary — a proper analysis.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">42 sources · 4 angles · 1 report</span></div>
+          <div class="use-case-number">02</div>
+          <span class="readout-label">RESEARCH</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">42</span><span class="readout-unit">sources</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">angles</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">report</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">5 min</span> · cross-referenced</div>
         </div>
       </div>
 
-      <!-- 3 -->
-      <div class="use-case-block fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">OPERATIONS</span>
-            <h3 class="use-case-title">Automate the daily grind</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: automating email and CRM tasks"><span class="p">❯</span> helios "Summarize unread emails, draft replies, update CRM with new leads"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 03 — OPERATIONS -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="3" fill="rgba(34,211,238,0.06)"/><path d="M16 16L24 10" stroke-width="1"/><path d="M24 8l-2 4 4-2" stroke-width="1" fill="rgba(34,211,238,0.06)"/><path d="M24 8l2 0 0 2" stroke-width="1"/></svg></div>
+        <div class="mission-label">03 — OPERATIONS</div>
+        <h3 class="mission-title">Automate the daily grind</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Email triage, CRM updates, and draft replies — reviewed before anything sends.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: automating email and CRM tasks">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Summarize unread emails, draft replies, update CRM with new leads"
 
   Scanning inbox... 47 unread, 8 flagged urgent
   Drafting replies for 8 threads ▸▸▸▸▸▸▸▸▸▸         <span class="s">✓</span>
   3 new leads → Salesforce ▸▸▸▸▸▸▸▸▸▸               <span class="s">✓</span>
   Checking tone + accuracy...                        <span class="s">✓</span>
 <span class="s">✅ Done</span> <span class="d">8 drafts ready · 3 leads added · summary sent</span></div>
-            <p class="use-case-desc">Email triage, CRM updates, and draft replies — reviewed before anything sends.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">8 drafts · 3 leads · quality checked</span></div>
+          <div class="use-case-number">03</div>
+          <span class="readout-label">OUTREACH</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">drafts</span></div>
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">leads</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">quality</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">3 min</span> · personalized</div>
         </div>
       </div>
 
-      <!-- 4 -->
-      <div class="use-case-block reverse fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">REVIEW</span>
-            <h3 class="use-case-title">Three-stage review catches what one pass misses</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: three-stage code review"><span class="p">❯</span> helios "Review PR #89 before we merge"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 04 — REVIEW -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="13" r="7" fill="rgba(34,211,238,0.06)"/><line x1="18" y1="18" x2="26" y2="26"/><polyline points="10 13 12.5 15.5 17 10" stroke-width="1"/></svg></div>
+        <div class="mission-label">04 — REVIEW</div>
+        <h3 class="mission-title">Three-stage review catches what one pass misses</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Three independent review passes. Security. Data flow. Claim verification. Nothing gets through.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: three-stage code review">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Review PR #89 before we merge"
 
   Adversarial review: security, architecture, style ▸▸▸▸
   Tracing data flow across 12 files ▸▸▸▸▸▸▸▸▸▸
   Verifying PR description vs actual diff ▸▸▸▸▸▸▸▸▸▸
 <span class="s">⚠️ 2 findings</span> <span class="d">SQL injection in /api/users · missing edge case test</span></div>
-            <p class="use-case-desc">Three independent review passes. Security. Data flow. Claim verification. Nothing gets through.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">3 review passes · 12 files traced</span></div>
+          <div class="use-case-number">04</div>
+          <span class="readout-label">REVIEW</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">passes</span></div>
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">files</span></div>
+            <div class="readout-stat"><span class="readout-num">2</span><span class="readout-unit">findings</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · adversarial</div>
         </div>
       </div>
 
-      <!-- 5 -->
-      <div class="use-case-block fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">CONTENT</span>
-            <h3 class="use-case-title">Research, write, publish — one command</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: writing and publishing content"><span class="p">❯</span> helios "Blog post about our new API, publish and create social threads"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 05 — CONTENT -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="14" r="4"/><path d="M16 18v6" stroke-width="1"/><path d="M8 14a8 8 0 0 1 0 0" stroke-width="0"/><path d="M10 8a8 8 0 0 1 12 0" stroke-width="1" stroke-dasharray="2 2" fill="none"/><path d="M7 20l4-2" stroke-width="1"/><path d="M25 20l-4-2" stroke-width="1"/><path d="M4 22l5-2" stroke-width="1"/><path d="M28 22l-5-2" stroke-width="1"/></svg></div>
+        <div class="mission-label">05 — CONTENT</div>
+        <h3 class="mission-title">Research, write, publish — one command</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Research. Draft. Review. Publish. Four stages, one command.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: writing and publishing content">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Blog post about our new API, publish and create social threads"
 
   Reading API docs + changelog + competitors ▸▸▸▸▸▸   <span class="s">✓</span>
   Drafting: 1,200 words, technical audience ▸▸▸▸▸▸▸▸  <span class="s">✓</span>
   Tone + accuracy review passed                       <span class="s">✓</span>
   Publishing: blog · Twitter (6) · LinkedIn ▸▸▸▸▸▸▸   <span class="s">✓</span>
 <span class="s">✅ Live</span> <span class="d">blog + 2 social platforms</span></div>
-            <p class="use-case-desc">Research. Draft. Review. Publish. Four stages, one command.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">research · draft · review · publish</span></div>
+          <div class="use-case-number">05</div>
+          <span class="readout-label">CONTENT</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">stages</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">draft</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">fact-checked</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">8 min</span> · end-to-end</div>
         </div>
       </div>
 
-      <!-- 6 -->
-      <div class="use-case-block reverse fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">DEBUGGING</span>
-            <h3 class="use-case-title">Debug with memory from last month</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: debugging with cross-session memory"><span class="p">❯</span> helios "Auth middleware returning 403s on valid tokens"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 06 — DEBUGGING -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="7" fill="rgba(34,211,238,0.06)"/><path d="M16 16l5-5" stroke-width="1"/><circle cx="22" cy="10" r="2"/><path d="M12 10l-2-4" stroke-width="1"/><path d="M20 22l2 4" stroke-width="1"/><path d="M9 16H5" stroke-width="1"/><path d="M27 16h-4" stroke-width="1"/></svg></div>
+        <div class="mission-label">06 — DEBUGGING</div>
+        <h3 class="mission-title">Debug with memory from last month</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Last month this took 2 hours. Helios remembered the fix. Four minutes.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: debugging with cross-session memory">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Auth middleware returning 403s on valid tokens"
 
   Recalling similar issues from prior sessions...
   Match found: JWT clock skew (Feb 14)
@@ -1631,23 +2537,31 @@
   Patching: 30s leeway added to jwt.verify() ▸▸▸▸  <span class="s">✓</span>
   Verifying: 14 auth tests passing, no regression   <span class="s">✓</span>
 <span class="s">✅ Fixed</span> <span class="d">Same root cause as last month — 4 min vs 2 hours</span></div>
-            <p class="use-case-desc">Last month this took 2 hours. Helios remembered the fix. Four minutes.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">recalled · fixed · verified · 4 min</span></div>
+          <div class="use-case-number">06</div>
+          <span class="readout-label">DEBUGGING</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">recalled</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">fixed</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">verified</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">4 min</span> · memory-assisted</div>
         </div>
       </div>
 
-      <!-- 7 -->
-      <div class="use-case-block fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">GOVERNANCE</span>
-            <h3 class="use-case-title">The agent that asks before it breaks things</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: governance confirmation before refactoring"><span class="p">❯</span> helios "Refactor the entire payments module"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION 07 — GOVERNANCE -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10" fill="rgba(34,211,238,0.06)"/><path d="M11 16a5 5 0 0 1 10 0" fill="none"/><line x1="16" y1="11" x2="16" y2="16"/><circle cx="16" cy="16" r="1.5" fill="rgba(34,211,238,0.06)"/><line x1="16" y1="6" x2="16" y2="8" stroke-width="1"/><line x1="16" y1="24" x2="16" y2="26" stroke-width="1"/><line x1="6" y1="16" x2="8" y2="16" stroke-width="1"/><line x1="24" y1="16" x2="26" y2="16" stroke-width="1"/></svg></div>
+        <div class="mission-label">07 — GOVERNANCE</div>
+        <h3 class="mission-title">The agent that asks before it breaks things</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">It asked before touching payments. Quality checks at every stage. Zero drift.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: governance confirmation before refactoring">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Refactor the entire payments module"
 
   Scoping: 34 files, 6 services affected
   Confirmation required:
@@ -1657,72 +2571,142 @@
   Planning: 8 tasks decomposed ▸▸▸▸▸▸▸▸▸▸           <span class="s">✓</span>
   Executing with quality gates after each phase...
 <span class="s">✅ Done</span> <span class="d">8 tasks · quality checks at every stage · 0 drift</span></div>
-            <p class="use-case-desc">It asked before touching payments. Quality checks at every stage. Zero drift.</p>
-          </div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">confirmed · planned · quality-gated</span></div>
+          <div class="use-case-number">07</div>
+          <span class="readout-label">PLANNING</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">confirmed</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">planned</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">gated</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">2 min</span> · goal-backward</div>
         </div>
       </div>
 
-      <!-- 8 -->
-      <div class="use-case-block reverse fade-up">
-        <div class="use-case-content">
-          <div class="use-case-card">
-            <span class="use-case-tag">ORCHESTRATION</span>
-            <h3 class="use-case-title">Coordinate a real migration</h3>
-            <div class="terminal-demo" role="img" aria-label="Terminal: coordinating a monolith migration"><span class="p">❯</span> helios "Migrate user service out of the monolith"
+      <div class="section-connector"><div class="section-connector-line"></div></div>
 
-  Planning: 12 tasks across 4 waves ▸▸▸▸▸▸▸▸▸▸      <span class="s">✓</span>
-  Wave 1: Schema + API contracts        ██████████   <span class="s">✓</span>
-  Wave 2: Service extraction + routing  ██████████   <span class="s">✓</span>
-  Wave 3: Integration tests + sync      ██████████   <span class="s">✓</span>
-  Architecture review after each wave              
-  Wave 4: Cutover + monitoring          ██████████   <span class="s">✓</span>
-<span class="s">✅ Migrated</span> <span class="d">12 tasks · 4 waves · 47 tests</span></div>
-            <p class="use-case-desc">Twelve tasks. Four waves. Parallel execution. Architecture review built in.</p>
-          </div>
+      <!-- MISSION 08 — ORCHESTRATION -->
+      <div class="mission-block fade-up">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="16" x2="12" y2="10" stroke-width="1"/><line x1="6" y1="16" x2="12" y2="22" stroke-width="1"/><line x1="12" y1="10" x2="20" y2="10"/><line x1="12" y1="22" x2="20" y2="22"/><circle cx="6" cy="16" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="10" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="22" r="2" fill="rgba(34,211,238,0.06)"/><line x1="24" y1="10" x2="28" y2="10" stroke-dasharray="1.5 1.5" stroke-width="1"/><line x1="24" y1="22" x2="28" y2="22" stroke-dasharray="1.5 1.5" stroke-width="1"/></svg></div>
+        <div class="mission-label">08 — ORCHESTRATION</div>
+        <h3 class="mission-title">Coordinate a real migration</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Twelve tasks. Four waves. Parallel execution. Architecture review built in.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: coordinating a monolith migration">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Migrate user service out of the monolith"
+
+  Planning: 12 tasks across 4 phases ▸▸▸▸▸▸▸▸▸▸      <span class="s">✓</span>
+  Phase 1: Schema + API contracts        ██████████   <span class="s">✓</span>
+  Phase 2: Service extraction + routing  ██████████   <span class="s">✓</span>
+  Phase 3: Integration tests + sync      ██████████   <span class="s">✓</span>
+  Architecture review after each phase              
+  Phase 4: Cutover + monitoring          ██████████   <span class="s">✓</span>
+<span class="s">✅ Migrated</span> <span class="d">12 tasks · 4 phases · 47 tests</span></div>
         </div>
         <div class="use-case-detail">
-          <div class="use-case-meta">
-            <div class="meta-row"><span class="meta-dot"></span><span class="meta-val">12 tasks · 4 waves · 47 tests</span></div>
+          <div class="use-case-number">08</div>
+          <span class="readout-label">MIGRATION</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">tasks</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">phases</span></div>
+            <div class="readout-stat"><span class="readout-num">47</span><span class="readout-unit">tests</span></div>
           </div>
+          <div class="readout-time"><span class="readout-clock">overnight</span> · zero downtime</div>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ─── THREE PILLARS ─────────────────────────────────── -->
+  <!-- ─── SOCIAL PROOF ────────────────────────────── -->
+  <section id="social-proof">
+    <div class="container">
+      <div class="section-header centered fade-up">
+        <div class="section-tag">TRUSTED BY EVERYONE</div>
+        <h2 class="section-title">Real people. Real results.</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">No AI background required. Just describe what you need.</p>
+      </div>
+      <div class="persona-grid fade-up">
+        <div class="persona-card">
+          <div class="persona-emoji">👩‍👧‍👦</div>
+          <div class="persona-name">Sarah, 41</div>
+          <span class="persona-badge cyan">Mom of 2</span>
+          <p class="persona-quote">"I told it to plan my week and it came back with a grocery list, a carpool schedule, and three dinner ideas. I cried a little."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">👨‍👧‍👦</div>
+          <div class="persona-name">Marcus, 37</div>
+          <span class="persona-badge gold">Father of 5</span>
+          <p class="persona-quote">"It handles the school forms, tracks everyone's activities, and reminds me before I forget. I actually showed up early to practice."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">⛪</div>
+          <div class="persona-name">Father Tom, 58</div>
+          <span class="persona-badge purple">Parish Priest</span>
+          <p class="persona-quote">"It drafted our volunteer schedule, wrote the bulletin, and followed up with three families I'd been meaning to call. In 10 minutes."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">🏥</div>
+          <div class="persona-name">Destiny, 29</div>
+          <span class="persona-badge green">Night-Shift Nurse</span>
+          <p class="persona-quote">"I work 7pm to 7am. It reorganized my whole life around that — errands, sleep schedule, meal prep. I finally feel functional."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">📚</div>
+          <div class="persona-name">Priya, 19</div>
+          <span class="persona-badge cyan">College Freshman</span>
+          <p class="persona-quote">"It sorted my deadlines by priority, found cheap food near campus, and built a study schedule I actually stuck to."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">🍳</div>
+          <div class="persona-name">Ray, 52</div>
+          <span class="persona-badge gold">Diner Owner</span>
+          <p class="persona-quote">"I asked it to get me more regulars. It wrote the emails, built a loyalty plan, and scheduled the promos. I just cook."</p>
+        </div>
+        <div class="persona-card">
+          <div class="persona-emoji">📖</div>
+          <div class="persona-name">Carol, 67</div>
+          <span class="persona-badge purple">Retired Teacher</span>
+          <p class="persona-quote">"It remembers my appointments, sends birthday messages, and keeps my daily routine on track. Like having a thoughtful assistant."</p>
+        </div>
+        <div class="persona-summary">
+          <div class="persona-summary-tag">THE POINT</div>
+          <p class="persona-summary-text">No AI background required. Just describe your life — Helios figures out the system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── THREE PILLARS ──────────────────────────── -->
   <section id="pillars">
     <div class="container">
 
-      <div class="fade-up">
-        <div class="section-label">DESIGN PRINCIPLES</div>
+      <div class="section-header fade-up">
+        <div class="section-tag">DESIGN PRINCIPLES</div>
         <h2 class="section-title">Built on three hard commitments.</h2>
       </div>
 
-      <div class="pillars-grid">
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon warm-icon" aria-hidden="true">⚖</div>
-          <h3 class="pillar-title">Governance-first</h3>
-          <p class="pillar-desc">
+      <div class="ghost-grid-3">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="4" x2="16" y2="26"/><line x1="6" y1="10" x2="26" y2="10"/><path d="M6 10L3 18h6L6 10z" fill="rgba(34,211,238,0.06)"/><path d="M26 10L23 18h6L26 10z" fill="rgba(34,211,238,0.06)"/><circle cx="16" cy="4" r="1.5" fill="rgba(34,211,238,0.06)"/><line x1="12" y1="26" x2="20" y2="26"/></svg></div>
+          <h3 class="ghost-title">Governance-first</h3>
+          <p class="ghost-desc">
             Every action is logged, scoped, and reviewed. It asks before touching important code and catches its own mistakes before you do. You don't have to watch it — it watches itself.
           </p>
         </div>
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon cyan-icon" aria-hidden="true">◈</div>
-          <h3 class="pillar-title">Self-solving architecture</h3>
-          <p class="pillar-desc">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10a8 8 0 1 1-8 8" fill="none"/><polyline points="22 6 22 10 18 10"/><circle cx="14" cy="18" r="2" fill="rgba(34,211,238,0.06)"/></svg></div>
+          <h3 class="ghost-title">Self-solving architecture</h3>
+          <p class="ghost-desc">
             When something fails, it tries different approaches. When it learns something new, it remembers for next time. Improves with every session.
           </p>
         </div>
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon green-icon" aria-hidden="true">◉</div>
-          <h3 class="pillar-title">Human-in-control</h3>
-          <p class="pillar-desc">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="9" fill="rgba(34,211,238,0.06)"/><circle cx="16" cy="16" r="3"/><line x1="16" y1="7" x2="16" y2="9" stroke-width="1"/><line x1="16" y1="23" x2="16" y2="25" stroke-width="1"/><line x1="7" y1="16" x2="9" y2="16" stroke-width="1"/><line x1="23" y1="16" x2="25" y2="16" stroke-width="1"/><path d="M12 6L14 12" stroke-width="1"/><circle cx="11" cy="5" r="1" fill="rgba(34,211,238,0.06)"/></svg></div>
+          <h3 class="ghost-title">Human-in-control</h3>
+          <p class="ghost-desc">
             You set the autonomy level — fully autonomous, approval-required, or advisory-only. Pause, redirect, or override at any point.
           </p>
         </div>
@@ -1731,37 +2715,49 @@
     </div>
   </section>
 
-  <!-- ─── HOW IT WORKS ──────────────────────────────────── -->
+  <!-- ─── HOW IT WORKS ──────────────────────────── -->
   <section id="how-it-works">
     <div class="container">
 
-      <div class="fade-up">
-        <div class="section-label">HOW IT WORKS</div>
+      <div class="section-header fade-up">
+        <div class="section-tag">HOW IT WORKS</div>
         <h2 class="section-title">Three stages. One command.</h2>
         <p class="section-subtitle">
           Every task goes through the same disciplined process — no shortcuts, no guessing.
         </p>
+        <div class="section-tachymeter" aria-hidden="true">
+          <svg width="160" height="28" viewBox="0 0 160 28" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 6 26 Q 80 -14 154 26" stroke="rgba(34,211,238,0.06)" stroke-width="0.5" fill="none"/>
+            <line x1="6" y1="26" x2="6" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="31" y1="13" x2="31" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="56" y1="6" x2="56" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="80" y1="3" x2="80" y2="8" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="104" y1="6" x2="104" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="129" y1="13" x2="129" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="154" y1="26" x2="154" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          </svg>
+        </div>
       </div>
 
-      <div class="pillars-grid">
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon cyan-icon" aria-hidden="true">◈</div>
-          <h3 class="pillar-title">Understand</h3>
-          <p class="pillar-desc">
+      <div class="ghost-grid-3">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16s5-10 14-10 14 10 14 10-5 10-14 10S2 16 2 16z" fill="rgba(34,211,238,0.06)"/><circle cx="16" cy="16" r="4"/><line x1="4" y1="16" x2="28" y2="16" stroke-width="0.5" stroke-dasharray="2 2"/></svg></div>
+          <h3 class="ghost-title">Understand</h3>
+          <p class="ghost-desc">
             Analyzes your codebase, maps dependencies, identifies what matters before touching anything. Plans tasks, defines acceptance criteria, and confirms scope with you on consequential work.
           </p>
         </div>
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon warm-icon" aria-hidden="true">⊞</div>
-          <h3 class="pillar-title">Execute</h3>
-          <p class="pillar-desc">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="10" x2="22" y2="10"/><line x1="4" y1="16" x2="28" y2="16"/><line x1="4" y1="22" x2="18" y2="22"/><circle cx="22" cy="10" r="1.5" fill="rgba(34,211,238,0.06)"/><circle cx="28" cy="16" r="1.5" fill="rgba(34,211,238,0.06)"/><circle cx="18" cy="22" r="1.5" fill="rgba(34,211,238,0.06)"/></svg></div>
+          <h3 class="ghost-title">Execute</h3>
+          <p class="ghost-desc">
             Decomposes work into parallel tasks. Independent workstreams run simultaneously with conflict-free coordination. Every task starts with a failing test and ends with passing verification.
           </p>
         </div>
-        <div class="pillar-card fade-up">
-          <div class="pillar-icon green-icon" aria-hidden="true">◉</div>
-          <h3 class="pillar-title">Verify</h3>
-          <p class="pillar-desc">
+        <div class="ghost-card fade-up">
+          <div class="ghost-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3L4 9v8c0 7 5.3 13.4 12 15 6.7-1.6 12-8 12-15V9L16 3z" fill="rgba(34,211,238,0.06)"/><polyline points="11 16 14.5 19.5 21 13"/></svg></div>
+          <h3 class="ghost-title">Verify</h3>
+          <p class="ghost-desc">
             Multi-stage adversarial review. Every change is tested, traced, and independently verified before you see it. Nothing ships with stubs, broken pipes, or unverified claims.
           </p>
         </div>
@@ -1770,57 +2766,108 @@
     </div>
   </section>
 
-  <!-- ─── CAPABILITIES ──────────────────────────────────── -->
+  <!-- ─── CAPABILITIES ─────────────────────────── -->
   <section id="capabilities">
     <div class="container">
 
-      <div class="fade-up">
-        <div class="section-label">SYSTEM CAPABILITIES</div>
+      <div class="section-header fade-up">
+        <div class="section-tag">SYSTEM CAPABILITIES</div>
         <h2 class="section-title">Six things built in from day one.</h2>
       </div>
 
-      <div class="capabilities-grid">
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">◉</div>
-          <h3 class="cap-name">Persistent Memory</h3>
-          <div class="cap-desc">Learns from every session. Recalls similar bugs, successful patterns, and past decisions. The more you use it, the faster it gets.</div>
+      <div class="ghost-grid-6">
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="24" cy="8" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="16" cy="16" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="8" cy="24" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="24" cy="24" r="2" fill="rgba(34,211,238,0.06)"/><line x1="9.5" y1="9.5" x2="14.5" y2="14.5" stroke-width="1"/><line x1="17.5" y1="14.5" x2="22.5" y2="9.5" stroke-width="1"/><line x1="9.5" y1="22.5" x2="14.5" y2="17.5" stroke-width="1"/><line x1="17.5" y1="17.5" x2="22.5" y2="22.5" stroke-width="1"/><line x1="8" y1="10" x2="8" y2="22" stroke-width="1"/><line x1="24" y1="10" x2="24" y2="22" stroke-width="1"/></svg></div>
+          <h3 class="ghost-title">Persistent Memory</h3>
+          <p class="ghost-desc">Learns from every session. Recalls similar bugs, successful patterns, and past decisions. The more you use it, the faster it gets.</p>
+          <div class="cap-meta"><span class="meta-key">STORE</span><span class="meta-val">/ RECALL</span></div>
         </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⊞</div>
-          <h3 class="cap-name">Parallel Execution</h3>
-          <div class="cap-desc">Independent tasks run simultaneously. Conflict-free coordination keeps quality high even at speed.</div>
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="2" fill="rgba(34,211,238,0.06)"/><path d="M8 16h4l2-6h4" stroke-width="1"/><path d="M8 16h4l2 0h4" stroke-width="1"/><path d="M8 16h4l2 6h4" stroke-width="1"/><circle cx="22" cy="10" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="16" r="2" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="22" r="2" fill="rgba(34,211,238,0.06)"/><path d="M14 16L14 16" stroke-width="0"/><polygon points="14 14.5 14 17.5 16.5 16" fill="rgba(34,211,238,0.06)" stroke="currentColor" stroke-width="1"/></svg></div>
+          <h3 class="ghost-title">Parallel Execution</h3>
+          <p class="ghost-desc">Independent tasks run simultaneously. Conflict-free coordination keeps quality high even at speed.</p>
+          <div class="cap-meta"><span class="meta-key">WORKERS</span><span class="meta-val">/ CONFLICT</span></div>
         </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⌘</div>
-          <h3 class="cap-name">Self-Governing</h3>
-          <div class="cap-desc">Built-in quality enforcement. Asks before touching critical code. Reviews its own work before you see it.</div>
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="10" width="12" height="16" rx="2" fill="rgba(34,211,238,0.06)"/><path d="M12 10V8a4 4 0 0 1 8 0v2"/><path d="M11 19h6" stroke-width="1"/><path d="M14 19v3" stroke-width="1"/><path d="M22 18l2-2 2 2" stroke-width="1"/><path d="M24 16v6" stroke-width="1"/></svg></div>
+          <h3 class="ghost-title">Self-Governing</h3>
+          <p class="ghost-desc">Built-in quality enforcement. Asks before touching critical code. Reviews its own work before you see it.</p>
+          <div class="cap-meta"><span class="meta-key">GATES</span><span class="meta-val">/ BLOCKS</span></div>
         </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">≡</div>
-          <h3 class="cap-name">Test-Driven</h3>
-          <div class="cap-desc">Every task starts with a failing test. No code ships without passing verification. No stubs. No shortcuts.</div>
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="22" height="16" rx="2" fill="rgba(34,211,238,0.06)"/><rect x="8" y="8" width="16" height="10" rx="1" fill="none" stroke-width="1"/><rect x="11" y="11" width="10" height="4" rx="0.5" fill="none" stroke-width="1"/><polyline points="13 26 16 22 19 26" stroke-width="1"/></svg></div>
+          <h3 class="ghost-title">Test-Driven</h3>
+          <p class="ghost-desc">Every task starts with a failing test. No code ships without passing verification. No stubs. No shortcuts.</p>
+          <div class="cap-meta"><span class="meta-key">FLOW</span><span class="meta-val">/ STUBS</span></div>
         </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">⟳</div>
-          <h3 class="cap-name">Model Freedom</h3>
-          <div class="cap-desc">Works with any LLM — Claude, GPT, Gemini, Llama, or your own. Switch providers without changing workflows.</div>
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="12" width="8" height="10" rx="1.5" fill="rgba(34,211,238,0.06)"/><line x1="9" y1="14" x2="11" y2="14" stroke-width="1"/><line x1="9" y1="16" x2="11" y2="16" stroke-width="1"/><line x1="9" y1="18" x2="11" y2="18" stroke-width="1"/><rect x="18" y="12" width="8" height="10" rx="1.5" fill="rgba(34,211,238,0.06)"/><circle cx="22" cy="15" r="1" stroke-width="1"/><circle cx="22" cy="19" r="1" stroke-width="1"/><path d="M14 17h4" stroke-dasharray="1.5 1.5"/></svg></div>
+          <h3 class="ghost-title">Model Freedom</h3>
+          <p class="ghost-desc">Works with any LLM — Claude, GPT, Gemini, Llama, or your own. Switch providers without changing workflows.</p>
+          <div class="cap-meta"><span class="meta-key">PROVIDERS</span><span class="meta-val">/ LOCK-IN</span></div>
         </div>
-        <div class="cap-cell fade-up">
-          <div class="cap-glyph" aria-hidden="true">◈</div>
-          <h3 class="cap-name">Zero Infrastructure</h3>
-          <div class="cap-desc">Runs in your terminal. No daemon. No Docker. No cloud account. One command to install.</div>
+        <div class="ghost-card fade-up">
+          <div class="cap-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="6" width="16" height="20" rx="2" fill="rgba(34,211,238,0.06)"/><line x1="8" y1="10" x2="24" y2="10" stroke-width="1"/><text x="16" y="9" text-anchor="middle" font-size="0" fill="none"></text><line x1="12" y1="14" x2="20" y2="14" stroke-width="1" stroke-dasharray="1 1.5"/><line x1="12" y1="17" x2="18" y2="17" stroke-width="1" stroke-dasharray="1 1.5"/><line x1="12" y1="20" x2="16" y2="20" stroke-width="1" stroke-dasharray="1 1.5"/><polyline points="11 8 13.5 8" stroke-width="1"/></svg></div>
+          <h3 class="ghost-title">Zero Infrastructure</h3>
+          <p class="ghost-desc">Runs in your terminal. No daemon. No Docker. No cloud account. One command to install.</p>
+          <div class="cap-meta"><span class="meta-key">DAEMONS</span><span class="meta-val">/ REQUIRES</span></div>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- ─── MODEL-AGNOSTIC ───────────────────────────────── -->
+  <!-- ─── COST TRANSPARENCY ──────────────────────── -->
+  <section id="cost-transparency">
+    <div class="container">
+      <div class="section-header centered fade-up">
+        <div class="section-tag">COST TRANSPARENCY</div>
+        <h2 class="section-title">Know the cost before you build.</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">No surprises. Helios estimates cost, picks the cheapest model that can handle the job, and shows you the math.</p>
+      </div>
+      <div class="cost-split fade-up">
+        <div class="cost-card without">
+          <div class="cost-card-tag">Without Helios</div>
+          <div class="cost-pain">Default to the most expensive model every time</div>
+          <div class="cost-pain">No idea what a task costs until the bill arrives</div>
+          <div class="cost-pain">Token burn on retry loops with no quality gates</div>
+          <div class="cost-pain">Pay frontier prices for tasks a small model handles fine</div>
+        </div>
+        <div class="cost-card with">
+          <div class="cost-card-tag">With Helios — Cost Estimator</div>
+          <div class="estimator-row">
+            <span class="estimator-key">Project</span>
+            <span class="estimator-val">"Add Stripe billing to SaaS app"</span>
+          </div>
+          <div class="estimator-row">
+            <span class="estimator-key">Est. Dev Time</span>
+            <span class="estimator-val">~6 minutes</span>
+          </div>
+          <div class="estimator-row">
+            <span class="estimator-key">Token Estimate</span>
+            <span class="estimator-val">~42K input · ~8K output</span>
+          </div>
+          <div class="estimator-row">
+            <span class="estimator-key">Routed Model</span>
+            <span class="estimator-val accent">Claude Sonnet (cost-optimized)</span>
+          </div>
+          <div class="estimator-row">
+            <span class="estimator-key">Why This Model</span>
+            <span class="estimator-val">Multi-file feature — needs quality, not frontier</span>
+          </div>
+          <div class="estimator-total">$0.84</div>
+          <div class="estimator-savings">vs. $3.20 on default GPT-4o · you save 74%</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MODEL-AGNOSTIC ───────────────────────── -->
   <section id="model-agnostic">
     <div class="container">
 
-      <div class="fade-up">
-        <div class="section-label">ANY MODEL. YOUR RULES.</div>
+      <div class="section-header centered fade-up">
+        <div class="section-tag">ANY MODEL. YOUR RULES.</div>
         <h2 class="section-title">Any model. Your rules.</h2>
       </div>
 
@@ -1836,6 +2883,19 @@
         <span class="model-badge">Mistral</span>
         <span class="model-badge">Ollama</span>
         <span class="model-badge">Any OpenAI-compatible API</span>
+      </div>
+
+      <div class="section-tachymeter" aria-hidden="true">
+        <svg width="160" height="28" viewBox="0 0 160 28" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 6 26 Q 80 -14 154 26" stroke="rgba(34,211,238,0.06)" stroke-width="0.5" fill="none"/>
+          <line x1="6" y1="26" x2="6" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="31" y1="13" x2="31" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="56" y1="6" x2="56" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="80" y1="3" x2="80" y2="8" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="104" y1="6" x2="104" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="129" y1="13" x2="129" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          <line x1="154" y1="26" x2="154" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+        </svg>
       </div>
 
       <div class="evidence-grid fade-up">
@@ -1866,17 +2926,98 @@
     </div>
   </section>
 
-  <!-- ─── COMPARISON ────────────────────────────────────── -->
+  <!-- ─── COACHING MODE ──────────────────────────── -->
+  <section id="coaching">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="section-tag">COACHING MODE</div>
+        <h2 class="section-title">Jump in with nothing.<br>Leave knowing everything.</h2>
+        <p class="section-subtitle">No AI experience required. Helios meets you where you are and grows with you.</p>
+      </div>
+      <div class="coaching-split fade-up">
+        <div class="coaching-steps">
+          <div class="coaching-step">
+            <div class="coaching-step-num">01</div>
+            <div>
+              <div class="coaching-step-title">Open your browser</div>
+              <div class="coaching-step-desc">No install. No account. Just a URL. Works on any device with a browser.</div>
+            </div>
+          </div>
+          <div class="coaching-connector"></div>
+          <div class="coaching-step">
+            <div class="coaching-step-num">02</div>
+            <div>
+              <div class="coaching-step-title">Give it permission</div>
+              <div class="coaching-step-desc">Tell Helios what it can access — your calendar, email, files. You control the boundaries.</div>
+            </div>
+          </div>
+          <div class="coaching-connector"></div>
+          <div class="coaching-step">
+            <div class="coaching-step-num">03</div>
+            <div>
+              <div class="coaching-step-title">Start talking</div>
+              <div class="coaching-step-desc">Describe what you need in plain language. Helios asks clarifying questions, then handles the rest.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="coaching-chat-mockup">
+            <div class="coaching-chat-header">Coaching Mode — Active</div>
+            <div class="coaching-bubble">"I want to get more clients for my landscaping business but I don't know where to start."</div>
+            <div class="coaching-bubble tip">
+              <span class="tip-label">Coaching Tip</span>
+              I'll start with three things that work for local service businesses: a follow-up email sequence for past clients, a seasonal promotion template, and a Google Business profile audit. Want me to build all three?
+            </div>
+          </div>
+          <div class="growth-loop">
+            <div class="growth-stage">
+              <div class="growth-stage-icon">🌱</div>
+              <div class="growth-stage-label">Curious</div>
+            </div>
+            <div class="growth-arrow">→</div>
+            <div class="growth-stage">
+              <div class="growth-stage-icon">📖</div>
+              <div class="growth-stage-label">Learner</div>
+            </div>
+            <div class="growth-arrow">→</div>
+            <div class="growth-stage">
+              <div class="growth-stage-icon">⚡</div>
+              <div class="growth-stage-label">Advanced</div>
+            </div>
+            <div class="growth-arrow">→</div>
+            <div class="growth-stage">
+              <div class="growth-stage-icon">🚀</div>
+              <div class="growth-stage-label">Power User</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COMPARISON ───────────────────────────── -->
   <section id="comparison">
     <div class="container">
 
-      <div class="comparison-header fade-up">
-        <div class="section-label">HOW HELIOS IS DIFFERENT</div>
+      <div class="section-header centered fade-up">
+        <div class="section-tag">HOW HELIOS IS DIFFERENT</div>
         <h2 class="section-title">Built different by design.</h2>
-        <p class="section-subtitle">
+        <p class="section-subtitle" style="margin: 0 auto;">
           The choices that matter aren't features — they're architectural commitments
           that can't be bolted on later.
         </p>
+        <div class="section-tachymeter" aria-hidden="true">
+          <svg width="160" height="28" viewBox="0 0 160 28" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 6 26 Q 80 -14 154 26" stroke="rgba(34,211,238,0.06)" stroke-width="0.5" fill="none"/>
+            <line x1="6" y1="26" x2="6" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="31" y1="13" x2="31" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="56" y1="6" x2="56" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="80" y1="3" x2="80" y2="8" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="104" y1="6" x2="104" y2="11" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="129" y1="13" x2="129" y2="18" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+            <line x1="154" y1="26" x2="154" y2="21" stroke="rgba(34,211,238,0.05)" stroke-width="0.5"/>
+          </svg>
+        </div>
       </div>
 
       <div class="comparison-wrapper fade-up">
@@ -1885,7 +3026,7 @@
             <tr>
               <th scope="col"><span class="sr-only">Feature</span></th>
               <th scope="col">Single-Agent Tools</th>
-              <th scope="col">Always-On Daemons</th>
+              <th scope="col">Always-On Agents<br><span style="font-size:9px;opacity:0.5;font-weight:400;letter-spacing:0.06em">(OpenClaw, etc.)</span></th>
               <th scope="col" class="helios-col">helios.</th>
             </tr>
           </thead>
@@ -1939,12 +3080,59 @@
     </div>
   </section>
 
-  <!-- ─── INSTALL ───────────────────────────────────────── -->
+  <!-- ─── BRICKYARD PORTFOLIO ─────────────────────── -->
+  <section id="brickyard">
+    <div class="container">
+      <div class="section-header centered fade-up">
+        <div class="section-tag">PORTFOLIO</div>
+        <h2 class="section-title">Powered by the people building.</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">Real verticals. Real workflows. Built on Helios.</p>
+      </div>
+      <div class="brickyard-grid fade-up">
+        <div class="brickyard-card">
+          <div class="brickyard-dot cyan"></div>
+          <div class="brickyard-name">Cold Chain Logistics</div>
+          <div class="brickyard-cases">Temperature monitoring, compliance reporting, route optimization, supplier coordination.</div>
+          <div class="brickyard-using">Using Helios for: operations automation</div>
+        </div>
+        <div class="brickyard-card">
+          <div class="brickyard-dot gold"></div>
+          <div class="brickyard-name">Real Estate</div>
+          <div class="brickyard-cases">Listing copy, market analysis, client follow-ups, open house coordination.</div>
+          <div class="brickyard-using">Using Helios for: client engagement</div>
+        </div>
+        <div class="brickyard-card">
+          <div class="brickyard-dot green"></div>
+          <div class="brickyard-name">FinTech</div>
+          <div class="brickyard-cases">Regulatory research, compliance docs, risk assessments, audit trail generation.</div>
+          <div class="brickyard-using">Using Helios for: compliance workflows</div>
+        </div>
+        <div class="brickyard-card">
+          <div class="brickyard-dot purple"></div>
+          <div class="brickyard-name">Health &amp; Wellness</div>
+          <div class="brickyard-cases">Patient communication, appointment scheduling, intake forms, wellness content.</div>
+          <div class="brickyard-using">Using Helios for: patient coordination</div>
+        </div>
+        <div class="brickyard-card">
+          <div class="brickyard-dot amber"></div>
+          <div class="brickyard-name">E-Commerce</div>
+          <div class="brickyard-cases">Product descriptions, ad copy, abandoned cart emails, inventory alerts.</div>
+          <div class="brickyard-using">Using Helios for: conversion optimization</div>
+        </div>
+        <div class="brickyard-summary">
+          <div class="persona-summary-tag">THE PATTERN</div>
+          <p class="persona-summary-text">Every vertical has the same problem: too much repetitive work, not enough hours. Helios builds the system so you can focus on the work only you can do.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── INSTALL ───────────────────────────────── -->
   <section id="install">
     <div class="container">
 
-      <div class="fade-up">
-        <div class="section-label">INSTALLATION</div>
+      <div class="section-header fade-up">
+        <div class="section-tag">INSTALLATION</div>
         <h2 class="section-title">Up and running in minutes.</h2>
         <p class="section-subtitle">
           No Docker required. No cloud account. No daemon to manage.
@@ -1954,37 +3142,35 @@
 
       <div class="install-panels">
         <div class="install-panel fade-up">
+          <span class="terminal-record-label">RECORD</span>
           <div class="install-panel-label">Quick start</div>
           <div class="code-block">
             <span class="code-line">
-              <span class="code-prompt">$</span>
-              <span class="code-cmd">curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</span>
+              <span class="code-prompt">$</span><span class="code-cmd">curl -fsSL https://raw.githubusercontent.com/sweetcheeks72/helios-team-installer/main/bootstrap.sh | bash</span>
             </span>
             <span class="code-line">
               <span class="code-comment"># set your API key</span>
             </span>
             <span class="code-line">
-              <span class="code-prompt">$</span>
-              <span class="code-cmd">helios config set <span class="code-arg">API_KEY</span> sk-...</span>
+              <span class="code-prompt">$</span><span class="code-cmd">helios config set <span class="code-arg">API_KEY</span> sk-...</span>
             </span>
             <span class="code-line">
               <span class="code-comment"># run your first task</span>
             </span>
             <span class="code-line">
-              <span class="code-prompt">$</span>
-              <span class="code-cmd">helios <span class="code-arg">"audit the auth module"</span></span>
+              <span class="code-prompt">$</span><span class="code-cmd">helios <span class="code-arg">"audit the auth module"</span></span>
             </span>
           </div>
         </div>
         <div class="install-panel fade-up">
+          <span class="terminal-record-label">SESSION</span>
           <div class="install-panel-label">With memory (recommended)</div>
           <div class="code-block">
             <span class="code-line">
               <span class="code-comment"># the installer handles everything — just run:</span>
             </span>
             <span class="code-line">
-              <span class="code-prompt">$</span>
-              <span class="code-cmd">helios doctor</span>
+              <span class="code-prompt">$</span><span class="code-cmd">helios doctor</span>
             </span>
             <span class="code-line">
               <span class="code-comment"># memory is configured automatically during install</span>
@@ -1996,21 +3182,32 @@
     </div>
   </section>
 
-  <!-- ─── CTA ──────────────────────────────────────────── -->
+  <!-- ─── CTA ─────────────────────────────────── -->
   <section id="cta">
-    <div class="warm-pulse-ring"></div>
     <div class="container">
       <div class="cta-inner fade-up">
         <h2 class="cta-title">Stop managing your AI.<br>Start directing it.</h2>
         <p class="cta-sub">
           Specialized agents. Zero daemons. One command to ship with confidence.
         </p>
-        <a href="#install" class="btn-warm" onclick="event.preventDefault(); openInstallModal();">Get Started →</a>
+        <a href="#install" class="btn-cta" onclick="event.preventDefault(); openInstallModal();">Get Started →</a>
+        <div class="section-tachymeter" aria-hidden="true" style="margin-top: 28px;">
+          <svg width="160" height="28" viewBox="0 0 160 28" fill="none" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 6 26 Q 80 -14 154 26" stroke="rgba(34,211,238,0.05)" stroke-width="0.5" fill="none"/>
+            <line x1="6" y1="26" x2="6" y2="21" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="31" y1="13" x2="31" y2="18" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="56" y1="6" x2="56" y2="11" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="80" y1="3" x2="80" y2="8" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="104" y1="6" x2="104" y2="11" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="129" y1="13" x2="129" y2="18" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+            <line x1="154" y1="26" x2="154" y2="21" stroke="rgba(34,211,238,0.04)" stroke-width="0.5"/>
+          </svg>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── INSTALL MODAL ───────────────────────────────── -->
+  <!-- ─── INSTALL MODAL ───────────────────────── -->
   <div class="install-modal-overlay" id="installModal" role="dialog" aria-modal="true" aria-label="Install helios">
     <div class="install-modal">
       <button class="install-modal-close" aria-label="Close" onclick="closeInstallModal()">&times;</button>
@@ -2047,7 +3244,6 @@
         <p class="install-note">Requires: Ubuntu 20.04+ / Debian 11+ / Fedora 36+, Node.js 18+</p>
       </div>
 
-
       <div class="install-modal-footer">
         <a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener" class="install-docs-link" aria-label="View full setup guide (opens in new tab)">Full setup guide →</a>
       </div>
@@ -2056,7 +3252,7 @@
 
   </main>
 
-  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <!-- ─── FOOTER ─── -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-left">
@@ -2069,51 +3265,261 @@
           <li><a href="#use-cases">Use Cases</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#install">Install</a></li>
+          <li><a href="https://github.com/sweetcheeks72/helios-team-installer" target="_blank" rel="noopener">GitHub</a></li>
         </ul>
       </nav>
     </div>
   </footer>
 
-  <!-- ─── SCROLL REVEAL ─────────────────────────────────── -->
+  <!-- ─── INSTRUMENT JS ─── -->
+  <script>
+/* ── Data Arrays ── */
+const DATA = {
+  business: {
+    who: ["Restaurant Owner","Freelance Designer","Real Estate Agent","Startup Founder","High School Teacher","Personal Trainer","E-commerce Seller","Podcast Host","Event Planner","Content Creator","Small Business Owner","Marketing Manager","Gym Owner","Independent Consultant","Nonprofit Director","Landscape Contractor","Mom of Three","Retired Teacher","Church Pastor","Online Seller"],
+    what: ["Get More Clients","Save 10hrs/Week","Grow My Audience","Cut My Costs","Launch a Product","Build a System","Write Faster","Automate the Boring Stuff","Scale My Revenue","Beat the Competition","Fill My Calendar","Reach New Markets","Stop the Churn","Launch Faster","Spend Less on Ads","Land My First 100 Customers","Stay Organized","Plan an Event"],
+    how: ["Write the emails","Build the workflow","Research the market","Create the content plan","Draft the pitch deck","Write the ad copy","Set up the automations","Automate the follow-ups","Run the numbers","Design the process","Find new customers","Write the scripts","Build the outreach system","Create the onboarding","Map the customer journey","Write the investor pitch","Organize the whole thing","Handle the research"]
+  },
+  everyday: {
+    who: ["Busy Parent","Working from Home","Weekend Planner","Solo Traveler","Night-Shift Worker","New Homeowner","Dog Owner","College Student","Budget Traveler","Empty Nester","Caregiver","Fitness Beginner","Home Cook","Daily Commuter","Social Planner","New in Town"],
+    what: ["Save Time Grocery Shopping","Find a Movie Everyone Likes","Stick to a Budget","Never Miss an Appointment","Eat Healthier This Week","Plan the Perfect Weekend","Stop Forgetting Things","Reduce Daily Stress","Plan a Road Trip","Get the Family Organized","Find the Fastest Route","Make Dinner Decisions Easier","Keep the House Running","Find Activities for the Kids","Stop Overpaying","Feel Less Overwhelmed"],
+    how: ["Find the optimal route","Recommend the perfect movie","Build the grocery list","Set up all the reminders","Plan the meals for the week","Schedule the appointments","Map out the errands","Compare prices and deals","Create the weekend itinerary","Build the packing list","Research the best options","Draft all the messages","Set up recurring tasks","Make the reservations","Track the spending","Build a family schedule"]
+  }
+};
+
+const ROLE_DESC = {
+  "Restaurant Owner": "Helios researches your market, writes your outreach, and builds follow-up sequences — all from a single prompt.",
+  "Freelance Designer": "Helios handles the brief, the copy, and the client emails. You focus on the work that requires your eye.",
+  "Real Estate Agent": "Helios drafts listing copy, follow-up sequences, and market analysis reports in minutes.",
+  "Startup Founder": "Helios builds your pitch, your deck outline, and your investor email list while you build the product.",
+  "High School Teacher": "Helios writes lesson plans, rubrics, and parent communication drafts — in your voice.",
+  "Personal Trainer": "Helios builds your content calendar, writes your DMs, and schedules your availability.",
+  "E-commerce Seller": "Helios writes product descriptions, ad copy, and abandoned cart emails that actually convert.",
+  "Podcast Host": "Helios writes show notes, guest outreach emails, and social clips from your episodes.",
+  "Event Planner": "Helios builds vendor email chains, run-of-show docs, and guest communication flows.",
+  "Content Creator": "Helios writes your hooks, scripts, captions, and replies — faster than any team could.",
+  "Small Business Owner": "Helios builds systems that do the repetitive work so you can focus on what only you can do.",
+  "Marketing Manager": "Helios writes campaign briefs, report summaries, and strategy docs at the speed of thought.",
+  "Gym Owner": "Helios writes class promotions, member retention emails, and new member onboarding flows.",
+  "Independent Consultant": "Helios builds proposal templates, follow-up sequences, and deliverable trackers.",
+  "Nonprofit Director": "Helios writes grant applications, donor emails, and annual reports that move people.",
+  "Landscape Contractor": "Helios writes quotes, follow-ups, seasonal promos, and referral ask emails.",
+  "Mom of Three": "Helios plans meals, organizes school schedules, and drafts all the emails you never have time for.",
+  "Retired Teacher": "Helios manages appointments, sends birthday messages, and keeps your daily routine on track.",
+  "Church Pastor": "Helios coordinates volunteers, manages event calendars, and drafts congregational communications.",
+  "Online Seller": "Helios writes product listings, manages inventory alerts, and builds customer follow-up flows.",
+  "Busy Parent": "Helios maps your errands, optimizes your grocery route, and saves 2+ hours every week.",
+  "Working from Home": "Helios blocks your calendar, batches tasks by focus type, and builds daily routines.",
+  "Weekend Planner": "Helios checks weather, preferences, and hours to build a Saturday itinerary everyone enjoys.",
+  "Solo Traveler": "Helios researches routes, compares booking prices, and builds a day-by-day plan with backups.",
+  "Night-Shift Worker": "Helios builds your sleep schedule, clusters errands for off-peak hours, and handles morning tasks.",
+  "New Homeowner": "Helios tracks maintenance schedules, finds local providers, and sends reminders before problems grow.",
+  "Dog Owner": "Helios schedules vet appointments, maps off-leash parks, and builds feeding and exercise reminders.",
+  "College Student": "Helios organizes deadlines by priority, finds cheap meals near campus, and builds study schedules.",
+  "Budget Traveler": "Helios monitors flight prices, finds free activities, and builds a full trip budget.",
+  "Empty Nester": "Helios finds local events, suggests hobbies, and builds a weekly structure for freed-up time.",
+  "Caregiver": "Helios tracks medications, schedules appointments, sends reminders, and flags follow-ups.",
+  "Fitness Beginner": "Helios builds a progressive workout plan, finds classes near you, and tracks consistency.",
+  "Home Cook": "Helios generates meal plans, builds grocery lists, and suggests dinner from what's in your fridge.",
+  "Daily Commuter": "Helios monitors traffic, finds the fastest route, and pre-loads your commute content.",
+  "Social Planner": "Helios polls availability, finds restaurants for all diets, and sends calendar invites.",
+  "New in Town": "Helios maps nearest services, recommends neighborhoods, and builds a week-one settling checklist."
+};
+
+let currentMode = 'business';
+let state = { v: [], busy: false };
+
+function getArrays() {
+  const d = DATA[currentMode];
+  return [d.who, d.what, d.how];
+}
+
+function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+function initState() {
+  const [W, G, A] = getArrays();
+  state.v = [W[0], G[0], A[0]];
+  updateDisplay();
+  buildDropdowns();
+}
+
+function updateDisplay() {
+  document.getElementById('r0').textContent = state.v[0];
+  document.getElementById('r1').textContent = state.v[1];
+  document.getElementById('r2').textContent = state.v[2];
+  document.getElementById('mw').textContent = state.v[0];
+  document.getElementById('mg').textContent = state.v[1];
+  document.getElementById('ma').textContent = state.v[2];
+  const desc = ROLE_DESC[state.v[0]] || '';
+  document.getElementById('role-desc').textContent = desc;
+}
+
+function buildDropdowns() {
+  const arrs = getArrays();
+  for (let i = 0; i < 3; i++) {
+    const dd = document.getElementById('dd' + i);
+    dd.innerHTML = '';
+    arrs[i].forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'reel-dropdown-item' + (item === state.v[i] ? ' selected' : '');
+      div.textContent = item;
+      div.setAttribute('role', 'option');
+      div.onclick = (e) => { e.stopPropagation(); selectItem(i, item); };
+      dd.appendChild(div);
+    });
+  }
+}
+
+function toggleDropdown(i) {
+  // Close all others
+  for (let j = 0; j < 3; j++) {
+    if (j !== i) document.getElementById('dd' + j).classList.remove('open');
+  }
+  const dd = document.getElementById('dd' + i);
+  dd.classList.toggle('open');
+}
+
+function selectItem(reelIdx, value) {
+  state.v[reelIdx] = value;
+  document.getElementById('dd' + reelIdx).classList.remove('open');
+  updateDisplay();
+  buildDropdowns();
+  // Flash output
+  const out = document.getElementById('output-panel');
+  out.style.background = 'rgba(34,211,238,0.04)';
+  setTimeout(() => { out.style.background = ''; }, 350);
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  initState();
+}
+
+async function synth() {
+  if (state.busy) return;
+  state.busy = true;
+  const btn = document.getElementById('btn');
+  btn.textContent = '...';
+  const arrs = getArrays();
+  const els = ['r0', 'r1', 'r2'];
+
+  els.forEach(id => document.getElementById(id).classList.add('updating'));
+  await new Promise(r => setTimeout(r, 140));
+
+  for (let i = 0; i < 3; i++) state.v[i] = pick(arrs[i]);
+  els.forEach((id, i) => { document.getElementById(id).textContent = state.v[i]; });
+  await new Promise(r => setTimeout(r, 60));
+
+  els.forEach(id => document.getElementById(id).classList.remove('updating'));
+  await new Promise(r => setTimeout(r, 180));
+
+  updateDisplay();
+  buildDropdowns();
+  const out = document.getElementById('output-panel');
+  out.style.background = 'rgba(34,211,238,0.04)';
+  setTimeout(() => { out.style.background = ''; }, 350);
+
+  btn.textContent = 'Show me another';
+  state.busy = false;
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.reel')) {
+    document.querySelectorAll('.reel-dropdown').forEach(dd => dd.classList.remove('open'));
+  }
+});
+
+// Space bar shuffle
+document.addEventListener('keydown', e => {
+  if ((e.code === 'Space' || e.key === 'ArrowUp') && (e.target === document.body || e.target === document.documentElement)) {
+    e.preventDefault();
+    synth();
+  }
+});
+
+// Initialize
+initState();
+  </script>
+
+  <!-- ─── SITE JS (scroll, modals, animations) ─── -->
   <script>
     (function () {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const els = document.querySelectorAll('.fade-up');
-      const staggerGroups = {
-        'use-cases-header': 0,
-        'pillars-grid':     60,
-        'agents-grid':      80,
-        'capabilities-grid':80,
-        'telemetry-row':    120,
-      };
+      // ── Fade-up observer ────────────────────
+      if (!reducedMotion) {
+        const fadeEls = document.querySelectorAll('.fade-up');
+        const seenParents = new WeakMap();
 
-      // Stagger siblings within the same parent
-      const seenParents = new WeakMap();
+        const fadeObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const parent = el.parentElement;
 
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target;
-          const parent = el.parentElement;
+            if (!seenParents.has(parent)) seenParents.set(parent, 0);
+            const idx = seenParents.get(parent);
+            seenParents.set(parent, idx + 1);
 
-          if (!seenParents.has(parent)) {
-            seenParents.set(parent, 0);
-          }
-          const idx = seenParents.get(parent);
-          seenParents.set(parent, idx + 1);
+            el.style.transitionDelay = (idx * 70) + 'ms';
+            el.classList.add('visible');
+            fadeObserver.unobserve(el);
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-          const delay = idx * 70;
-          el.style.transitionDelay = delay + 'ms';
-          el.classList.add('visible');
-          io.unobserve(el);
+        fadeEls.forEach((el) => fadeObserver.observe(el));
+      } else {
+        // Reduced motion: show all immediately
+        document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+      }
+
+      // ── Terminal animation observer ─────────
+      if (!reducedMotion) {
+        const terminals = document.querySelectorAll('.mission-terminal');
+
+        const terminalObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('in-view');
+            terminalObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
+
+        terminals.forEach((t) => terminalObserver.observe(t));
+      } else {
+        // Reduced motion: show all terminal content immediately
+        document.querySelectorAll('.mission-terminal').forEach(t => {
+          t.classList.add('in-view');
+          t.querySelectorAll('.s').forEach(s => {
+            s.style.opacity = '1';
+            s.style.transform = 'none';
+          });
         });
-      }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px',
-      });
+      }
 
-      els.forEach((el) => io.observe(el));
+      // ── Connector line observer ─────────────
+      if (!reducedMotion) {
+        const connectorLines = document.querySelectorAll('.section-connector-line');
+
+        const connectorObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('animate');
+            connectorObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.5 });
+
+        connectorLines.forEach((line) => connectorObserver.observe(line));
+      } else {
+        document.querySelectorAll('.section-connector-line').forEach(l => {
+          l.style.height = '40px';
+          l.style.opacity = '1';
+        });
+      }
     })();
 
     // ── Install Modal ────────────────────────
@@ -2133,9 +3539,7 @@
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
       switchTab(os);
-      // trap focus
       modal.querySelector('.install-modal-close').focus();
-      // close on Esc
       modal._escHandler = function(e) { if (e.key === 'Escape') closeInstallModal(); };
       document.addEventListener('keydown', modal._escHandler);
     }
@@ -2166,7 +3570,6 @@
       });
     }
 
-    // Close modal on overlay click (not inner modal click)
     document.getElementById('installModal')?.addEventListener('click', function(e) {
       if (e.target === this) closeInstallModal();
     });
