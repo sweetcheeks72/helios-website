@@ -112,7 +112,7 @@
 
     /* ─────────────────────────────────────────────
        PRIVACY GLASS GATE
-       Three doors. Rams × NASA, 1965.
+       Rams × NASA, 1965. Technical manual cover.
     ───────────────────────────────────────────── */
     .gate {
       position: fixed;
@@ -120,8 +120,10 @@
       z-index: 10000;
       background: var(--bg);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 48px 32px;
       transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
                   visibility 0s linear 0s;
     }
@@ -132,133 +134,159 @@
       transition: opacity 1.8s cubic-bezier(0.4, 0, 0.2, 1),
                   visibility 0s linear 1.8s;
     }
-    .gate-inner {
+
+    /* Document header strip */
+    .gate-doc-header {
+      width: 100%;
+      max-width: 760px;
+      margin-bottom: auto;
+    }
+    .gate-doc-id {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.4;
+      padding: 6px 0;
+    }
+    .gate-doc-line {
+      width: 100%;
+      height: 1px;
+      background: var(--border-bright);
+    }
+
+    /* Title block */
+    .gate-title-block {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0;
-      max-width: 820px;
-      width: 100%;
-      padding: 40px 24px;
-      text-align: center;
+      margin-bottom: 48px;
     }
-
-    /* Orbital mark */
     .gate-mark {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       color: var(--accent);
       opacity: 0.12;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
-
-    /* Brand line */
-    .gate-brand {
+    .gate-title {
       font-family: var(--font-body);
-      font-weight: 300;
-      font-size: 20px;
-      letter-spacing: 0.18em;
+      font-weight: 200;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: 0.2em;
       color: var(--text);
       margin-bottom: 12px;
     }
-
-    /* Positioning line */
-    .gate-position {
+    .gate-subtitle {
       font-family: var(--font-body);
-      font-weight: 200;
-      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 300;
+      font-size: clamp(14px, 2vw, 18px);
       color: var(--text-dim);
-      letter-spacing: 0.01em;
-      line-height: 1.5;
-      margin-bottom: 48px;
+      letter-spacing: 0.02em;
     }
 
-    /* Three doors */
+    /* Section label */
+    .gate-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      opacity: 0.35;
+      margin-bottom: 20px;
+    }
+
+    /* Three doors — mission modules */
     .gate-doors {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 1px;
+      background: var(--border-bright);
       width: 100%;
-      margin-bottom: 32px;
+      max-width: 760px;
+      margin-bottom: auto;
     }
     .gate-door {
-      background: transparent;
-      border: 1px solid var(--border-bright);
-      padding: 32px 20px 28px;
+      background: var(--bg);
+      border: none;
+      padding: 28px 24px;
       cursor: pointer;
-      text-align: center;
+      text-align: left;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
+      gap: 0;
       font-family: inherit;
+      transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .gate-door::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--door-color);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .gate-door:hover::before { opacity: 1; }
     .gate-door:hover {
-      border-color: var(--door-color);
       background: var(--door-bg);
-      transform: translateY(-2px);
     }
     .gate-door:focus-visible {
       outline: 2px solid var(--accent);
-      outline-offset: 2px;
+      outline-offset: -2px;
     }
 
     .gate-door--dev {
       --door-color: #22D3EE;
-      --door-bg: rgba(34, 211, 238, 0.04);
+      --door-bg: rgba(34, 211, 238, 0.03);
     }
     .gate-door--biz {
       --door-color: #d4a73a;
-      --door-bg: rgba(212, 167, 58, 0.04);
+      --door-bg: rgba(212, 167, 58, 0.03);
     }
     .gate-door--life {
       --door-color: #22C55E;
-      --door-bg: rgba(34, 197, 94, 0.04);
+      --door-bg: rgba(34, 197, 94, 0.03);
     }
 
+    .gate-door-num {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--door-color);
+      opacity: 0.2;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .gate-door:hover .gate-door-num { opacity: 0.5; }
+    .gate-door-line {
+      width: 24px;
+      height: 1px;
+      background: var(--door-color);
+      opacity: 0.3;
+      margin-bottom: 12px;
+      transition: width 0.3s, opacity 0.3s;
+    }
+    .gate-door:hover .gate-door-line { width: 48px; opacity: 0.7; }
     .gate-door-title {
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text);
+      margin-bottom: 14px;
       transition: color 0.3s;
     }
     .gate-door:hover .gate-door-title { color: var(--door-color); }
-
-    .gate-door-examples {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .gate-door-examples { display: flex; flex-direction: column; gap: 5px; }
     .gate-door-ex {
       font-family: var(--font-body);
       font-size: 12px;
       font-weight: 300;
       color: var(--text-dim);
+      opacity: 0.6;
       line-height: 1.4;
     }
+    .gate-door:hover .gate-door-ex { opacity: 0.9; }
 
-    /* Footnote */
-    .gate-footnote {
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      opacity: 0.25;
+    /* Classification footer */
+    .gate-classification {
+      width: 100%;
+      max-width: 760px;
     }
 
     /* Page content — privacy glass */
@@ -280,9 +308,12 @@
       .gate.dissolving { transition: opacity 0.3s, visibility 0s linear 0.3s; }
       .page-content { transition: filter 0.3s; }
     }
-    @media (max-width: 600px) {
-      .gate-doors { grid-template-columns: 1fr; gap: 12px; }
-      .gate-door { padding: 24px 20px; }
+    @media (max-width: 640px) {
+      .gate { padding: 32px 20px; }
+      .gate-doors { grid-template-columns: 1fr; }
+      .gate-door { padding: 20px; }
+      .gate-doc-id { font-size: 7px; }
+      .gate-title { letter-spacing: 0.12em; }
     }
 
     /* ─────────────────────────────────────────────
@@ -2461,47 +2492,77 @@
        Rams walks into NASA, 1965. The gate IS the brand.
   ═══════════════════════════════════════════════════════════════ -->
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-label="Choose your experience">
-    <div class="gate-inner">
 
-      <!-- Orbital mark -->
+    <!-- Document header strip -->
+    <div class="gate-doc-header">
+      <div class="gate-doc-id">
+        <span>HELIOS SYSTEMS</span>
+        <span>DOC HLS-2026-001</span>
+      </div>
+      <div class="gate-doc-line"></div>
+      <div class="gate-doc-id">
+        <span>PERSONAL AI SYSTEM</span>
+        <span>REV 17 MARCH 2026</span>
+      </div>
+    </div>
+
+    <!-- Center title block -->
+    <div class="gate-title-block">
       <svg class="gate-mark" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="currentColor" stroke-width="1.2" transform="rotate(-25 50 50)"/>
+        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1.2"/>
+        <ellipse cx="50" cy="50" rx="48" ry="16" fill="none" stroke="currentColor" stroke-width="1" transform="rotate(-25 50 50)"/>
         <circle cx="50" cy="50" r="3" fill="currentColor"/>
       </svg>
+      <div class="gate-title">helios.</div>
+      <div class="gate-subtitle">Your AI partner for every part of life.</div>
+    </div>
 
-      <div class="gate-brand">helios.</div>
-      <div class="gate-position">Your AI partner for every part of life.</div>
+    <!-- Mission selection modules -->
+    <div class="gate-label">SELECT PRIMARY USE CASE</div>
 
-      <!-- Three doors -->
-      <div class="gate-doors">
-        <button class="gate-door gate-door--dev" onclick="openGate('development')" aria-label="Development">
-          <div class="gate-door-title">Development</div>
-          <div class="gate-door-examples">
-            <div class="gate-door-ex">Ship features overnight</div>
-            <div class="gate-door-ex">Review your own PRs</div>
-            <div class="gate-door-ex">Debug with memory</div>
-          </div>
-        </button>
-        <button class="gate-door gate-door--biz" onclick="openGate('business')" aria-label="Business">
-          <div class="gate-door-title">Business</div>
-          <div class="gate-door-examples">
-            <div class="gate-door-ex">Research any market</div>
-            <div class="gate-door-ex">Write copy that converts</div>
-            <div class="gate-door-ex">Automate the boring stuff</div>
-          </div>
-        </button>
-        <button class="gate-door gate-door--life" onclick="openGate('everyday')" aria-label="Everyday Life">
-          <div class="gate-door-title">Everyday Life</div>
-          <div class="gate-door-examples">
-            <div class="gate-door-ex">Plan meals for the week</div>
-            <div class="gate-door-ex">Organize family schedules</div>
-            <div class="gate-door-ex">Never miss an appointment</div>
-          </div>
-        </button>
+    <div class="gate-doors">
+      <button class="gate-door gate-door--dev" onclick="openGate('development')">
+        <div class="gate-door-num">01</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Development</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Ship features overnight</div>
+          <div class="gate-door-ex">Review your own PRs</div>
+          <div class="gate-door-ex">Debug with memory</div>
+          <div class="gate-door-ex">Migrate entire codebases</div>
+        </div>
+      </button>
+      <button class="gate-door gate-door--biz" onclick="openGate('business')">
+        <div class="gate-door-num">02</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Business</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Close your next 10 clients</div>
+          <div class="gate-door-ex">Launch campaigns in minutes</div>
+          <div class="gate-door-ex">Automate invoices & contracts</div>
+          <div class="gate-door-ex">Build content pipelines</div>
+        </div>
+      </button>
+      <button class="gate-door gate-door--life" onclick="openGate('everyday')">
+        <div class="gate-door-num">03</div>
+        <div class="gate-door-line"></div>
+        <div class="gate-door-title">Everyday Life</div>
+        <div class="gate-door-examples">
+          <div class="gate-door-ex">Plan a week of meals</div>
+          <div class="gate-door-ex">Coordinate family schedules</div>
+          <div class="gate-door-ex">Manage bills & subscriptions</div>
+          <div class="gate-door-ex">Plan trips door-to-door</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Classification footer -->
+    <div class="gate-classification">
+      <div class="gate-doc-line"></div>
+      <div class="gate-doc-id">
+        <span>CLASSIFICATION: UNRESTRICTED</span>
+        <span>DISTRIBUTION: UNLIMITED</span>
       </div>
-
-      <div class="gate-footnote">This shapes your experience.</div>
     </div>
   </div>
 
@@ -3107,6 +3168,130 @@
             <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">providers</span></div>
           </div>
           <div class="readout-time"><span class="readout-clock">3 min</span> · year-round</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B5 — DOCUMENT INTELLIGENCE -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="20" height="24" rx="2" fill="rgba(212,167,58,0.06)"/><line x1="10" y1="10" x2="22" y2="10" stroke-width="1"/><line x1="10" y1="14" x2="22" y2="14" stroke-width="1"/><line x1="10" y1="18" x2="18" y2="18" stroke-width="1"/><path d="M18 22l2 2 4-4" stroke-width="1.5"/></svg></div>
+        <div class="mission-label">B5 — DOCUMENTS</div>
+        <h3 class="mission-title">Review every contract before you sign</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Three red flags you would have missed. Auto-renewal trap caught. Missing SLA surfaced. Thirty seconds, not thirty minutes.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: reviewing a vendor contract">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Review this vendor contract and flag anything unusual"
+
+  Extracting terms from PDF ▸▸▸▸▸▸▸▸▸▸             <span class="s">✓</span>
+  Comparing against standard clauses ▸▸▸▸▸▸▸▸▸▸    <span class="s">✓</span>
+  Flagging risks — 3 issues found ▸▸▸▸▸▸▸▸▸▸      <span class="s">✓</span>
+  Generating summary + recommendations ▸▸▸▸▸▸▸▸▸▸ <span class="s">✓</span>
+<span class="s">✅ Review complete</span> <span class="d"> 3 flags · auto-renewal trap · missing SLA · 30-day exit clause</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B5</div>
+          <span class="readout-label">DOCUMENTS</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">3</span><span class="readout-unit">flags</span></div>
+            <div class="readout-stat"><span class="readout-num">1</span><span class="readout-unit">contract</span></div>
+            <div class="readout-stat"><span class="readout-num">✓</span><span class="readout-unit">recommendations</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">30 sec</span> · compliance</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION B6 — CONTENT PIPELINE -->
+      <div class="mission-block fade-up" data-persona="business">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h24v16H4z" fill="rgba(212,167,58,0.06)"/><line x1="8" y1="12" x2="24" y2="12" stroke-width="1"/><line x1="8" y1="16" x2="20" y2="16" stroke-width="1"/><line x1="8" y1="20" x2="16" y2="20" stroke-width="1"/><path d="M22 18l4 4-4 4" stroke-width="1.5" fill="none"/></svg></div>
+        <div class="mission-label">B6 — CONTENT</div>
+        <h3 class="mission-title">Research, write, optimize, publish — while you sleep</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">One prompt. One blog post. One LinkedIn article. Three tweets. SEO score: 94. Published everywhere.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: creating multi-platform content">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Write a blog post about AI automation for small businesses"
+
+  Researching — 18 sources, 4 competitor articles ▸▸▸▸ <span class="s">✓</span>
+  Drafting 1,200 words ▸▸▸▸▸▸▸▸▸▸                    <span class="s">✓</span>
+  SEO optimization — keywords, meta, structure ▸▸▸▸▸▸ <span class="s">✓</span>
+  Formatting for WordPress + LinkedIn + Twitter ▸▸▸▸▸▸ <span class="s">✓</span>
+<span class="s">✅ Content ready</span> <span class="d"> 1 blog · 1 LinkedIn post · 3 tweets · SEO score 94</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">B6</div>
+          <span class="readout-label">CONTENT</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">18</span><span class="readout-unit">sources</span></div>
+            <div class="readout-stat"><span class="readout-num">4</span><span class="readout-unit">formats</span></div>
+            <div class="readout-stat"><span class="readout-num">94</span><span class="readout-unit">SEO</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">8 min</span> · multi-platform</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E5 — SCHOOL & ACTIVITIES -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l12 6-12 6L4 10z" fill="rgba(34,197,94,0.06)"/><path d="M4 10v8l12 6 12-6v-8" fill="none"/><line x1="28" y1="10" x2="28" y2="22" stroke-width="1"/><circle cx="28" cy="23" r="1.5" fill="rgba(34,197,94,0.06)"/></svg></div>
+        <div class="mission-label">E5 — SCHOOL</div>
+        <h3 class="mission-title">Every newsletter, every deadline, nothing lost</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Twelve emails from three schools. Eight events extracted. Zero missed. Reminders set for everything.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: parsing school emails and updating calendar">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Parse these school emails and update our family calendar"
+
+  Reading 12 emails from 3 schools ▸▸▸▸▸▸▸▸▸▸        <span class="s">✓</span>
+  Extracting dates — 8 events found ▸▸▸▸▸▸▸▸▸▸       <span class="s">✓</span>
+  Checking conflicts with existing schedule ▸▸▸▸▸▸▸▸▸ <span class="s">✓</span>
+  Adding to calendar with reminders ▸▸▸▸▸▸▸▸▸▸       <span class="s">✓</span>
+<span class="s">✅ Calendar updated</span> <span class="d"> 8 events · 3 schools · 0 conflicts · reminders set</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E5</div>
+          <span class="readout-label">SCHOOL</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">12</span><span class="readout-unit">emails</span></div>
+            <div class="readout-stat"><span class="readout-num">8</span><span class="readout-unit">events</span></div>
+            <div class="readout-stat"><span class="readout-num">0</span><span class="readout-unit">missed</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">1 min</span> · auto-parsed</div>
+        </div>
+      </div>
+
+      <div class="section-connector"><div class="section-connector-line"></div></div>
+
+      <!-- MISSION E6 — BUDGET & BILLS -->
+      <div class="mission-block fade-up" data-persona="everyday">
+        <div class="mission-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="16" rx="2" fill="rgba(34,197,94,0.06)"/><line x1="4" y1="14" x2="28" y2="14" stroke-width="1"/><circle cx="22" cy="20" r="2" fill="none"/><line x1="8" y1="20" x2="14" y2="20" stroke-width="1"/></svg></div>
+        <div class="mission-label">E6 — BUDGET</div>
+        <h3 class="mission-title">Stop overpaying for everything</h3>
+        <div class="mission-accent-line"></div>
+        <p class="mission-desc">Eight hundred forty-seven dollars a year. Three downgrades. Two cancellations. Found in sixty seconds.</p>
+        <div class="mission-terminal" role="img" aria-label="Terminal: reviewing subscriptions and finding savings">
+          <span class="terminal-record-label">RECORD</span>
+          <div class="terminal-content"><span class="p">❯</span> helios "Review our subscriptions and find where we're overpaying"
+
+  Scanning bank statements — 3 months ▸▸▸▸▸▸▸▸▸▸     <span class="s">✓</span>
+  Identifying 14 recurring charges ▸▸▸▸▸▸▸▸▸▸        <span class="s">✓</span>
+  Comparing plans — 3 cheaper alternatives found ▸▸▸▸ <span class="s">✓</span>
+  Calculating potential savings ▸▸▸▸▸▸▸▸▸▸           <span class="s">✓</span>
+<span class="s">✅ Savings found</span> <span class="d"> $847/year · 3 downgrades · 2 cancellations recommended</span></div>
+        </div>
+        <div class="use-case-detail">
+          <div class="use-case-number">E6</div>
+          <span class="readout-label">BUDGET</span>
+          <div class="readout-grid">
+            <div class="readout-stat"><span class="readout-num">$847</span><span class="readout-unit">yr savings</span></div>
+            <div class="readout-stat"><span class="readout-num">14</span><span class="readout-unit">subscriptions</span></div>
+            <div class="readout-stat"><span class="readout-num">5</span><span class="readout-unit">actions</span></div>
+          </div>
+          <div class="readout-time"><span class="readout-clock">1 min</span> · money saved</div>
         </div>
       </div>
 
