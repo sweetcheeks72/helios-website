@@ -2669,7 +2669,8 @@
 
   <div class="mode-toggle-row" id="mode-toggle">
     <button class="mode-toggle-btn active" data-mode="business" onclick="switchMode('business')">Business</button>
-    <button class="mode-toggle-btn" data-mode="everyday" onclick="switchMode('everyday')">Everyday Life</button>
+    <button class="mode-toggle-btn" data-mode="personal" onclick="switchMode('personal')">Personal</button>
+    <button class="mode-toggle-btn" data-mode="development" onclick="switchMode('development')">Development</button>
   </div>
 
   <div class="instrument" id="instrument">
@@ -2702,7 +2703,7 @@
     </div>
 
     <div class="inst-output" id="output-panel">
-      <div class="inst-output-label">Here's what Helios does for you</div>
+      <div class="inst-output-label" id="output-label">Here's what Helios does for you</div>
       <div class="inst-mission" id="mission">
         <span class="who" id="mw">Restaurant Owner</span>
         <span class="conn"> · </span>
@@ -4512,57 +4513,91 @@ const DATA = {
     what: ["Get More Clients","Save 10hrs/Week","Grow My Audience","Cut My Costs","Launch a Product","Build a System","Write Faster","Automate the Boring Stuff","Scale My Revenue","Beat the Competition","Fill My Calendar","Reach New Markets","Stop the Churn","Launch Faster","Spend Less on Ads","Land My First 100 Customers","Stay Organized","Plan an Event"],
     how: ["Write the emails","Build the workflow","Research the market","Create the content plan","Draft the pitch deck","Write the ad copy","Set up the automations","Automate the follow-ups","Run the numbers","Design the process","Find new customers","Write the scripts","Build the outreach system","Create the onboarding","Map the customer journey","Write the investor pitch","Organize the whole thing","Handle the research"]
   },
-  everyday: {
+  personal: {
     who: ["Busy Parent","Working from Home","Weekend Planner","Solo Traveler","Night-Shift Worker","New Homeowner","Dog Owner","College Student","Budget Traveler","Empty Nester","Caregiver","Fitness Beginner","Home Cook","Daily Commuter","Social Planner","New in Town"],
     what: ["Save Time Grocery Shopping","Find a Movie Everyone Likes","Stick to a Budget","Never Miss an Appointment","Eat Healthier This Week","Plan the Perfect Weekend","Stop Forgetting Things","Reduce Daily Stress","Plan a Road Trip","Get the Family Organized","Find the Fastest Route","Make Dinner Decisions Easier","Keep the House Running","Find Activities for the Kids","Stop Overpaying","Feel Less Overwhelmed"],
     how: ["Find the optimal route","Recommend the perfect movie","Build the grocery list","Set up all the reminders","Plan the meals for the week","Schedule the appointments","Map out the errands","Compare prices and deals","Create the weekend itinerary","Build the packing list","Research the best options","Draft all the messages","Set up recurring tasks","Make the reservations","Track the spending","Build a family schedule"]
+  },
+  development: {
+    who: ["Frontend Developer","Backend Engineer","Full-Stack Developer","ML Engineer","DevOps Engineer","Mobile Developer","Tech Lead","Indie Hacker","Open Source Contributor","Startup CTO","Platform Engineer","Security Engineer","Data Engineer","QA Engineer","Technical Writer"],
+    what: ["Ship a Feature Faster","Fix a Tricky Bug","Review a PR","Refactor Legacy Code","Add Test Coverage","Set Up CI/CD","Migrate a Database","Build an API","Write Documentation","Debug a Production Issue","Architect a New System","Onboard to a Codebase","Optimize Performance","Handle a Security Audit","Build a CLI Tool"],
+    how: ["Scout the codebase","Write the tests first","Run the review pipeline","Draft the migration plan","Trace the data flow","Ship the implementation","Coordinate the agents","Write the docs","Debug the trace","Build the spec","Map the dependencies","Set up the workflow","Analyze the bottleneck","Write the PR description","Scaffold the project"]
   }
 };
 
-const ROLE_DESC = {
-  "Restaurant Owner": "Helios researches your market, writes your outreach, and builds follow-up sequences — all from a single prompt.",
-  "Freelance Designer": "Helios handles the brief, the copy, and the client emails. You focus on the work that requires your eye.",
-  "Real Estate Agent": "Helios drafts listing copy, follow-up sequences, and market analysis reports in minutes.",
-  "Startup Founder": "Helios builds your pitch, your deck outline, and your investor email list while you build the product.",
-  "High School Teacher": "Helios writes lesson plans, rubrics, and parent communication drafts — in your voice.",
-  "Personal Trainer": "Helios builds your content calendar, writes your DMs, and schedules your availability.",
-  "E-commerce Seller": "Helios writes product descriptions, ad copy, and abandoned cart emails that actually convert.",
-  "Podcast Host": "Helios writes show notes, guest outreach emails, and social clips from your episodes.",
-  "Event Planner": "Helios builds vendor email chains, run-of-show docs, and guest communication flows.",
-  "Content Creator": "Helios writes your hooks, scripts, captions, and replies — faster than any team could.",
-  "Small Business Owner": "Helios builds systems that do the repetitive work so you can focus on what only you can do.",
-  "Marketing Manager": "Helios writes campaign briefs, report summaries, and strategy docs at the speed of thought.",
-  "Gym Owner": "Helios writes class promotions, member retention emails, and new member onboarding flows.",
-  "Independent Consultant": "Helios builds proposal templates, follow-up sequences, and deliverable trackers.",
-  "Nonprofit Director": "Helios writes grant applications, donor emails, and annual reports that move people.",
-  "Landscape Contractor": "Helios writes quotes, follow-ups, seasonal promos, and referral ask emails.",
-  "Mom of Three": "Helios plans meals, organizes school schedules, and drafts all the emails you never have time for.",
-  "Retired Teacher": "Helios manages appointments, sends birthday messages, and keeps your daily routine on track.",
-  "Church Pastor": "Helios coordinates volunteers, manages event calendars, and drafts congregational communications.",
-  "Online Seller": "Helios writes product listings, manages inventory alerts, and builds customer follow-up flows.",
-  "Busy Parent": "Helios maps your errands, optimizes your grocery route, and saves 2+ hours every week.",
-  "Working from Home": "Helios blocks your calendar, batches tasks by focus type, and builds daily routines.",
-  "Weekend Planner": "Helios checks weather, preferences, and hours to build a Saturday itinerary everyone enjoys.",
-  "Solo Traveler": "Helios researches routes, compares booking prices, and builds a day-by-day plan with backups.",
-  "Night-Shift Worker": "Helios builds your sleep schedule, clusters errands for off-peak hours, and handles morning tasks.",
-  "New Homeowner": "Helios tracks maintenance schedules, finds local providers, and sends reminders before problems grow.",
-  "Dog Owner": "Helios schedules vet appointments, maps off-leash parks, and builds feeding and exercise reminders.",
-  "College Student": "Helios organizes deadlines by priority, finds cheap meals near campus, and builds study schedules.",
-  "Budget Traveler": "Helios monitors flight prices, finds free activities, and builds a full trip budget.",
-  "Empty Nester": "Helios finds local events, suggests hobbies, and builds a weekly structure for freed-up time.",
-  "Caregiver": "Helios tracks medications, schedules appointments, sends reminders, and flags follow-ups.",
-  "Fitness Beginner": "Helios builds a progressive workout plan, finds classes near you, and tracks consistency.",
-  "Home Cook": "Helios generates meal plans, builds grocery lists, and suggests dinner from what's in your fridge.",
-  "Daily Commuter": "Helios monitors traffic, finds the fastest route, and pre-loads your commute content.",
-  "Social Planner": "Helios polls availability, finds restaurants for all diets, and sends calendar invites.",
-  "New in Town": "Helios maps nearest services, recommends neighborhoods, and builds a week-one settling checklist."
+const MODE_DESC = {
+  business: {
+    "Restaurant Owner": "Helios researches your market, writes your outreach, and builds follow-up sequences — all from a single prompt.",
+    "Freelance Designer": "Helios handles the brief, the copy, and the client emails. You focus on the work that requires your eye.",
+    "Real Estate Agent": "Helios drafts listing copy, follow-up sequences, and market analysis reports in minutes.",
+    "Startup Founder": "Helios builds your pitch, your deck outline, and your investor email list while you build the product.",
+    "High School Teacher": "Helios writes lesson plans, rubrics, and parent communication drafts — in your voice.",
+    "Personal Trainer": "Helios builds your content calendar, writes your DMs, and schedules your availability.",
+    "E-commerce Seller": "Helios writes product descriptions, ad copy, and abandoned cart emails that actually convert.",
+    "Podcast Host": "Helios writes show notes, guest outreach emails, and social clips from your episodes.",
+    "Event Planner": "Helios builds vendor email chains, run-of-show docs, and guest communication flows.",
+    "Content Creator": "Helios writes your hooks, scripts, captions, and replies — faster than any team could.",
+    "Small Business Owner": "Helios builds systems that do the repetitive work so you can focus on what only you can do.",
+    "Marketing Manager": "Helios writes campaign briefs, report summaries, and strategy docs at the speed of thought.",
+    "Gym Owner": "Helios writes class promotions, member retention emails, and new member onboarding flows.",
+    "Independent Consultant": "Helios builds proposal templates, follow-up sequences, and deliverable trackers.",
+    "Nonprofit Director": "Helios writes grant applications, donor emails, and annual reports that move people.",
+    "Landscape Contractor": "Helios writes quotes, follow-ups, seasonal promos, and referral ask emails.",
+    "Mom of Three": "Helios plans meals, organizes school schedules, and drafts all the emails you never have time for.",
+    "Retired Teacher": "Helios manages appointments, sends birthday messages, and keeps your daily routine on track.",
+    "Church Pastor": "Helios coordinates volunteers, manages event calendars, and drafts congregational communications.",
+    "Online Seller": "Helios writes product listings, manages inventory alerts, and builds customer follow-up flows."
+  },
+  personal: {
+    "Busy Parent": "Helios maps your errands, optimizes your grocery route, and saves 2+ hours every week.",
+    "Working from Home": "Helios blocks your calendar, batches tasks by focus type, and builds daily routines.",
+    "Weekend Planner": "Helios checks weather, preferences, and hours to build a Saturday itinerary everyone enjoys.",
+    "Solo Traveler": "Helios researches routes, compares booking prices, and builds a day-by-day plan with backups.",
+    "Night-Shift Worker": "Helios builds your sleep schedule, clusters errands for off-peak hours, and handles morning tasks.",
+    "New Homeowner": "Helios tracks maintenance schedules, finds local providers, and sends reminders before problems grow.",
+    "Dog Owner": "Helios schedules vet appointments, maps off-leash parks, and builds feeding and exercise reminders.",
+    "College Student": "Helios organizes deadlines by priority, finds cheap meals near campus, and builds study schedules.",
+    "Budget Traveler": "Helios monitors flight prices, finds free activities, and builds a full trip budget.",
+    "Empty Nester": "Helios finds local events, suggests hobbies, and builds a weekly structure for freed-up time.",
+    "Caregiver": "Helios tracks medications, schedules appointments, sends reminders, and flags follow-ups.",
+    "Fitness Beginner": "Helios builds a progressive workout plan, finds classes near you, and tracks consistency.",
+    "Home Cook": "Helios generates meal plans, builds grocery lists, and suggests dinner from what's in your fridge.",
+    "Daily Commuter": "Helios monitors traffic, finds the fastest route, and pre-loads your commute content.",
+    "Social Planner": "Helios polls availability, finds restaurants for all diets, and sends calendar invites.",
+    "New in Town": "Helios maps nearest services, recommends neighborhoods, and builds a week-one settling checklist."
+  },
+  development: {
+    "Frontend Developer": "Helios scouts your components, writes failing tests, implements the feature, and opens the PR — while you review.",
+    "Backend Engineer": "Helios maps your data model, writes the migration, implements the endpoint, and verifies it end-to-end.",
+    "Full-Stack Developer": "Helios coordinates frontend and backend workers in parallel, so features ship complete — not half-done.",
+    "ML Engineer": "Helios runs experiment loops, tracks val metrics, and surfaces the best checkpoint — autonomously.",
+    "DevOps Engineer": "Helios writes your Terraform, maps pipeline dependencies, and flags config drift before it reaches production.",
+    "Mobile Developer": "Helios scouts your components, writes platform-specific tests, and ships features across iOS and Android.",
+    "Tech Lead": "Helios reviews PRs, surfaces architectural risks, and keeps your team unblocked with concrete next steps.",
+    "Indie Hacker": "Helios builds features, writes copy, and handles the research so you stay in flow.",
+    "Open Source Contributor": "Helios scouts the codebase, writes the failing test, and drafts a clean PR with full context.",
+    "Startup CTO": "Helios coordinates your engineering agents, maps technical debt, and keeps the roadmap moving.",
+    "Platform Engineer": "Helios maps service dependencies, writes runbooks, and traces failure paths before on-call does.",
+    "Security Engineer": "Helios audits code paths, flags injection risks, and writes hardened implementations.",
+    "Data Engineer": "Helios maps pipeline schemas, writes migration queries, and validates data integrity end-to-end.",
+    "QA Engineer": "Helios writes test suites, generates edge cases, and traces coverage gaps in changed files.",
+    "Technical Writer": "Helios reads your code, drafts API docs, and writes tutorials that actually match implementation."
+  }
 };
+
+const MODE_LABELS = {
+  business:    "Here's what Helios does for your business",
+  personal:    "Here's what Helios does for you",
+  development: "Here's what Helios does in your codebase"
+};
+
+const VALID_MODES = Object.keys(MODE_LABELS);
 
 let currentMode = 'business';
 let state = { v: [], busy: false };
 
 function getArrays() {
-  const d = DATA[currentMode];
+  const d = DATA[currentMode] || DATA['business'];
   return [d.who, d.what, d.how];
 }
 
@@ -4582,8 +4617,10 @@ function updateDisplay() {
   document.getElementById('mw').textContent = state.v[0];
   document.getElementById('mg').textContent = state.v[1];
   document.getElementById('ma').textContent = state.v[2];
-  const desc = ROLE_DESC[state.v[0]] || '';
+  const desc = (MODE_DESC[currentMode] || {})[state.v[0]] || '';
   document.getElementById('role-desc').textContent = desc;
+  const labelEl = document.getElementById('output-label');
+  if (labelEl) labelEl.textContent = MODE_LABELS[currentMode] || MODE_LABELS.business;
 }
 
 function buildDropdowns() {
@@ -4623,12 +4660,13 @@ function selectItem(reelIdx, value) {
 }
 
 function switchMode(mode) {
-  currentMode = mode;
+  currentMode = VALID_MODES.includes(mode) ? mode : 'business';
   document.querySelectorAll('.mode-toggle-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.mode === mode);
+    b.classList.toggle('active', b.dataset.mode === currentMode);
   });
   initState();
 }
+window.setMode = switchMode;
 
 async function synth() {
   if (state.busy) return;
@@ -4642,13 +4680,11 @@ async function synth() {
   await new Promise(r => setTimeout(r, 140));
 
   for (let i = 0; i < 3; i++) state.v[i] = pick(arrs[i]);
-  els.forEach((id, i) => { document.getElementById(id).textContent = state.v[i]; });
+  updateDisplay();
   await new Promise(r => setTimeout(r, 60));
 
   els.forEach(id => document.getElementById(id).classList.remove('updating'));
   await new Promise(r => setTimeout(r, 180));
-
-  updateDisplay();
   buildDropdowns();
   const out = document.getElementById('output-panel');
   out.style.background = 'rgba(34,211,238,0.04)';
@@ -4929,10 +4965,9 @@ initState();
       }
 
       // ── 6. Reel mode ──
-      if (persona === 'everyday' && typeof window.setMode === 'function') {
-        window.setMode('everyday');
-      } else if (typeof window.setMode === 'function') {
-        window.setMode('business');
+      if (typeof window.setMode === 'function') {
+        var modeMap = { development: 'development', business: 'business', everyday: 'personal' };
+        window.setMode(modeMap[persona] || 'business');
       }
 
       // ── 7. CTA text ──
