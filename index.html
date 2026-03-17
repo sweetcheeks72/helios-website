@@ -303,6 +303,9 @@
       filter: blur(0px) saturate(1);
     }
 
+    /* Persona-show: hide all variants by default until JS runs applyPersona() */
+    [data-persona-show] { display: none; }
+
     @media (prefers-reduced-motion: reduce) {
       .gate { transition: opacity 0.3s; }
       .gate.dissolving { transition: opacity 0.3s, visibility 0s linear 0.3s; }
@@ -4944,8 +4947,8 @@ initState();
 
       // ── 8. Generic persona-show elements ──
       document.querySelectorAll('[data-persona-show]').forEach(function(el) {
-        var show = el.getAttribute('data-persona-show');
-        el.style.display = (show === persona || show === 'all') ? '' : 'none';
+        var showFor = el.getAttribute('data-persona-show').split(' ');
+        el.style.display = (showFor.indexOf(persona) !== -1 || showFor.indexOf('all') !== -1) ? '' : 'none';
       });
     }
   })();
