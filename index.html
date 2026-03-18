@@ -1568,6 +1568,21 @@
     }
     .install-tab:hover { color: var(--text-dim); }
     .install-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .install-tab.hidden-tab { display: none; }
+    .install-show-all { 
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 8px;
+      opacity: 0.55;
+      transition: opacity 0.15s;
+    }
+    .install-show-all:hover { opacity: 1; }
     .install-tab-content { display: none; padding: 24px 0; }
     .install-tab-content.active { display: block; }
     .install-command-block {
@@ -4479,6 +4494,7 @@
       </div>
 
       <div class="install-modal-footer">
+        <button class="install-show-all" id="showAllPlatforms" aria-expanded="false" onclick="toggleAllPlatforms()">Show all platforms ↓</button>
         <a href="#install" onclick="event.preventDefault(); openInstallModal();" class="install-docs-link">Full setup guide →</a>
       </div>
     </div>
@@ -4807,6 +4823,17 @@ initState();
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
       switchTab(os);
+      // Hide non-matching tabs
+      document.querySelectorAll('.install-tab').forEach(t => {
+        t.classList.toggle('hidden-tab', t.dataset.tab !== os);
+      });
+      // Reset show-all button
+      const showAllBtn = document.getElementById('showAllPlatforms');
+      if (showAllBtn) {
+        showAllBtn.textContent = 'Show all platforms ↓';
+        showAllBtn._expanded = false;
+        showAllBtn.setAttribute('aria-expanded', 'false');
+      }
       modal.querySelector('.install-modal-close').focus();
       modal._escHandler = function(e) { if (e.key === 'Escape') closeInstallModal(); };
       document.addEventListener('keydown', modal._escHandler);
@@ -4827,6 +4854,24 @@ initState();
       document.querySelectorAll('.install-tab-content').forEach(c => {
         c.classList.toggle('active', c.id === 'tab-' + tab);
       });
+    }
+
+    function toggleAllPlatforms() {
+      const btn = document.getElementById('showAllPlatforms');
+      const expanded = !btn._expanded;
+      btn._expanded = expanded;
+      document.querySelectorAll('.install-tab').forEach(t => {
+        t.classList.remove('hidden-tab');
+      });
+      btn.textContent = expanded ? 'Hide other platforms ↑' : 'Show all platforms ↓';
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      if (!expanded) {
+        const os = detectOS();
+        document.querySelectorAll('.install-tab').forEach(t => {
+          t.classList.toggle('hidden-tab', t.dataset.tab !== os);
+        });
+        switchTab(os);
+      }
     }
 
     function copyCommand(btn) {
