@@ -16,15 +16,15 @@
        DESIGN TOKENS — Rams at NASA, 1965
     ───────────────────────────────────────────── */
     :root {
-      --bg:            #020914;
-      --surface:       #060f1f;
-      --surface2:      #0a1628;
-      --border:        rgba(34, 211, 238, 0.03);
-      --border-bright: rgba(34, 211, 238, 0.06);
+      --bg:            #060d1a;
+      --surface:       #0c1628;
+      --surface2:      #101e32;
+      --border:        rgba(34, 211, 238, 0.08);
+      --border-bright: rgba(34, 211, 238, 0.14);
 
       --text:          #f0f4f8;
-      --text-dim:      #8A9BB0;
-      --text-muted:    #6b7e96;
+      --text-dim:      #B0BEC9;
+      --text-muted:    #94A3B8;
 
       --accent:        #22D3EE;
       --accent-dim:    rgba(34, 211, 238, 0.08);
@@ -50,12 +50,12 @@
       color: var(--text);
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
+      font-size: clamp(1.125rem, 1rem + 0.35vw, 1.375rem);
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       /* dot grid only — dual-temperature glow removed */
-      background-image: radial-gradient(circle, rgba(34,211,238,0.02) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(34,211,238,0.035) 1px, transparent 1px);
       background-size: 24px 24px;
       background-attachment: fixed;
     }
@@ -209,7 +209,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0.55;
+      opacity: 0.75;
       margin-bottom: 24px;
     }
 
@@ -292,7 +292,7 @@
       background: rgba(2, 9, 20, 0.96);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(34,211,238,0.03);
+      border-bottom: 1px solid rgba(34,211,238,0.08);
       display: flex;
       align-items: center;
       padding: 0 32px;
@@ -367,7 +367,7 @@
       text-transform: uppercase;
       color: var(--text-muted);
       transition: color 0.15s ease-out;
-      opacity: 0.6;
+      opacity: 0.8;
     }
     .nav-links a:hover { color: var(--accent); opacity: 1; }
     .nav-links .nav-cta {
@@ -414,7 +414,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0.6;
+      opacity: 0.8;
       transition: opacity 0.2s;
     }
     .ps-btn.active .ps-label { opacity: 1; color: var(--text); }
@@ -561,14 +561,14 @@
     .hero-divider {
       width: 100%;
       height: 1px;
-      background: rgba(34,211,238,0.05);
+      background: rgba(34,211,238,0.10);
       margin-bottom: 32px;
     }
 
     .hero-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       line-height: 1.75;
       color: var(--text-dim);
       margin-bottom: 40px;
@@ -644,7 +644,7 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.6;
+      opacity: 0.8;
     }
 
     /* ─────────────────────────────────────────────
@@ -671,7 +671,7 @@
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.35;
+      opacity: 0.6;
       white-space: nowrap;
     }
     .hero-telemetry {
@@ -689,7 +689,7 @@
     .telem-item + .telem-item {
       padding-left: 24px;
       padding-right: 24px;
-      border-left: 1px solid rgba(34,211,238,0.05);
+      border-left: 1px solid rgba(34,211,238,0.10);
     }
     .telem-item:last-child { padding-right: 0; }
     .telem-value {
@@ -707,7 +707,7 @@
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.5;
+      opacity: 0.7;
     }
 
     /* Section tachymeter arc — reused across sections */
@@ -789,7 +789,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       /* amber ghost — spec says amber ONLY on section labels at ~0.08 opacity */
-      color: rgba(240, 160, 48, 0.08);
+      color: rgba(240, 160, 48, 0.35);
       margin-bottom: 16px;
       display: inline-flex;
       align-items: center;
@@ -801,7 +801,7 @@
       display: block;
       height: 1px;
       width: 20px;
-      background: rgba(240,160,48,0.06);
+      background: rgba(240,160,48,0.2);
     }
 
     .section-title {
@@ -816,7 +816,7 @@
     .section-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       color: var(--text-dim);
       line-height: 1.7;
       max-width: 560px;
@@ -869,7 +869,7 @@
       font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(34,211,238,0.06);
+      color: rgba(34,211,238,0.3);
       display: flex;
       align-items: center;
       gap: 10px;
@@ -879,7 +879,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background: rgba(34,211,238,0.03);
+      background: rgba(34,211,238,0.15);
       max-width: 160px;
     }
 
@@ -896,14 +896,14 @@
     .mission-accent-line {
       width: 20px;
       height: 1px;
-      background: rgba(34,211,238,0.04);
+      background: rgba(34,211,238,0.08);
       margin-bottom: 20px;
     }
 
     .mission-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       color: var(--text-dim);
       line-height: 1.75;
       max-width: 680px;
@@ -914,8 +914,8 @@
     .mission-terminal {
       position: relative;
       background: rgba(6, 15, 31, 0.4);
-      border-top: 1px solid rgba(34,211,238,0.03);
-      border-bottom: 1px solid rgba(34,211,238,0.03);
+      border-top: 1px solid rgba(34,211,238,0.08);
+      border-bottom: 1px solid rgba(34,211,238,0.08);
       padding: 24px 28px;
       margin-bottom: 20px;
       overflow-x: auto;
@@ -949,7 +949,7 @@
     }
     .terminal-content .p { color: var(--accent); }
     .terminal-content .a { color: rgba(240, 160, 48, 0.65); }
-    .terminal-content .d { color: var(--text-muted); opacity: 0.55; }
+    .terminal-content .d { color: var(--text-muted); opacity: 0.75; }
     .terminal-content .s {
       color: var(--green);
       opacity: 0;
@@ -983,7 +983,7 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.4;
+      opacity: 0.65;
     }
     .meta-val {
       font-family: var(--font-mono);
@@ -1040,7 +1040,7 @@
       font-size: 9px;
       font-weight: 500;
       letter-spacing: 0.15em;
-      color: rgba(34,211,238,0.25);
+      color: rgba(34,211,238,0.45);
       margin-bottom: 16px;
     }
     .cap-icon {
@@ -1048,7 +1048,7 @@
       height: 28px;
       margin-bottom: 10px;
       color: var(--accent);
-      opacity: 0.6;
+      opacity: 0.75;
     }
     .cap-icon svg {
       width: 100%;
@@ -1059,7 +1059,7 @@
       height: 32px;
       margin-bottom: 12px;
       color: var(--accent);
-      opacity: 0.7;
+      opacity: 0.85;
     }
     .mission-icon svg {
       width: 100%;
@@ -1068,7 +1068,7 @@
     .ghost-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       color: var(--text);
       margin-bottom: 12px;
       letter-spacing: 0.01em;
@@ -1076,7 +1076,7 @@
     .ghost-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--text-dim);
       line-height: 1.7;
     }
@@ -1086,7 +1086,7 @@
     ───────────────────────────────────────────── */
     .model-agnostic-text {
       font-weight: 300;
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       color: var(--text-dim);
       max-width: 600px;
       margin: 0 auto 32px;
@@ -1146,7 +1146,7 @@
       opacity: 0.7;
     }
     .evidence-detail {
-      font-size: 0.875rem;
+      font-size: 1rem;
       color: var(--text-dim);
       line-height: 1.5;
     }
@@ -1155,11 +1155,11 @@
       font-size: 8px;
       color: var(--text-muted);
       margin-top: 8px;
-      opacity: 0.5;
+      opacity: 0.7;
     }
     .evidence-quote {
       font-style: italic;
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       color: var(--text-dim);
       max-width: 600px;
       margin: 0 auto;
@@ -1193,13 +1193,13 @@
     }
     .comparison-table th.helios-col {
       color: var(--accent);
-      background: rgba(34,211,238,0.02);
-      border-left: 1px solid rgba(34,211,238,0.04);
-      border-right: 1px solid rgba(34,211,238,0.04);
+      background: rgba(34,211,238,0.06);
+      border-left: 1px solid rgba(34,211,238,0.08);
+      border-right: 1px solid rgba(34,211,238,0.08);
     }
     .comparison-table td {
       padding: 12px 18px;
-      border-bottom: 1px solid rgba(34,211,238,0.02);
+      border-bottom: 1px solid rgba(34,211,238,0.06);
       color: rgba(138,155,181,0.4);
       vertical-align: top;
       line-height: 1.5;
@@ -1210,9 +1210,9 @@
     }
     .comparison-table td.helios-col {
       color: rgba(34,211,238,0.7);
-      background: rgba(34,211,238,0.02);
-      border-left: 1px solid rgba(34,211,238,0.04);
-      border-right: 1px solid rgba(34,211,238,0.04);
+      background: rgba(34,211,238,0.06);
+      border-left: 1px solid rgba(34,211,238,0.08);
+      border-right: 1px solid rgba(34,211,238,0.08);
     }
     .comparison-table tbody tr:hover td { background: rgba(34,211,238,0.01); }
     .comparison-table tbody tr:hover td.helios-col { background: rgba(34,211,238,0.04); }
@@ -1248,7 +1248,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      opacity: 0.6;
+      opacity: 0.8;
     }
     .install-panel-label::after {
       content: '';
@@ -1265,7 +1265,7 @@
     }
     .code-line { display: block; }
     .code-prompt { color: var(--accent); margin-right: 8px; }
-    .code-comment { color: var(--text-muted); opacity: 0.5; }
+    .code-comment { color: var(--text-muted); opacity: 0.7; }
     .code-cmd    { color: var(--text); opacity: 0.75; }
     .code-arg    { color: rgba(240,160,48,0.65); }
 
@@ -1303,7 +1303,7 @@
       margin-right: auto;
     }
     .cta-sub {
-      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
+      font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
       color: var(--text-dim);
       margin-bottom: 40px;
       line-height: 1.7;
@@ -1352,7 +1352,7 @@
       font-size: 0.875rem;
       letter-spacing: 0.2em;
       color: var(--accent);
-      opacity: 0.45;
+      opacity: 0.7;
     }
     .footer-tag {
       font-family: var(--font-mono);
@@ -1360,7 +1360,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.4;
+      opacity: 0.65;
     }
     .footer-links ul[role="list"] {
       display: flex;
@@ -1373,7 +1373,7 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-muted);
-      opacity: 0.45;
+      opacity: 0.7;
       transition: opacity 0.15s ease-out;
     }
     .footer-links a:hover { opacity: 0.85; }
@@ -1541,7 +1541,7 @@
       cursor: pointer;
       padding: 0;
       margin-top: 8px;
-      opacity: 0.55;
+      opacity: 0.75;
       transition: opacity 0.15s;
     }
     .install-show-all:hover { opacity: 1; }
@@ -1586,7 +1586,7 @@
       color: var(--text-muted);
       margin-top: 10px;
       letter-spacing: 0.04em;
-      opacity: 0.55;
+      opacity: 0.75;
     }
     .install-modal-footer {
       margin-top: 24px;
@@ -1687,7 +1687,7 @@
       align-items: center;
       justify-content: space-between;
       background: rgba(3,7,16,0.8);
-      border-bottom: 1px solid rgba(34,211,238,0.05);
+      border-bottom: 1px solid rgba(34,211,238,0.10);
       padding: 11px 22px;
     }
     .artifact-header-left {
@@ -1753,7 +1753,7 @@
       align-items: baseline;
       gap: 12px;
       padding: 9px 0;
-      border-bottom: 1px solid rgba(34,211,238,0.03);
+      border-bottom: 1px solid rgba(34,211,238,0.08);
     }
     .artifact-param-row:last-child { border-bottom: none; }
     .param-key {
@@ -1777,7 +1777,7 @@
     .param-val.accent { color: rgba(34,211,238,0.6); }
     .artifact-footer {
       background: rgba(3,7,16,0.6);
-      border-top: 1px solid rgba(34,211,238,0.04);
+      border-top: 1px solid rgba(34,211,238,0.08);
       padding: 11px 22px;
       display: flex;
       align-items: center;
@@ -1845,7 +1845,7 @@
       .ghost-grid-6 { grid-template-columns: 1fr; }
       .hero-line-1, .hero-line-2, .hero-line-3 { font-size: clamp(1.75rem, 8vw, 2.75rem); }
       .section-title { font-size: clamp(1.5rem, 5vw, 2rem); }
-      .ghost-title { font-size: 1.0625rem; }
+      .ghost-title { font-size: 1.125rem; }
       .persona-grid { grid-template-columns: 1fr 1fr; }
       .persona-card { padding: 24px 20px; }
       .hero-ctas { flex-direction: column; gap: 10px; }
@@ -1873,7 +1873,7 @@
       .persona-grid { grid-template-columns: 1fr; }
       .hero-dials { flex-direction: column; gap: 16px; }
       .hero-telemetry { flex-direction: column; gap: 12px; }
-      .telem-item + .telem-item { border-left: none; padding-left: 0; border-top: 1px solid rgba(34,211,238,0.05); padding-top: 12px; }
+      .telem-item + .telem-item { border-left: none; padding-left: 0; border-top: 1px solid rgba(34,211,238,0.10); padding-top: 12px; }
     }
 
     /* ═══════════════════════════════════════════
@@ -1971,7 +1971,7 @@
 
     .readout-value {
       font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
-      font-size: 1.0625rem;
+      font-size: 1.1875rem;
       font-weight: 400;
       color: var(--text, #f0f4f8);
       text-align: center;
@@ -2027,7 +2027,7 @@
       border-color: rgba(34,211,238,0.18);
     }
     .toggle.set {
-      color: var(--bg, #020914);
+      color: var(--bg, #060d1a);
       border-color: var(--green, #3fb950);
       background: var(--green, #3fb950);
     }
@@ -2049,7 +2049,7 @@
       transition: all 0.12s;
       border: 1px solid var(--accent, #22D3EE);
       background: var(--accent, #22D3EE);
-      color: var(--bg, #020914);
+      color: var(--bg, #060d1a);
       font-weight: 700;
     }
     .btn-synth:hover { background: #1ec8e3; border-color: #1ec8e3; }
@@ -2159,7 +2159,7 @@
       padding: 10px 18px;
       color: var(--text-dim);
       cursor: pointer;
-      border-bottom: 1px solid rgba(34,211,238,0.03);
+      border-bottom: 1px solid rgba(34,211,238,0.08);
       transition: background 0.1s, color 0.1s;
     }
     .reel-dropdown-item:hover { background: rgba(34,211,238,0.06); color: var(--text); }
@@ -2196,7 +2196,7 @@
     .persona-name {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 1rem;
+      font-size: 1.125rem;
       color: var(--text);
       margin-bottom: 4px;
     }
@@ -2217,7 +2217,7 @@
     .persona-quote {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--text-dim);
       line-height: 1.65;
       font-style: italic;
@@ -2283,7 +2283,7 @@
     .cost-pain {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--text-dim);
       line-height: 1.7;
       padding: 8px 0;
@@ -2361,14 +2361,14 @@
     .coaching-step-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 1rem;
+      font-size: 1.125rem;
       color: var(--text);
       margin-bottom: 4px;
     }
     .coaching-step-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--text-dim);
       line-height: 1.6;
     }
@@ -2487,7 +2487,7 @@
     .brickyard-cases {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 0.9375rem;
+      font-size: 1.0625rem;
       color: var(--text-dim);
       line-height: 1.65;
       margin-bottom: 14px;
