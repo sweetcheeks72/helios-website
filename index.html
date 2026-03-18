@@ -50,7 +50,7 @@
       color: var(--text);
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 1rem;
+      font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
       line-height: 1.75;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
@@ -531,7 +531,7 @@
     .hero-line-1 {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      font-size: clamp(2.25rem, 5vw, 5rem);
       line-height: 1.1;
       letter-spacing: -0.045em;
       color: var(--text);
@@ -540,7 +540,7 @@
     .hero-line-2 {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      font-size: clamp(2.25rem, 5vw, 5rem);
       line-height: 1.1;
       letter-spacing: -0.045em;
       color: var(--text);
@@ -549,7 +549,7 @@
     .hero-line-3 {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(2rem, 4.5vw, 4.5rem);
+      font-size: clamp(2.25rem, 5vw, 5rem);
       line-height: 1.1;
       letter-spacing: -0.045em;
       color: var(--accent);
@@ -568,7 +568,7 @@
     .hero-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       line-height: 1.75;
       color: var(--text-dim);
       margin-bottom: 40px;
@@ -807,7 +807,7 @@
     .section-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-size: clamp(1.75rem, 3.5vw, 3rem);
       line-height: 1.2;
       letter-spacing: -0.045em;
       color: var(--text);
@@ -816,7 +816,7 @@
     .section-subtitle {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       color: var(--text-dim);
       line-height: 1.7;
       max-width: 560px;
@@ -886,7 +886,7 @@
     .mission-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
       line-height: 1.2;
       letter-spacing: -0.045em;
       color: var(--text);
@@ -903,7 +903,7 @@
     .mission-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       color: var(--text-dim);
       line-height: 1.75;
       max-width: 680px;
@@ -1068,7 +1068,7 @@
     .ghost-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 0.9375rem;
+      font-size: 1.125rem;
       color: var(--text);
       margin-bottom: 12px;
       letter-spacing: 0.01em;
@@ -1076,7 +1076,7 @@
     .ghost-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.7;
     }
@@ -1086,7 +1086,7 @@
     ───────────────────────────────────────────── */
     .model-agnostic-text {
       font-weight: 300;
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       color: var(--text-dim);
       max-width: 600px;
       margin: 0 auto 32px;
@@ -1146,7 +1146,7 @@
       opacity: 0.7;
     }
     .evidence-detail {
-      font-size: 12px;
+      font-size: 0.875rem;
       color: var(--text-dim);
       line-height: 1.5;
     }
@@ -1159,7 +1159,7 @@
     }
     .evidence-quote {
       font-style: italic;
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       color: var(--text-dim);
       max-width: 600px;
       margin: 0 auto;
@@ -1293,7 +1293,7 @@
     .cta-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: clamp(1.75rem, 3.5vw, 3rem);
+      font-size: clamp(2rem, 4vw, 3.5rem);
       line-height: 1.2;
       letter-spacing: -0.045em;
       color: var(--text);
@@ -1303,7 +1303,7 @@
       margin-right: auto;
     }
     .cta-sub {
-      font-size: 14px;
+      font-size: clamp(1rem, 0.9rem + 0.25vw, 1.125rem);
       color: var(--text-dim);
       margin-bottom: 40px;
       line-height: 1.7;
@@ -1499,7 +1499,7 @@
     .install-modal-title {
       font-family: var(--font-body);
       font-weight: 200;
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       color: var(--text);
       margin-bottom: 8px;
       letter-spacing: -0.02em;
@@ -1836,14 +1836,18 @@
       .hamburger { display: flex; }
       .nav-brand .nav-descriptor { display: none; }
       .nav-brand .nav-sep { display: none; }
+      .ghost-grid-6 .ghost-card { padding: 32px 28px; }
     }
 
     @media (max-width: 600px) {
       section { padding: 56px 0; }
       .container { padding: 0 20px; }
       .ghost-grid-6 { grid-template-columns: 1fr; }
-      .hero-line-1, .hero-line-2, .hero-line-3 { font-size: clamp(1.5rem, 8vw, 2.5rem); }
-      .section-title { font-size: clamp(1.25rem, 5vw, 1.75rem); }
+      .hero-line-1, .hero-line-2, .hero-line-3 { font-size: clamp(1.75rem, 8vw, 2.75rem); }
+      .section-title { font-size: clamp(1.5rem, 5vw, 2rem); }
+      .ghost-title { font-size: 1.0625rem; }
+      .persona-grid { grid-template-columns: 1fr 1fr; }
+      .persona-card { padding: 24px 20px; }
       .hero-ctas { flex-direction: column; gap: 10px; }
       .btn-primary, .btn-secondary, .btn-cta { width: 100%; max-width: 280px; text-align: center; }
       .terminal-content { font-size: 10px; white-space: pre-wrap; word-break: break-word; }
@@ -1863,6 +1867,13 @@
       .footer-links ul { justify-content: center; }
       .mission-meta { gap: 16px; }
       .ghost-card { padding: 28px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .persona-grid { grid-template-columns: 1fr; }
+      .hero-dials { flex-direction: column; gap: 16px; }
+      .hero-telemetry { flex-direction: column; gap: 12px; }
+      .telem-item + .telem-item { border-left: none; padding-left: 0; border-top: 1px solid rgba(34,211,238,0.05); padding-top: 12px; }
     }
 
     /* ═══════════════════════════════════════════
@@ -1892,7 +1903,7 @@
     /* Instrument headline */
     .inst-headline {
       font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
-      font-size: clamp(38px, 5vw, 64px);
+      font-size: clamp(2.25rem, 5.5vw, 4.5rem);
       font-weight: 200;
       letter-spacing: -0.035em;
       line-height: 1.08;
@@ -1960,7 +1971,7 @@
 
     .readout-value {
       font-family: var(--font-body, 'IBM Plex Sans', sans-serif);
-      font-size: 15px;
+      font-size: 1.0625rem;
       font-weight: 400;
       color: var(--text, #f0f4f8);
       text-align: center;
@@ -2185,7 +2196,7 @@
     .persona-name {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 14px;
+      font-size: 1rem;
       color: var(--text);
       margin-bottom: 4px;
     }
@@ -2206,7 +2217,7 @@
     .persona-quote {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.65;
       font-style: italic;
@@ -2272,7 +2283,7 @@
     .cost-pain {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.7;
       padding: 8px 0;
@@ -2350,14 +2361,14 @@
     .coaching-step-title {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 14px;
+      font-size: 1rem;
       color: var(--text);
       margin-bottom: 4px;
     }
     .coaching-step-desc {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.6;
     }
@@ -2388,7 +2399,7 @@
       margin-bottom: 12px;
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.6;
     }
@@ -2476,7 +2487,7 @@
     .brickyard-cases {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 13px;
+      font-size: 0.9375rem;
       color: var(--text-dim);
       line-height: 1.65;
       margin-bottom: 14px;
