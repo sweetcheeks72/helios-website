@@ -149,13 +149,13 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0.4;
+      opacity: 0.6;
       padding: 6px 0;
     }
     .gate-doc-line {
       width: 100%;
       height: 1px;
-      background: var(--border-bright);
+      background: rgba(34, 211, 238, 0.12);
     }
 
     /* Title block */
@@ -170,7 +170,7 @@
       width: 56px;
       height: 56px;
       color: var(--accent);
-      opacity: 0.5;
+      opacity: 0.7;
       margin-bottom: 24px;
     }
     .gate-title {
@@ -196,7 +196,7 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--text-dim);
-      opacity: 0.35;
+      opacity: 0.65;
       margin-bottom: 20px;
     }
 
@@ -205,13 +205,13 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
-      background: var(--border-bright);
+      background: rgba(34, 211, 238, 0.12);
       width: 100%;
       max-width: 760px;
       margin-bottom: auto;
     }
     .gate-door {
-      background: var(--bg);
+      background: var(--surface);
       border: none;
       padding: 28px 24px;
       cursor: pointer;
@@ -232,15 +232,15 @@
 
     .gate-door--dev {
       --door-color: #22D3EE;
-      --door-bg: rgba(34, 211, 238, 0.03);
+      --door-bg: rgba(34, 211, 238, 0.06);
     }
     .gate-door--biz {
       --door-color: #d4a73a;
-      --door-bg: rgba(212, 167, 58, 0.03);
+      --door-bg: rgba(212, 167, 58, 0.06);
     }
     .gate-door--life {
       --door-color: #22C55E;
-      --door-bg: rgba(34, 197, 94, 0.03);
+      --door-bg: rgba(34, 197, 94, 0.06);
     }
 
     .gate-door-num {
@@ -248,20 +248,20 @@
       font-size: 32px;
       font-weight: 700;
       color: var(--door-color);
-      opacity: 0.2;
+      opacity: 0.4;
       line-height: 1;
       margin-bottom: 8px;
     }
-    .gate-door:hover .gate-door-num { opacity: 0.5; }
+    .gate-door:hover .gate-door-num { opacity: 0.7; }
     .gate-door-line {
       width: 24px;
       height: 1px;
       background: var(--door-color);
-      opacity: 0.3;
+      opacity: 0.5;
       margin-bottom: 12px;
       transition: width 0.3s, opacity 0.3s;
     }
-    .gate-door:hover .gate-door-line { width: 48px; opacity: 0.7; }
+    .gate-door:hover .gate-door-line { width: 48px; opacity: 0.9; }
     .gate-door-title {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -278,10 +278,10 @@
       font-size: 12px;
       font-weight: 300;
       color: var(--text-dim);
-      opacity: 0.6;
+      opacity: 0.85;
       line-height: 1.4;
     }
-    .gate-door:hover .gate-door-ex { opacity: 0.9; }
+    .gate-door:hover .gate-door-ex { opacity: 1; }
 
     /* Classification footer */
     .gate-classification {
